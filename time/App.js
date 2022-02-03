@@ -5,14 +5,15 @@ import Icon from './comps/Icon';
 import Jobsite from './comps/Jobsite';
 import Login from './comps/login';
 import Menu from './comps/Menu';
+import EmployeeHours from './comps/EmployeeHours.js';
 import PageGroup from './comps/PageGroup';
 import PageOption from './comps/PageOption';
 import { Color } from './comps/Palette.js';
 export default function App() {
   return (
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
-      
-      <Jobsite/>
+      <Menu></Menu>
+      <EmployeeHours></EmployeeHours>
     </SafeAreaView>
   );
 }
