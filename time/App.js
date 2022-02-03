@@ -1,13 +1,26 @@
+
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import Menu from './comps/Menu';
 import { Color } from './comps/Palette.js';
+import Page from './comps/Page';
+import PageGroup from './comps/PageGroup';
+
+
+const pageNames = ["Card", "Time"]
 export default function App() {
   return (
+    <NavigationContainer>
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
       
+<<<<<<< Updated upstream
       <Menu user={'admin'}/>
+=======
+      <PageGroup pageNames={pageNames}></PageGroup>
+>>>>>>> Stashed changes
     </SafeAreaView>
+    </NavigationContainer>
   );
 }
 

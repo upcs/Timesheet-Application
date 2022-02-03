@@ -60,6 +60,15 @@ const style = StyleSheet.create({
         fontWeight: "bold",
         lineHeight: 50,
     },
+
+    page: {
+        width: '100%',
+        height: '100%',
+    },
+
+    hamburger: {
+        width: '50',
+    }
 })
 
 export { Color, style };

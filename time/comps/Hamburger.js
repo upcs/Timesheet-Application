@@ -2,7 +2,7 @@ import React from 'react';
 import { Color, style } from './Palette.js';
 import { Text, View, StyleSheet } from 'react-native';
 import Icon from './Icon.js';
-import PageOption from './PageOption.js';
+
 
 /*
     Should provide drop down for logout, etc. 
