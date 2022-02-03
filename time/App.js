@@ -2,12 +2,13 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import Login from './comps/login';
 import Menu from './comps/Menu';
+import EmployeeHours from './comps/EmployeeHours.js';
 import { Color } from './comps/Palette.js';
 export default function App() {
   return (
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
-      
-      <Login/>
+      <Menu></Menu>
+      <EmployeeHours></EmployeeHours>
     </SafeAreaView>
   );
 }
