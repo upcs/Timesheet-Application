@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import Login from './comps/login';
 import Menu from './comps/Menu';
 import EmployeeHours from './comps/EmployeeHours.js';
+import PageGroup from './comps/PageGroup';
 import { Color } from './comps/Palette.js';
 export default function App() {
   return (
