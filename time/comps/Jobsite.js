@@ -1,13 +1,14 @@
 import React from 'react';
 import { Color } from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity} from 'react-native'
+import Menu from './Menu'
 
 class Jobsite extends React.Component {
     render() {
         return (
             <View style={styles.containerMaster}>
 
-                <View style={styles.containerTop}>
+                {/* <View style={styles.containerTop}>
                     <TouchableOpacity style={styles.navButton} onPress={this.onPress}>
                         <Text adjustsFontSizeToFit={true} style={styles.navText}>Card</Text>
                     </TouchableOpacity>
@@ -19,8 +20,9 @@ class Jobsite extends React.Component {
                     <TouchableOpacity style={styles.navButton} onPress={this.onPress}>
                         <Text adjustsFontSizeToFit={true} style={styles.navText}>Hours</Text>
                     </TouchableOpacity>
-                </View>
-
+                </View> */}
+                <Menu></Menu>
+                
                 <View style={styles.containerBottom}>
                     <View style={styles.jobInfoContainer}>
                         <Text adjustsFontSizeToFit={true} style={styles.jobLocContainer}>Job Name FILLER</Text>
