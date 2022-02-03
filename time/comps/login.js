@@ -19,12 +19,12 @@ class Login extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Image style={styles.logo} source={require('../assets/logo.png')} />
+                <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                 <TouchableOpacity style={styles.login} onPress={this.onPress}>
                     <Text style={styles.text}>Sign-in</Text>
                 </TouchableOpacity> 
             </View>
-        )
+        ) 
     }
 }
 
@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
         flex: 0.8
     },
     logo: { 
-        aspectRatio: 2.0, 
+        aspectRatio: 0.9, 
         resizeMode: 'contain'
     },
     login: {
-      backgroundColor: 'maroon', 
+      backgroundColor: Color.MAR, 
       padding: 20, 
       borderRadius: 30,
       width: 200, 
