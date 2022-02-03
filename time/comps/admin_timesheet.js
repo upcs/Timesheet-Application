@@ -34,11 +34,7 @@ class AdminTimesheet extends React.Component {
                     <Text style={styles.employees}>Employee</Text>
                     <Text style={styles.hours}>Hours</Text>
                 </View>
-                
             </View>
-        
-        
-        
         );
     }
 }

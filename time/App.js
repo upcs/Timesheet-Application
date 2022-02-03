@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 import SearchBar from './comps/search_bar'
 import AdminTimesheet from './comps/admin_timesheet'
 import Menu from './comps/Menu';
+import ScrollableList from './comps/scrollable_list';
 import { Color } from './comps/Palette.js';
 export default function App() {
   return (
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
       
-      <AdminTimesheet/>
+      <ScrollableList/>
     </SafeAreaView>
   );
 }
