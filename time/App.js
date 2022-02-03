@@ -1,9 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import Hamburger from './comps/Hamburger';
+import Icon from './comps/Icon';
+import Jobsite from './comps/Jobsite';
 import Login from './comps/login';
 import Menu from './comps/Menu';
 import EmployeeHours from './comps/EmployeeHours.js';
 import PageGroup from './comps/PageGroup';
+import PageOption from './comps/PageOption';
 import { Color } from './comps/Palette.js';
 export default function App() {
   return (
