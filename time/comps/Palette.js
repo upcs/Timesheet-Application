@@ -69,3 +69,4 @@ const style = StyleSheet.create({
 })
 
 export { Color, style };
+
