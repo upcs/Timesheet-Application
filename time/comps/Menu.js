@@ -1,30 +1,34 @@
 import React from 'react';
-import Color from './Palette.js';
-import { Text, View, StyleSheet } from 'react-native'
+import { Color } from './Palette.js';
+import PageOption from './PageOption';
+import PageGroup from './PageGroup';
+import Hamburger from './Hamburger';
+import { Text, View, StyleSheet } from 'react-native';
+import { style } from './Palette';
 class Menu extends React.Component {
     render() {
+
+        const pageNames = ['Card', 'Job', 'Hours'];
+        const currentPage = 1;
+        //const propList = buttonTitles.map((title, i) => ({
+         //   title, isChosen: (i == current),
+       // }));
+       // const list = propList.map(({title, isChosen}) => 
+         //   <PageOption isChosen={isChosen} text={title} key={"PageOption" + title} />
+      //  );
         return (
-            <View style={styles.menu_outer}><Text style={styles.title}>Menu</Text></View>
+            <View style={style.menu_outer}>
+              <Hamburger />
+              <PageGroup pageNames={pageNames} currentPage={currentPage} />
+            
+            </View>
         )
     }
 }
 
 
-const styles = StyleSheet.create({
-    menu_outer: {
-      flex: 1,
-      backgroundColor: Color.BG,
-      alignItems: 'flex-start',
-      alignContent: 'flex-start',
-      padding: 10,
-      /* NOTE ALWAYS DO SIZES IN INTEGERS NO STRINGS ... OR IT CRASHES */
-      fontSize: 60,
-    },
-    title: {
-        fontSize: 40,
-        fontWeight: "bold",
-        lineHeight: 50,
-    }
-  });
+
+
+
 
 export default Menu;
