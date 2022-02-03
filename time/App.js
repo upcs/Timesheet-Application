@@ -6,7 +6,7 @@ export default function App() {
   return (
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
       
-      <Menu />
+      <Menu user={'admin'}/>
     </SafeAreaView>
   );
 }
@@ -19,6 +19,7 @@ const bodyStyle = StyleSheet.create({
 });
 
 const safeAreaAndroid = StyleSheet.create({
+// Creates an area that is safe from notches or camera.
 /* https://stackoverflow.com/questions/51289587/react-native-how-to-use-safeareaview-for-android-notch-devices*/
     SafeArea: {
       flex: 1,

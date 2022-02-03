@@ -6,14 +6,15 @@ const Color = {
     BUTTON: "#eee",
     BUTTON_BORDER: "#999",
     BUTTON_SELECTED: "#ccc",
-    MAROON: "#a70202",
+    MAROON: "#a70202", // Company color
 
 }
 
 const style = StyleSheet.create({
     clickable: {
-        paddingLeft: 15,
-        paddingRight: 15,
+        // USE for all things a user should tap on, I think.
+        paddingLeft: 10,
+        paddingRight: 10,
         paddingTop: 5,
         paddingBottom: 5,
         borderRadius: 5,
@@ -27,21 +28,14 @@ const style = StyleSheet.create({
         backgroundColor: Color.BUTTON,
         borderColor: Color.BUTTON_BORDER,
     },
-    options: {
-        width: 40,
-        height: 40,
-       
-        fontSize: 15,
-        lineHeight: 30,
-        textAlign: 'center',
-        alignContent: 'center',
-        flexDirection: 'row',
-    },
     selected: {
+        // Selected button
         backgroundColor: Color.BUTTON_SELECTED,     
     },
-    menu_outer: {
 
+    
+    menu_outer: {
+        // Menu  holding and padding
         backgroundColor: Color.BG,
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -5,9 +5,8 @@ import Icon from './Icon.js';
 import PageOption from './PageOption.js';
 
 /*
-<View style={[style.options, style.clickable]}>
-                    <Text>X</Text>
-                </View>*/
+    Should provide drop down for logout, etc. 
+*/
 class Hamburger extends React.Component {
 
     constructor (props) {
@@ -20,7 +19,7 @@ class Hamburger extends React.Component {
         //if (this.props.isChosen) styleList.push(style.selected)
         return (
             <View>
-                <PageOption pageName={"X"}/>
+                <Text style={[style.button, style.clickable ]}>&#x2630;</Text>
             </View>
         );
     }
