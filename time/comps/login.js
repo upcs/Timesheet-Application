@@ -9,8 +9,9 @@
  ************************************************/
 
 import React from 'react';
-import Color from './Palette.js';
+import {Color, style} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
+
 
 
 //Render the Company logo in the center of the screen 
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     login: {
-      backgroundColor: Color.MAR, 
+      backgroundColor: Color.MAROON,  
       padding: 20, 
       borderRadius: 30,
       width: 200, 

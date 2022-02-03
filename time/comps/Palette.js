@@ -6,8 +6,7 @@ const Color = {
     BUTTON: "#eee",
     BUTTON_BORDER: "#999",
     BUTTON_SELECTED: "#ccc",
-    MAROON: "#a70202",
-
+    MAROON: '#a70202'
 }
 
 const style = StyleSheet.create({
@@ -67,6 +66,7 @@ const style = StyleSheet.create({
         lineHeight: 50,
     },
 })
+
 
 export { Color, style };
 
