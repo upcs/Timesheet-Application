@@ -6,10 +6,6 @@ import Icon from './comps/Icon';
 
 import Jobsite from './comps/Jobsite';
 import Login from './comps/login';
-import PageGroup from './comps/PageGroup';
-import PageOption from './comps/PageOption';
-import { createStackNavigator } from '@react-navigation/stack';
-
 import { Color } from './comps/Palette.js';
 import User from './comps/User';
 
