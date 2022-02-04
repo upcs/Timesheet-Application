@@ -5,12 +5,13 @@ import AdminTimesheet from './comps/admin_timesheet'
 import Menu from './comps/Menu';
 import ScrollableList from './comps/scrollable_list';
 import { Color } from './comps/Palette.js';
+import CalendarButton from './comps/calendar_button';
+
 export default function App() {
   return (
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
       
-      <AdminTimesheet/>
-      {/* <ScrollableList/> */}
+      <AdminTimesheet></AdminTimesheet>
     </SafeAreaView>
   );
 }

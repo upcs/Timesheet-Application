@@ -12,37 +12,35 @@ import { Text, View, StyleSheet, TouchableOpacity, Image, Button} from 'react-na
 import SearchBar from './search_bar'
 import ScrollableList from './scrollable_list';
 import Menu from './Menu';
-import { textDecorationColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import CalendarButton from './calendar_button';
 
 
-
-
-//Render the Company logo in the center of the screen 
-//With a sign-in button underneath
+/**
+ * Admin page to view timesheets of all employees
+ */
 class AdminTimesheet extends React.Component {
     render() {
         return (
-
-
             // Vertical  layout 
             <View style={styles.vertical_layout}>
                 <Menu></Menu>
                  {/* Horizontal Layout for serch and date selection */}
                 <View style={styles.horizontal_layout_top}>
-                    <SearchBar></SearchBar>
-                    <Text> Search From: <Button title='Date'/> To: <Button title='Date'/>
-                    </Text>
+                    <View style={styles.search}><SearchBar></SearchBar></View>
+                    <Text style={styles.text_date}>Search From:</Text>
+                     <CalendarButton></CalendarButton> 
+                     <Text style={styles.text_date}>To:</Text> 
+                     <CalendarButton></CalendarButton>
                 </View>
 
                 {/* Horizontal Layout for employees and Hours  */}
                 <View style={styles.horizontal_layout_bottom}>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
-                        <Text style={styles.employees_hours}>Employee</Text>
+                        <Text style={[styles.employees_hours, styles.text_employee]}>Employees:</Text>
                         <ScrollableList style={styles.employees}></ScrollableList>
                     </View>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
-                        <Text style={styles.employees_hours}>Hours</Text>
-                        <ScrollableList style={styles.employees}></ScrollableList>
+                        <Text style={[styles.employees_hours, styles.text_employee]}>Hours:</Text>
                     </View>
                 </View>
             </View>
@@ -50,38 +48,43 @@ class AdminTimesheet extends React.Component {
     }
 }
 
-
+//Styles used to create layout
 const styles = StyleSheet.create({
     vertical_layout: {
-        marginTop: 40,
         flex: 1,
-        backgroundColor: 'blue'
     },
     horizontal_layout_top: {
         flex: 0.1,
         flexDirection: "row", 
         marginBottom: 0,
-        backgroundColor: 'yellow',
-        marginTop: 5
+        marginTop: 5,
+        alignItems: 'center', 
+        justifyContent: 'center',
+        borderBottomWidth: 1
     },
     horizontal_layout_bottom: {
         flex: 1,
         flexDirection: "row", 
         marginBottom: 0,
-        backgroundColor: 'blue'
-    },
-    search: {
-        marginRight: 75,
-        marginLeft: 20
+        marginTop: 20
     },
     employees_hours: {
         marginLeft: 0,
         fontSize: 35,
-        backgroundColor: 'red',
         marginTop: 0,
         padding: 0,
         borderLeftWidth: 1
     },
+    text_date: {
+        fontSize: 10,
+        marginLeft: 10
+    },
+    text_employee: {
+        textDecorationLine: 'underline'
+    },
+    search: {
+        marginLeft: 10
+    }
 });
 
 

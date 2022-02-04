@@ -46,13 +46,12 @@ class ScrollableList extends React.Component {
     }
 
     //Render each item as a button
-    renderItem = ({ item}) => {
+    renderItem = ({item}) => {
         return (
             <View style={styles.item}>
                 <TouchableOpacity onPress={this.onPress}>
                     <Text >{item.item}</Text>
                 </TouchableOpacity>
-                
             </View>
         );
     };
