@@ -10,6 +10,9 @@ import React, {useEffect, useState} from 'react';
 //import {Color, style} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, Image, Button} from 'react-native'
 import SearchBar from './search_bar'
+import ScrollableList from './scrollable_list';
+import Menu from './Menu';
+import { textDecorationColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 
 
@@ -20,8 +23,10 @@ class AdminTimesheet extends React.Component {
     render() {
         return (
 
+
             // Vertical  layout 
             <View style={styles.vertical_layout}>
+                <Menu></Menu>
                  {/* Horizontal Layout for serch and date selection */}
                 <View style={styles.horizontal_layout_top}>
                     <SearchBar></SearchBar>
@@ -31,8 +36,14 @@ class AdminTimesheet extends React.Component {
 
                 {/* Horizontal Layout for employees and Hours  */}
                 <View style={styles.horizontal_layout_bottom}>
-                    <Text style={styles.employees}>Employee</Text>
-                    <Text style={styles.hours}>Hours</Text>
+                    <View style={[styles.vertical_layout, styles.employees_hours]}>
+                        <Text style={styles.employees_hours}>Employee</Text>
+                        <ScrollableList style={styles.employees}></ScrollableList>
+                    </View>
+                    <View style={[styles.vertical_layout, styles.employees_hours]}>
+                        <Text style={styles.employees_hours}>Hours</Text>
+                        <ScrollableList style={styles.employees}></ScrollableList>
+                    </View>
                 </View>
             </View>
         );
@@ -51,6 +62,7 @@ const styles = StyleSheet.create({
         flexDirection: "row", 
         marginBottom: 0,
         backgroundColor: 'yellow',
+        marginTop: 5
     },
     horizontal_layout_bottom: {
         flex: 1,
@@ -62,14 +74,14 @@ const styles = StyleSheet.create({
         marginRight: 75,
         marginLeft: 20
     },
-    employees: {
-        marginRight: 75,
-        marginLeft: 20,
-        fontSize: 35
-    }, 
-    hours: {
-        fontSize: 40
-    }
+    employees_hours: {
+        marginLeft: 0,
+        fontSize: 35,
+        backgroundColor: 'red',
+        marginTop: 0,
+        padding: 0,
+        borderLeftWidth: 1
+    },
 });
 
 
