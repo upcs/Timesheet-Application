@@ -13,6 +13,7 @@ import {Color} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import USER from './User.js';
 
+
 //Render the Company logo in the center of the screen 
 //With a sign-in button underneath
 class Login extends React.Component {
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     login: {
+
       backgroundColor: Color.MAROON, 
       padding: 20, 
       borderRadius: 30,
