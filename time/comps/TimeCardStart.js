@@ -8,7 +8,6 @@
  import React from 'react';
  import {Color} from './Palette.js';
  import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
  
  
  //Company Logo with large "Start" button in the center of the screen

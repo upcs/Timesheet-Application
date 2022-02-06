@@ -33,6 +33,7 @@ class App extends React.Component {
     // means that it will always use the scope of 'App'. in other words the 'this' keyword will always refernece the
     // same place as if the function was run here. at least i think so
     this.login = this.login.bind(this);
+    this.loginAdmin = this.loginAdmin.bind(this);
   }
   login() {
   /* login function in app should return some object representing server response
@@ -50,6 +51,14 @@ class App extends React.Component {
 
   }
 
+  loginAdmin() {
+    console.log("Attepting log in");
+      this.setState({
+        signedIn: 1,
+        user: User.ADMIN,
+      })
+  }
+
   render() {
     const signedIn = this.state.signedIn;
     const isAdmin = this.state.user == User.ADMIN;
@@ -62,17 +71,17 @@ class App extends React.Component {
             isAdmin ? (
               // Logged in as admin
               <>
-                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
+                <Tab.Screen name="Card" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Timesheet" component={Timesheet}></Tab.Screen>
                 <Tab.Screen name="Employees" component={Employees}></Tab.Screen>
-                <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
+                <Tab.Screen name="Site" component={Jobsite}></Tab.Screen>
               </>
             ) : (
               // Logge in as default user
               <>
-                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
-                <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
-                <Tab.Screen name="EmployeeHours" component={EmployeeHours}></Tab.Screen>
+                <Tab.Screen name="Card" component={TimeCardStart}></Tab.Screen>
+                <Tab.Screen name="Site" component={Jobsite}></Tab.Screen>
+                <Tab.Screen name="Hours" component={EmployeeHours}></Tab.Screen>
               </>
             )
           ) : (
@@ -82,6 +91,7 @@ class App extends React.Component {
               component={Login}
               initialParams={{
                 login: this.login,
+                loginAdmin: this.loginAdmin,
               }}
               ></Tab.Screen>
           )

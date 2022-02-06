@@ -25,8 +25,10 @@ class Login extends React.Component {
             <View style={styles.container}>
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                 <TouchableOpacity style={styles.login} onPress={() => this.props.route.params.login()}>
-                
                     <Text style={styles.text}>Sign-in</Text>
+                </TouchableOpacity> 
+                <TouchableOpacity style={styles.login} onPress={() => this.props.route.params.loginAdmin()}>
+                    <Text style={styles.text}>TEMP Sign-in Admin</Text>
                 </TouchableOpacity> 
             </View>
         ) 
