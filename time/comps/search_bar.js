@@ -40,5 +40,5 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 10
     }
-});
+}); 
 export default SearchBar;
