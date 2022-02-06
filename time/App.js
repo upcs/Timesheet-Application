@@ -10,13 +10,16 @@ import PageGroup from './comps/PageGroup';
 import PageOption from './comps/PageOption';
 import { Color } from './comps/Palette.js';
 import TimeCardStart from './comps/TimeCardStart';
+import AdminJobsite from './comps/AdminJobsite';
+import SearchBar from './comps/SearchBar';
+
 export default function App() {
   return (
 
 
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
       <Menu></Menu>
-      <TimeCardStart></TimeCardStart>
+      <AdminJobsite></AdminJobsite>
     </SafeAreaView>
   );
 }
