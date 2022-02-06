@@ -1,16 +1,18 @@
 /************************************************
  * Time Card Start Menu
  * 
+ * Update: added timer functionality
+ * Author: Jude Gabriel 
+ * 
  * Author: Harrison Winters (Build off of Jude Gabriel's Login component)
  * Date: February 5, 2022
  ************************************************/
 
- import React from 'react';
- import {Color} from './Palette.js';
- import { Text, View, StyleSheet, TouchableOpacity, Image, TouchableHighlightComponent} from 'react-native'
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import React from 'react';
+import {Color, style} from './Palette.js';
+import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
  
- 
+//Variables used for time tracking
 var isPressed;
 var shiftTimer;
 var sec = 0;
@@ -31,6 +33,7 @@ var hour = 0;
         this.totalTime = this.totalTime.bind(this);
     };
 
+    //Get the total time after the stop button is pressed
     totalTime(){
         //Get the hours
         hour = hour + Math.floor(this.state.time / 3600);
@@ -47,21 +50,25 @@ var hour = 0;
         console.log(hour + ":" + min + ":" + sec);
     }
 
+    //Turn the timer off
     timerOff(){
         clearTimeout(shiftTimer);
         this.totalTime();
     }
 
+    //Update the time 
     tick(){
         console.log(this.state.time);
         this.setState({time: this.state.time + 1});
     };
 
+    //Call tick to update time and reset timer
     add(){ 
         this.tick();
         this.timer();
     };
 
+    //Call add to add time and start timer
     timer(){
         this.add
         shiftTimer = setTimeout(this.add, 1000);
@@ -83,15 +90,18 @@ var hour = 0;
         );
     };
 
-
+    //Render the page
      render() {
          const {text} = this.state;
          return (
              <View style={styles.container}>
                  <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                 <TouchableOpacity style={styles.start} onPress={this.onPress}>
+                 <TouchableOpacity style={isPressed ? styles.stop : styles.start} 
+                 onPress={this.onPress}
+                 backgroundColor='blue'>
                      <Text style={styles.text}>{text}</Text>
                  </TouchableOpacity> 
+                 <Text>Today's Time: {hour} hours, {min} minutes, {sec} seconds</Text> 
              </View>
          ) 
      }
@@ -110,7 +120,7 @@ var hour = 0;
          marginTop: 170,
      },
      start: {
-       backgroundColor: Color.MAROON, 
+       backgroundColor: 'green', 
        padding: 40, 
        borderRadius: 40,
        width: 250, 
@@ -118,8 +128,17 @@ var hour = 0;
        marginBottom: 170,
        borderWidth: 5,
        borderColor: '#138564',
-
      },
+     stop: {
+        backgroundColor: Color.MAROON, 
+        padding: 40, 
+        borderRadius: 40,
+        width: 250, 
+        alignItems: 'center',
+        marginBottom: 170,
+        borderWidth: 5,
+        borderColor: '#138564',
+    },
      text: {
          color: 'white',
          fontSize: 40
