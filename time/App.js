@@ -9,11 +9,14 @@ import EmployeeHours from './comps/EmployeeHours.js';
 import PageGroup from './comps/PageGroup';
 import PageOption from './comps/PageOption';
 import { Color } from './comps/Palette.js';
+import TimeCardStart from './comps/TimeCardStart';
 export default function App() {
   return (
+
+
     <SafeAreaView style={safeAreaAndroid.SafeArea}>
       <Menu></Menu>
-      <EmployeeHours></EmployeeHours>
+      <TimeCardStart></TimeCardStart>
     </SafeAreaView>
   );
 }
