@@ -16,6 +16,7 @@ import React from 'react';
 import { UserInterfaceIdiom } from 'expo-constants';
 import Timesheet from './comps/Timesheet';
 import EmployeeHours from './comps/EmployeeHours.js';
+import AdminTimesheet from './comps/admin_timesheet';
 import Employees from './comps/Employees';
 import Card from './comps/Card';
 import TimeCardStart from './comps/TimeCardStart';
@@ -76,8 +77,11 @@ class App extends React.Component {
             isAdmin ? (
               // Logged in as admin
               <>
-                <Tab.Screen name="Card" component={TimeCardStart}></Tab.Screen>
-                <Tab.Screen name="AdminTimesheet" component={AdminTimesheet}></Tab.Screen>
+
+
+                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
+                <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
+
                 <Tab.Screen name="Employees" component={Employees}></Tab.Screen>
                 <Tab.Screen name="Site" component={Jobsite}></Tab.Screen>
               </>
