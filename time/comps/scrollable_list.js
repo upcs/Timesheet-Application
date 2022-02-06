@@ -8,7 +8,7 @@
  * Touchable List: https://reactnative.dev/docs/flatlist
  * Constructor for list: https://www.tutorialspoint.com/what-is-the-flatlist-component-and-how-to-use-it-in-react-native
  ***********************************************************************/
-
+ 
 
 import React, {useEffect, useState} from 'react';
 import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity} from 'react-native'
