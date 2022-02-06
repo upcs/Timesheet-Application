@@ -6,6 +6,7 @@ import Icon from './comps/Icon';
 
 import Jobsite from './comps/Jobsite';
 import Login from './comps/login';
+
 import { Color } from './comps/Palette.js';
 import User from './comps/User';
 
@@ -13,10 +14,10 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import React from 'react';
 import { UserInterfaceIdiom } from 'expo-constants';
 import Timesheet from './comps/Timesheet';
+import EmployeeHours from './comps/EmployeeHours.js';
 import Employees from './comps/Employees';
 import Card from './comps/Card';
-import Hours from './comps/Hours';
-
+import TimeCardStart from './comps/TimeCardStart';
 const Tab = createMaterialTopTabNavigator();
 
 
@@ -61,7 +62,7 @@ class App extends React.Component {
             isAdmin ? (
               // Logged in as admin
               <>
-                <Tab.Screen name="Card" component={Card}></Tab.Screen>
+                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Timesheet" component={Timesheet}></Tab.Screen>
                 <Tab.Screen name="Employees" component={Employees}></Tab.Screen>
                 <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
@@ -69,9 +70,9 @@ class App extends React.Component {
             ) : (
               // Logge in as default user
               <>
-                <Tab.Screen name="Card" component={Card}></Tab.Screen>
+                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
-                <Tab.Screen name="Hours" component={Hours}></Tab.Screen>
+                <Tab.Screen name="EmployeeHours" component={EmployeeHours}></Tab.Screen>
               </>
             )
           ) : (
@@ -90,7 +91,6 @@ class App extends React.Component {
       </SafeAreaView>
     );
   }
-  
 }
 
 const bodyStyle = StyleSheet.create({
