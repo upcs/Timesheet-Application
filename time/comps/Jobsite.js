@@ -21,7 +21,6 @@ class Jobsite extends React.Component {
                         <Text adjustsFontSizeToFit={true} style={styles.navText}>Hours</Text>
                     </TouchableOpacity>
                 </View> */}
-                <Menu></Menu>
                 
                 <View style={styles.containerBottom}>
                     <View style={styles.jobInfoContainer}>
