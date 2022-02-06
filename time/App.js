@@ -19,10 +19,13 @@ import EmployeeHours from './comps/EmployeeHours.js';
 import Employees from './comps/Employees';
 import Card from './comps/Card';
 import TimeCardStart from './comps/TimeCardStart';
+import AdminJobsite from './comps/AdminJobsite';
+import SearchBar from './comps/SearchBar';
 const Tab = createMaterialTopTabNavigator();
 
 
 class App extends React.Component {
+
 
   state = { signedIn: 0, user: User.DEFAULT };
 
