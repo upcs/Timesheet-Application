@@ -9,7 +9,6 @@
  import {Color} from './Palette.js';
  import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
  import { useState } from 'react';
- import { TextInput } from 'react-native-web';
 import SearchBar from './SearchBar.js';
 
 
@@ -69,7 +68,7 @@ import SearchBar from './SearchBar.js';
     
      },
      text: {
-         color: 'white  ',
+         color: 'white',
          fontSize: 14,    
         position: 'absolute',
         // margin: 'auto',
