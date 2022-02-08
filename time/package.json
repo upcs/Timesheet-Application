@@ -11,10 +11,8 @@
     "eject": "expo eject"
   },
   "jest": {
-    "transform": {
-      "^.+\\.[t|j]sx?$": "babel-jest"
-    }
-  },
+    "preset": "react-native"
+    },
   "dependencies": {
     "@react-navigation/material-top-tabs": "^6.1.1",
     "@react-navigation/native": "^6.0.8",
