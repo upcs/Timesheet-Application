@@ -11,6 +11,7 @@
  import { useState } from 'react';
  import { TextInput } from 'react-native-web';
 import SearchBar from './SearchBar.js';
+import ScrollableList from './scrollable_list.js';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
@@ -27,6 +28,7 @@ import SearchBar from './SearchBar.js';
                             <Text style={styles.text}>Add</Text>
                         </TouchableOpacity>
                     </View>
+                    <ScrollableList></ScrollableList>
                     
                 </View>
              </View>
@@ -34,7 +36,7 @@ import SearchBar from './SearchBar.js';
      }
  }
  
- /*  Styles used for login screen */
+ /*  Styles used for AdminJobsite screen */
  const styles = StyleSheet.create({
      container: {
         //  alignItems: 'center', 

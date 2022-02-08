@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+
 import { NavigationContainer } from '@react-navigation/native';
 
 import Icon from './comps/Icon';
@@ -15,14 +16,12 @@ import React from 'react';
 import { UserInterfaceIdiom } from 'expo-constants';
 import Timesheet from './comps/Timesheet';
 import EmployeeHours from './comps/EmployeeHours.js';
+import AdminTimesheet from './comps/admin_timesheet';
 import Employees from './comps/Employees';
 import Card from './comps/Card';
 import TimeCardStart from './comps/TimeCardStart';
-import AdminJobsite from './comps/AdminJobsite';
-import SearchBar from './comps/SearchBar';
+const Tab = createMaterialTopTabNavigator();
 
-export default function App() {
-  return (
 
 class App extends React.Component {
 
@@ -66,7 +65,7 @@ class App extends React.Component {
               // Logged in as admin
               <>
                 <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
-                <Tab.Screen name="Timesheet" component={Timesheet}></Tab.Screen>
+                <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
                 <Tab.Screen name="Employees" component={Employees}></Tab.Screen>
                 <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
               </>
