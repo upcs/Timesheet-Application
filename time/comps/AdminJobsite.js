@@ -9,9 +9,8 @@
  import {Color} from './Palette.js';
  import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
  import { useState } from 'react';
-import SearchBar from './SearchBar.js';
-
-//COMMENT
+ import ScrollableList from './scrollable_list.js';
+ import SearchBar from './search_bar.js';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
@@ -29,7 +28,9 @@ import SearchBar from './SearchBar.js';
                         </TouchableOpacity>
                     </View>
                     
+                    
                 </View>
+                <ScrollableList></ScrollableList>
              </View>
          ) 
      }
