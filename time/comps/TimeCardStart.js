@@ -98,7 +98,6 @@ var endTime = 0;
     timerOff(){
         endTime = Date.now() - startTime;
         this.totalTime();
-        console.log(endTime);
     }
 
 
