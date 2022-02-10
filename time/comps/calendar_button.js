@@ -4,10 +4,10 @@
  */
 
 
- import React from 'react';
- import {Color, style} from './Palette.js';
- import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
-  
+ import React, { useState }  from 'react';
+ import {Color} from './Palette.js';
+ import {View, StyleSheet, ButtonGroup} from 'react-native'
+ import CalendarS from './calendarSelect';
 
 /**
  * Button that loads calendar on press
@@ -16,21 +16,31 @@
      render() {
          return (
              <View style={styles.container}>
-                 <TouchableOpacity style={styles.button}>
-                     <Text style={styles.text}>Date</Text>
-                 </TouchableOpacity>
+               <View style ={styles.container2}>
+                  <CalendarS id="From" name="From"></CalendarS>
+               </View>
+               <View style ={styles.container2}>
+                  <CalendarS id="To" name="   To   "></CalendarS>
+               </View>
              </View>
          ) 
      }
  }
- 
-
+    
  /*  Styles used for button */
  const styles = StyleSheet.create({
      container: {
-        marginLeft: 10,
-        flex: 0.8
+        alignItems: 'center', 
+        justifyContent: 'center',
+        flexDirection: "row",
+        flex: 1
      },
+     container2: {
+      alignItems: 'center', 
+      justifyContent: 'center',
+      flexDirection: "row",
+      flex: 1
+   },
     button: {
         backgroundColor: Color.MAROON,  
         padding: 10, 

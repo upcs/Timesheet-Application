@@ -28,10 +28,7 @@ class AdminTimesheet extends React.Component {
                  {/* Horizontal Layout for serch and date selection */}
                 <View style={styles.horizontal_layout_top}>
                     <View style={styles.search}><SearchBar></SearchBar></View>
-                    <Text style={styles.text_date}>Search From:</Text>
                      <CalendarButton></CalendarButton> 
-                     <Text style={styles.text_date}>To:</Text> 
-                     <CalendarButton></CalendarButton>
                 </View>
 
                 {/* Horizontal Layout for employees and Hours  */}
