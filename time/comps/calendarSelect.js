@@ -8,21 +8,27 @@
  import {Color, style} from './Palette.js';
  import {View, Button} from 'react-native'
  import DateTimePicker from '@react-native-community/datetimepicker'
-import { get } from 'core-js/core/dict';
 
 /**
  * Button that loads calendar on press
  */
-export default function CalendarS() {
+export default function CalendarS(props) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-    let bName = "Pick Date"
+    const [buttonText, setButtonText] = useState(props.name);
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-  };
+    try{
+    changeText(selectedDate.toString().substring(0,11));
+    }
+    catch(error){
+      console.log("error")
+    }
+  }
 
   const showMode = (currentMode) => {
     setShow(true);
@@ -32,22 +38,14 @@ export default function CalendarS() {
   const showDatepicker = () => {
     showMode('date');
   };
-  function getDateOnly(st){
-      let w = 0;
-        for(i = 0; i < st.length; i++){
-            if(st.charAt(i) == ' '){
-                w++;
-            }
-            if(w == 3){
-                return st.substring(0,i);
-            }
-        }
-        return "";
-  }
+
+  const changeText = (text) =>{try {setButtonText(text); } catch(error){console.log("error")}}
+  
+
      return (
         <View>
         <View>
-          <Button onPress={showDatepicker} title={"select date"} />
+          <Button onPress={showDatepicker} title={buttonText} color={Color.MAROON} />
         </View>
         {show && (
           <DateTimePicker
@@ -59,7 +57,5 @@ export default function CalendarS() {
           />
         )}
       </View>
-     )
- }
-
- 
+     );
+}
