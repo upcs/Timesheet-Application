@@ -9,74 +9,114 @@
  ************************************************/
 
 import React from 'react';
-import {Color, style} from './Palette.js';
+import {Color} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
  
-//Variables used for time tracking
+/* Global Variables for time tracking */
 var isPressed;
-var shiftTimer;
 var sec = 0;
 var min = 0;
 var hour = 0;
+var startTime = 0;
+var endTime = 0;
 
 
- //Company Logo with large "Start" button in the center of the screen 
+/**
+ * Timecard component
+ * 
+ * Features: 
+ *      -Company Logo
+ *      -Start/Stop Button for timing shifts
+ *      -Daily time text
+ */
  class TimeCardStart extends React.Component {
 
+    /**
+     * Constructor for the timecard component
+     * 
+     * @param {} props 
+     */
     constructor(props){
         super(props);
-        this.state = {text : 'Start', time : 0};
-        this.tick = this.tick.bind(this);
-        this.timer = this.timer.bind(this);
-        this.add = this.add.bind(this);
+        this.state = {text : 'Start'};
+        this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
         this.totalTime = this.totalTime.bind(this);
     };
 
-    //Get the total time after the stop button is pressed
+
+    /**
+     * Updates the users daily time when the stop button is pressed
+     * 
+     * Takes their current running time and adds it to the daily banked time
+     */
     totalTime(){
-        //Get the hours
-        hour = hour + Math.floor(this.state.time / 3600);
-        this.setState({time: this.setState.time - (Math.floor(hour * 3600))});
+        //Calculate the hours
+        let newHour = Math.floor(endTime / 3600000);
+        endTime -= newHour * 3600000;
+        hour += newHour;
 
-        //Get the minutes
-        min = min + Math.floor(this.state.time / 60);
-        this.setState({time: this.setState.time - (Math.floor(min * 60))});
-        //Get the seconds
-        sec = sec + this.state.time;
-        this.setState({time: this.setState.time = 0});
+        //Calculate minutes
+        let newMin =  Math.floor(endTime / 60000);
+        endTime -= newMin * 60000;
+        min += newMin;
 
-        //log the total time
-        console.log(hour + ":" + min + ":" + sec);
+        //Check if a new hour needs to be rolled over
+        if(min >= 60){
+            let minRollover = Math.floor(min / 60);
+            min -= minRollover * 60;
+            hour += minRollover;
+        }
+
+        //Calculate new seconds
+        let newSec = Math.floor(endTime / 1000);
+        endTime = 0;
+        sec += newSec;
+
+        //Check if a new minute needs to be rolled over
+        if(sec >= 60){
+            let secRollover = Math.floor(sec / 60);
+            sec -= secRollover * 60;
+            min += secRollover;
+        }
+
+        //Check again for a new hour rollover after latest minute rollover
+        if(min >= 60){
+            let minRollover = Math.floor(min / 60);
+            min -= minRollover * 60;
+            hour += minRollover;
+        }
     }
 
-    //Turn the timer off
+
+    /**
+     * Turns the timer off
+     * 
+     * Called when user pressed 'Stop' 
+     * Calls totalTime() to total the new time added
+     */
     timerOff(){
-        clearTimeout(shiftTimer);
+        endTime = Date.now() - startTime;
         this.totalTime();
     }
 
-    //Update the time 
-    tick(){
-        console.log(this.state.time);
-        this.setState({time: this.state.time + 1});
+
+    /**
+     * Starts the timer 
+     * 
+     * Called when the user presses 'Start" 
+     */
+    timerOn(){
+        startTime = Date.now();
     };
 
-    //Call tick to update time and reset timer
-    add(){ 
-        this.tick();
-        this.timer();
-    };
 
-    //Call add to add time and start timer
-    timer(){
-        this.add
-        shiftTimer = setTimeout(this.add, 1000);
-    };
-
-     //User initially pressed
+     /**
+      * Called when user presses either start or stop
+      * 
+      * Starts or stopes a timer and updates the state
+      */
     onPress = () => { 
-
         //Check if the user has already pressed the button
         isPressed ? (
             isPressed = false,
@@ -86,11 +126,17 @@ var hour = 0;
             //Logging 
             isPressed = true,
             this.setState({text : 'Stop'}),
-            this.timer() 
+            this.timerOn() 
         );
     };
 
-    //Render the page
+
+    /**
+     * Renders the start/stop button as well as company logo
+     * Also renders a note showing daily time
+     * 
+     * @returns the timecard component 
+     */
      render() {
          const {text} = this.state;
          return (
@@ -103,22 +149,30 @@ var hour = 0;
                  </TouchableOpacity> 
                  <Text>Today's Time: {hour} hours, {min} minutes, {sec} seconds</Text> 
              </View>
-         ) 
-     }
- }
+            ) 
+        }
+    }
  
- /*  Styling*/
+
+ /**
+  * Styles used for creating the timecard component 
+  */
  const styles = StyleSheet.create({
+     //Timecard container
      container: {
          alignItems: 'center', 
          justifyContent: 'center',
          flex: 0.6,
      },
+
+     //Styles for the logo
      logo: { 
          aspectRatio: 0.7, 
          resizeMode: 'contain',
          marginTop: 170,
      },
+
+     //Styles for start button
      start: {
        backgroundColor: 'green', 
        padding: 40, 
@@ -129,6 +183,8 @@ var hour = 0;
        borderWidth: 5,
        borderColor: '#138564',
      },
+
+     //Styles for stop button
      stop: {
         backgroundColor: Color.MAROON, 
         padding: 40, 
@@ -139,6 +195,8 @@ var hour = 0;
         borderWidth: 5,
         borderColor: '#138564',
     },
+
+    //Styles for text in the button
      text: {
          color: 'white',
          fontSize: 40

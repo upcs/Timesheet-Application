@@ -69,8 +69,8 @@ class App extends React.Component {
               <>
                 <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
-                <Tab.Screen name="Employees" component={Employees}></Tab.Screen>
-                <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
+                <Tab.Screen name="Employees" component={AdminJobsite}></Tab.Screen>
+                <Tab.Screen name="Jobsite" component={AdminJobsite}></Tab.Screen>
               </>
             ) : (
               // Logge in as default user
