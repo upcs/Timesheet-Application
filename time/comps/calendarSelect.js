@@ -8,17 +8,15 @@
  import {Color, style} from './Palette.js';
  import {View, Button} from 'react-native'
  import DateTimePicker from '@react-native-community/datetimepicker'
-import { get } from 'core-js/core/dict';
-import { render } from 'react-dom';
 
 /**
  * Button that loads calendar on press
  */
-export default function CalendarS() {
+export default function CalendarS(props) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-    const [buttonText, setButtonText] = useState("To");
+    const [buttonText, setButtonText] = useState(props.name);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -47,7 +45,7 @@ export default function CalendarS() {
      return (
         <View>
         <View>
-          <Button onPress={showDatepicker} title={buttonText} />
+          <Button onPress={showDatepicker} title={buttonText} color={Color.MAROON} />
         </View>
         {show && (
           <DateTimePicker
