@@ -28,7 +28,7 @@ const Tab = createMaterialTopTabNavigator();
 class App extends React.Component {
 
 
-  state = { signedIn: 0, user: User.DEFAULT };
+  state = { signedIn: 1, user: User.ADMIN };
 
   constructor(props) {
     super(props);
