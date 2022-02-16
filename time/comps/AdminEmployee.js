@@ -11,12 +11,11 @@
  import { useState } from 'react';
  import TimeSheetList from './TimeSheetList.js';
  import SearchBar from './search_bar.js';
- import AddEmployee from './AddEmployee.js'
- import JobsList from './JobsList.js';
+import EmployeesList from './EmployeesList.js';  
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
- class AdminJobsite extends React.Component {
+ class AdminEmployee extends React.Component {
      
      render() {
         
@@ -25,12 +24,14 @@
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
                     <View style={styles.buttonContainer}>
-                        <AddEmployee></AddEmployee>
+                        <TouchableOpacity style={styles.add} onPress={this.onPress}>
+                            <Text style={styles.text}>Add</Text>
+                        </TouchableOpacity>
                     </View>
                     
                     
                 </View>
-                <JobsList></JobsList>
+                <EmployeesList></EmployeesList>
              </View>
          ) 
      }
@@ -84,4 +85,4 @@
     }
  });
  
- export default AdminJobsite;
+ export default AdminEmployee;

@@ -19,7 +19,7 @@ import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity} from 'r
  * 
  * Data predefined currently (Sprint 1)
  */
-class ScrollableList extends React.Component {
+class TimeSheetList extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default ScrollableList;
+export default TimeSheetList;
