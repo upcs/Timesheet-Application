@@ -7,12 +7,14 @@
  * Sources: 
  * Touchable List: https://reactnative.dev/docs/flatlist
  * Constructor for list: https://www.tutorialspoint.com/what-is-the-flatlist-component-and-how-to-use-it-in-react-native
+ * 
+ * Delete: https://reactnative-examples.com/remove-selected-item-from-flatlist-in-react-native/
  ***********************************************************************/
  
 
  import React, {useEffect, useState} from 'react';
  import { Text, View, StyleSheet, TextInput, FlatList, Modal, TouchableOpacity, Alert, Switch} from 'react-native'
- import FakeData from './FakeData';
+ import FakeData from './FakeEmployeeData';
 import { Color } from './Palette';
  
  
@@ -64,10 +66,15 @@ import { Color } from './Palette';
         this.setState({userEdited: edited})
     }
 
+    deleteUser = () => {
+        console.log(this.state.userEdited);
+        const newEmployeeList = this.state.FakeData.filter(item => item.id !== this.state.userEdited)
+        this.setState({FakeData: newEmployeeList});
+    }
+
 
 
     updateEmployee = (edited) => {
-        console.log(this.state.FakeData);
         const newEmployeeList = this.state.FakeData.map( item =>
             {
                 if (item.id === edited){
@@ -192,6 +199,27 @@ import { Color } from './Palette';
                                     }}>
                                     <Text style={styles.textStyle}>Save Changes</Text>
                             </TouchableOpacity>
+                            
+                            {/* REMOVE USER */}
+                            <TouchableOpacity
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={ () => {
+                                        Alert.alert(
+                                            'Delete user',
+                                            'Would you like to delete this user?',
+                                            [
+                                                {text: 'Yes', onPress: () =>{
+                                                        this.deleteUser();
+                                                        this.setModalVisible(!isModalVisible);
+                                                    }, 
+                                                },
+                                                {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
+                                            ],
+                                            {cancelable: false}
+                                        )
+                                    }}>
+                                    <Text style={styles.textStyle}>DELETE</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -238,13 +266,14 @@ import { Color } from './Palette';
     button: {
         borderRadius: 20,
         padding: 15,
-        elevation: 2
+        elevation: 2,
+        marginTop: 25
         },
         buttonOpen: {
         backgroundColor: Color.MAROON,
     },
     buttonClose: {
-        backgroundColor: Color.MAROON
+        backgroundColor: Color.MAROON,
     },
     textAndTitle: {
         flexDirection: 'row'
