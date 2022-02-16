@@ -22,6 +22,7 @@ import Card from './comps/Card';
 import TimeCardStart from './comps/TimeCardStart';
 import AdminJobsite from './comps/AdminJobsite';
 import SearchBar from './comps/SearchBar';
+import AdminEmployee from './comps/AdminEmployee'
 const Tab = createMaterialTopTabNavigator();
 
 
@@ -69,7 +70,7 @@ class App extends React.Component {
               <>
                 <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
-                <Tab.Screen name="Employees" component={AdminJobsite}></Tab.Screen>
+                <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
                 <Tab.Screen name="Jobsite" component={AdminJobsite}></Tab.Screen>
               </>
             ) : (
