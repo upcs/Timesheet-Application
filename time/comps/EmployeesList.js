@@ -12,9 +12,9 @@
  ***********************************************************************/
  
 
- import React, {useEffect, useState} from 'react';
- import { Text, View, StyleSheet, TextInput, FlatList, Modal, TouchableOpacity, Alert, Switch} from 'react-native'
- import FakeData from './FakeEmployeeData';
+import React, {useEffect, useState} from 'react';
+import { Text, View, StyleSheet, TextInput, FlatList, Modal, TouchableOpacity, Alert, Switch} from 'react-native'
+import FakeData from './FakeEmployeeData';
 import { Color } from './Palette';
  
  
@@ -130,7 +130,6 @@ import { Color } from './Palette';
                     transparent={true}
                     visible = {isModalVisible}
                     onRequestClose = { () => {
-                        Alert.alert("modal has been closed");
                         this.setModalVisible(!isModalVisible);
                     }}
                 >
@@ -303,7 +302,7 @@ import { Color } from './Palette';
         padding: 15,
         marginTop: 10,
         marginBottom: 30
-    }
+    },
  });
  
  
