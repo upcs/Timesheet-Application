@@ -144,34 +144,44 @@ import { Color } from './Palette';
                             <Text style={styles.modalText}> {this.state.userFirst + " " + this.state.userLast}</Text>
 
                             {/* CHANGE FIRST NAME */}
-                            <TextInput 
-                                style={styles.textArea} 
-                                defaultValue={this.state.userFirst}
-                                onChangeText={ (text) =>{
-                                    this.setState({userFirst: text})
-                                }}>
-                            </TextInput>
+                            <View style={styles.textAndTitle}>
+                                <Text style={styles.titles}>First Name:</Text>
+                                <TextInput 
+                                    style={styles.textArea} 
+                                    defaultValue={this.state.userFirst}
+                                    onChangeText={ (text) =>{
+                                        this.setState({userFirst: text})
+                                    }}>
+                                </TextInput>
+                            </View>
 
                             {/* CHANGE LAST NAME */}
-                            <TextInput 
-                                style={styles.textArea} 
-                                defaultValue={this.state.userLast}
-                                onChangeText={ (text) =>{
-                                    this.setState({userLast: text})
-                                }}>
-                            </TextInput>
+                            <View style={styles.textAndTitle}>
+                                <Text style={styles.titles}>Last Name:</Text>
+                                <TextInput 
+                                    style={styles.textArea} 
+                                    defaultValue={this.state.userLast}
+                                    onChangeText={ (text) =>{
+                                        this.setState({userLast: text})
+                                    }}>
+                                </TextInput>
+                            </View>
 
                             {/* SWITCH FOR CHANGING USER TYPE */}
-                            <Switch
-                            style={styles.switch}
-                            trackColor={{false: 'black', true: Color.MAROON}}
-                            thumbColor={isAdmin ? "white" : "black"}
-                            onValueChange={ () => {
-                                this.setAdmin(!isAdmin);
-                            }}
-                            value={isAdmin}
-                            >
-                            </Switch>
+                            <View style={styles.textAndTitle}>
+                                <Text style={styles.titles}>Basic</Text>
+                                <Switch
+                                    style={styles.switch}
+                                    trackColor={{false: 'black', true: Color.MAROON}}
+                                    thumbColor={isAdmin ? "white" : "black"}
+                                    onValueChange={ () => {
+                                        this.setAdmin(!isAdmin);
+                                    }}
+                                    value={isAdmin}
+                                >
+                                </Switch>
+                                <Text style={styles.titles}>Admin</Text>
+                            </View>
                             
                             {/* SAVE CHANGES */}
                             <TouchableOpacity
@@ -193,24 +203,24 @@ import { Color } from './Palette';
  
  //Styles used for Scrollable list
  const styles = StyleSheet.create({
-     items: {
-         padding: 20,
-         borderTopWidth: 1,
-     }, 
-     centeredView: {
+    items: {
+        padding: 20,
+        borderTopWidth: 1,
+    }, 
+    centeredView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         marginTop: 22
-      },
-      leftView: {
+    },
+    leftView: {
         paddingLeft: 0,
         paddingRight: 200,
         paddingBottom: 25,
         flexDirection: 'row',
         justifyContent: 'flex-start'
       },
-      modalView: {
+    modalView: {
         margin: 10,
         backgroundColor: "white",
         borderRadius: 20,
@@ -218,44 +228,53 @@ import { Color } from './Palette';
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
+        shadowRadius: 4,
+        elevation: 5
     },
     button: {
         borderRadius: 20,
         padding: 15,
         elevation: 2
-      },
-      buttonOpen: {
+        },
+        buttonOpen: {
         backgroundColor: Color.MAROON,
-      },
-      buttonClose: {
+    },
+    buttonClose: {
         backgroundColor: Color.MAROON
-      },
-      textStyle: {
+    },
+    textAndTitle: {
+        flexDirection: 'row'
+    },
+    titles: {
+        padding: 15
+    },
+    textStyle: {
         color: "white",
         fontWeight: "bold",
         textAlign: "center"
-      },
-      modalText: {
+    },
+    modalText: {
         marginBottom: 15,
-        textAlign: "center"
-      },
-      textArea: {
-          padding: 15,
-          marginBottom: 15,
-          borderColor: 'black',
-          borderWidth: 1,
-          borderRadius: 15
-      },
-      switch:{
-          paddingBottom: 50
-      }
-
+        textAlign: "center", 
+        fontWeight: 'bold',
+        fontSize: 25
+    },
+    textArea: {
+        padding: 15,
+        marginBottom: 15,
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 15
+    },
+    switch:{
+        padding: 15,
+        marginTop: 10,
+        marginBottom: 30
+    }
  });
  
  
