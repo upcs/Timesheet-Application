@@ -11,6 +11,7 @@
  import { useState } from 'react';
  import ScrollableList from './scrollable_list.js';
  import SearchBar from './search_bar.js';
+ import AddEmployee from './AddEmployee.js'
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
@@ -23,9 +24,7 @@
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.add} onPress={this.onPress}>
-                            <Text style={styles.text}>Add</Text>
-                        </TouchableOpacity>
+                        <AddEmployee></AddEmployee>
                     </View>
                     
                     
