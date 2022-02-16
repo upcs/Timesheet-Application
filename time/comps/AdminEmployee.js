@@ -11,11 +11,11 @@
  import { useState } from 'react';
  import TimeSheetList from './TimeSheetList.js';
  import SearchBar from './search_bar.js';
-import JobsList from './JobsList.js';
+import EmployeesList from './EmployeesList.js';  
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
- class AdminJobsite extends React.Component {
+ class AdminEmployee extends React.Component {
      
      render() {
         
@@ -31,7 +31,7 @@ import JobsList from './JobsList.js';
                     
                     
                 </View>
-                <JobsList></JobsList>
+                <EmployeesList></EmployeesList>
              </View>
          ) 
      }
@@ -85,4 +85,4 @@ import JobsList from './JobsList.js';
     }
  });
  
- export default AdminJobsite;
+ export default AdminEmployee;
