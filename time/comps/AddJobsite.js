@@ -83,6 +83,7 @@ export default function AddEmployee(props) {
                 </View>
 
                 <TextInput
+                  id='jnInput'
                   style={styles.textbox}
                   onChangeText={text => {setJobN(text), setDataOut({jName: text, jAd: jobA,  note: notes})}}
                   value={jobN}
@@ -95,6 +96,7 @@ export default function AddEmployee(props) {
                 </View>
 
                 <TextInput
+                   id='aInput'
                    multiline
                    numberOfLines={2}
                    style={styles.textbox}
@@ -109,6 +111,7 @@ export default function AddEmployee(props) {
                   </View>
                 
                 <TextInput
+                id='nInput'
                 style={styles.textbox}
                 multiline
                 numberOfLines={6}
