@@ -7,7 +7,6 @@
  import {Color, style} from './Palette.js';
  import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
  import Employees from "./EmployeeInfo";
-import Position from 'react-native/Libraries/Components/Touchable/Position';
 
 
 
@@ -15,11 +14,12 @@ import Position from 'react-native/Libraries/Components/Touchable/Position';
  * Allows the admin to add an employee
  */
 export default function AddEmployee() {
+    //Sets for firstname, lastname, password, and if employee is an admin respectively
     const [empF, setEmpF] = useState(null);
     const [empL, setEmpL] = useState(null);
     const [pass, setPass] = useState(null);
     const[isAdmin, setAdmin] = useState(false);
-  
+    //is modal shown?
     const [modalVisible, setModalVisible] = useState(false);
     //Render the component
 
@@ -29,23 +29,29 @@ export default function AddEmployee() {
           animationType="fade"
           transparent={true}
           visible={modalVisible}
+          //What to do when back button on phone is pressed
           onRequestClose={() => {
             setModalVisible(!modalVisible);
           }}>
           
           <View style={styles.centeredView}>
+            {/*this View adds the blurred background behind the modal*/}
             <View style={styles.blur}>
+
               <View style={styles.modalView}>
                 <TouchableOpacity 
                 style={styles.exit}
+                //Make sure user wants to exit when 'x' is pressed
                 onPress={ () => {
                   Alert.alert(
                       'Exit Addition',
                       'Are you sure you want to cancel?',
                       [
+                        //On "Yes" exit the modal and set all the data to null
                           {text: 'Yes', onPress: () => {setEmpF(null), setEmpL(null), setPass(null), setModalVisible(!modalVisible)}, style: 'cancel'
                             
                           },
+                          //On "No" do nothing
                           {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
                       ],
                       {cancelable: false}
@@ -54,7 +60,10 @@ export default function AddEmployee() {
                 >
                   <Text style={styles.textStyle}>X</Text>
                 </TouchableOpacity>
+                {/*Contain everything within a scroll view so it reacts well to the key board*/}
                 <ScrollView style={style.container}>
+
+                {/*First text input*/}
                 <View style = {styles.textView}>
                   <Text adjustsFontSizeToFit={true} style = {styles.modalText}>First Name</Text>
                 </View>
@@ -66,6 +75,7 @@ export default function AddEmployee() {
                   placeholder=" Employee First Name"
                 ></TextInput>
 
+                 {/*Second text input*/}
                 <View style = {styles.textView}>
                   <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Last Name</Text>
                 </View>
@@ -77,6 +87,7 @@ export default function AddEmployee() {
                   placeholder=" Employee Last Name"
                 ></TextInput>
 
+                   {/*Third text input*/}
                   <View style = {styles.textView}>
                       <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Password</Text>
                   </View>
@@ -88,6 +99,8 @@ export default function AddEmployee() {
                     placeholder=" Employee Password"
                 ></TextInput>
 
+                {/*Switch*/}
+                {/*Switch background color and text when switch is fliped*/}
                 <View style = {styles.adEmpView}
                  backgroundColor={isAdmin ? Color.MAROON : "black"}
                  >
@@ -114,6 +127,7 @@ export default function AddEmployee() {
                   onPress={() => setModalVisible(!modalVisible)}>
                   <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                 </Pressable>
+                
                 </ScrollView>
               </View>
             </View>
