@@ -13,24 +13,32 @@
  import SearchBar from './search_bar.js';
 import EmployeesList from './EmployeesList.js';  
 import AddEmployee from './AddEmployee.js';
+import FakeEmployeeData from './FakeEmployeeData.js';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
  class AdminEmployee extends React.Component {
+   
      
      render() {
-        
+         let employList = {};
+       
+        const addData = (params) => {
+            employList = params;
+            console.log(employList);
+        }
+
          return (
              <View style={styles.container}>
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
                     <View style={styles.buttonContainer}>
-                        <AddEmployee></AddEmployee>
+                        <AddEmployee sendData={addData} ></AddEmployee>
                     </View>
                     
                     
                 </View>
-                <EmployeesList></EmployeesList>
+                <EmployeesList addData={employList}></EmployeesList>
              </View>
          ) 
      }

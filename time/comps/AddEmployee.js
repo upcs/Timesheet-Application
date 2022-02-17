@@ -13,20 +13,33 @@
 /**
  * Allows the admin to add an employee
  */
-export default function AddEmployee() {
+export default function AddEmployee(props) {
     //Sets for firstname, lastname, password, and if employee is an admin respectively
     const [empF, setEmpF] = useState(null);
     const [empL, setEmpL] = useState(null);
     const [pass, setPass] = useState(null);
     const[isAdmin, setAdmin] = useState(false);
+    
     //is modal shown?
     const [modalVisible, setModalVisible] = useState(false);
+
+    //Set employee data
+    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null, password: null, usertype: null});
+
+    //Send new employ to parent component
+    const handleSubmit = () => {
+      props.sendData(dataOut);
+      setDataOut({firstname: null, lastname: null, password: null, usertype: null});
+      setEmpF(null);
+      setEmpL(null);
+      setPass(null);
+  };
     //Render the component
 
     return (
       <View style={styles.centeredView}>
         <Modal
-          animationType="fade"
+          animationType='slide'
           transparent={true}
           visible={modalVisible}
           //What to do when back button on phone is pressed
@@ -70,7 +83,7 @@ export default function AddEmployee() {
 
                 <TextInput
                   style={styles.textbox}
-                  onChangeText={text => setEmpF(text)}
+                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, password: pass, usertype: isAdmin ? 0 : 1 })}}
                   value={empF}
                   placeholder=" Employee First Name"
                 ></TextInput>
@@ -82,7 +95,7 @@ export default function AddEmployee() {
 
                 <TextInput
                   style={styles.textbox}
-                  onChangeText={text => setEmpL(text)}
+                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, password: pass, usertype: isAdmin ? 0 : 1 })}}
                   value={empL}
                   placeholder=" Employee Last Name"
                 ></TextInput>
@@ -94,7 +107,7 @@ export default function AddEmployee() {
 
                 <TextInput
                     style={styles.textbox}
-                    onChangeText={text => setPass(text)}
+                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, password: text, usertype: isAdmin ? 0 : 1 })}}
                     value={pass}
                     placeholder=" Employee Password"
                 ></TextInput>
@@ -115,6 +128,7 @@ export default function AddEmployee() {
                        thumbColor={isAdmin ? "white" : "black"}
                        onValueChange={ () => {
                           setAdmin(!isAdmin);
+                          setDataOut({firstname: empF, lastname: empL, password: pass, usertype: isAdmin ? 0 : 1 });
                        }}
                        value={isAdmin}
                         >
@@ -124,10 +138,10 @@ export default function AddEmployee() {
 
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}>
+                  onPress={() => { handleSubmit(),setModalVisible(!modalVisible)}}>
                   <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                 </Pressable>
-                
+
                 </ScrollView>
               </View>
             </View>
