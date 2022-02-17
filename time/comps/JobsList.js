@@ -14,7 +14,8 @@
  import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Modal, Alert, TouchableHighlightBase} from 'react-native'
  import FakeData from './FakeJobsiteData';
  import {Color} from './Palette';
- import eData from './FakeEmployeeData'
+ import eData from './FakeEmployeeData';
+ import SearchBar from './search_bar';
  
  
  /**
@@ -101,6 +102,7 @@ class JobsList extends React.Component {
     //Render each employee
     renderEmployee = ({item}) => {
         const { modalTwo } = this.state;
+        const { isModalVisible } = this.state;
         return (
             <View style={styles.items}>
                 <TouchableOpacity onPress={ () => {
@@ -109,8 +111,12 @@ class JobsList extends React.Component {
                         'Add Employee to Jobsite',
                         [
                             {text: 'Yes', onPress: () =>{
-                                    //this.deleteUser();
-                                    //this.setModalVisible(!isModalVisible);
+                                    Alert.alert(
+                                        'Employee Added', 
+                                        'Employee Added to Jobsite',
+                                        this.setModalTwo(!modalTwo),
+                                        this.setModalVisible(!isModalVisible)
+                                    )
                                 }, 
                             },
                             {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
@@ -124,6 +130,7 @@ class JobsList extends React.Component {
         );
     };
 
+    //Render sublist of employees for each job
     renderList = ({item}) => {
         return(
             <View style={styles.items}>
@@ -207,6 +214,11 @@ class JobsList extends React.Component {
                                 </TextInput>
                             </View>
 
+                            {/* SEARCH BAR */}
+                            <View styles={styles.search}>
+                                <SearchBar></SearchBar>
+                            </View>
+
                             {/* EMPLOYEE LIST */}
                             <FlatList 
                                 style={styles.list}
@@ -283,8 +295,14 @@ class JobsList extends React.Component {
                             </View>
 
                             {/* Search Employees */}
-                            <Text style={styles.modalText}>Search Employees</Text>
+                            <Text style={styles.modalText}>Add Employees</Text>
+
+                            {/* SEARCH BAR */}
+                            <View styles={styles.search}>
+                                <SearchBar></SearchBar>
+                            </View>
                             <FlatList 
+                                style={styles.list}
                                 data={this.state.eData} 
                                 keyExtractor={item => item.id.toString()}
                                 renderItem={this.renderEmployee} 
@@ -367,13 +385,18 @@ const styles = StyleSheet.create({
     },
     list: {
         flexGrow: 0,
-        height: 200
+        height: 200,
+        marginTop: 20
     },
     textStyle: {
         color: "white",
         fontWeight: "bold",
         textAlign: "center"
     },
+    search: {
+        paddingBottom: 50,
+        marginBottom: 15,
+    }
 });
  
  
