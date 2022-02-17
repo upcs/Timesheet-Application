@@ -107,9 +107,8 @@ class JobsList extends React.Component {
                         ]
                     )
                 }}>
-                <Text>{item.lastName + ", " + item.firstName}</Text>   
+                    <Text>{item.lastName + ", " + item.firstName}</Text>   
                 </TouchableOpacity>
-                
             </View>
         )
     }
@@ -180,6 +179,37 @@ class JobsList extends React.Component {
                                 keyExtractor={item => item.id.toString()}
                                 renderItem={this.renderList} 
                             />
+
+                            {/* SAVE CHANGES */}
+                            <TouchableOpacity
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={ () => {
+                                        this.setModalVisible(!isModalVisible);
+                                        this.updateEmployee(this.state.userEdited);
+                                    }}>
+                                    <Text style={styles.textStyle}>Save Changes</Text>
+                            </TouchableOpacity>
+
+                            {/* REMOVE JOB */}
+                            <TouchableOpacity
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={ () => {
+                                        Alert.alert(
+                                            'Delete user',
+                                            'Would you like to delete this user?',
+                                            [
+                                                {text: 'Yes', onPress: () =>{
+                                                        //this.deleteJob();
+                                                        this.setModalVisible(!isModalVisible);
+                                                    }, 
+                                                },
+                                                {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
+                                            ],
+                                            {cancelable: false}
+                                        )
+                                    }}>
+                                    <Text style={styles.textStyle}>DELETE</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
