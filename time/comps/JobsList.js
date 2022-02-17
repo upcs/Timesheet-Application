@@ -11,7 +11,7 @@
  
 
  import React, {useEffect, useState} from 'react';
- import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Modal} from 'react-native'
+ import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Modal, Alert, TouchableHighlightBase} from 'react-native'
  import FakeData from './FakeJobsiteData';
  import {Color} from './Palette';
  
@@ -28,9 +28,12 @@ class JobsList extends React.Component {
         this.state = {
             FakeData: this.initFakeData,
             isModalVisible: false,
+            modalTwo: false,
             address: '',
             jobName: '',
-            jobEdited: 1
+            jobEdited: 1,
+            employeeEdited: 1,
+            eList: this.initFakeData[1]
         };
     }
 
@@ -48,8 +51,22 @@ class JobsList extends React.Component {
 
     setJobEdited = (edited) => {
         this.setState({jobEdited: edited});
-        console.log(this.state.jobEdited);
     }
+
+    setEmployeeEdited = (edited) => {
+        this.setState({employeeEdited: edited});
+    }
+
+    setEList = (list) => {
+        this.setState({elist: list});
+        console.log(this.state.eList)
+    }
+
+    deleteUser = () => {
+        //console.log(this.state.eList);
+        
+    }
+
 
 
     
@@ -65,6 +82,7 @@ class JobsList extends React.Component {
                     this.setAddress(item.address);
                     this.setJobName(item.jobName);
                     this.setJobEdited(item.id);
+                    this.setEList(item.employees);
                 }}>
                     <Text >{item.jobName}</Text>
                 </TouchableOpacity>
@@ -75,7 +93,23 @@ class JobsList extends React.Component {
     renderList = ({item}) => {
         return(
             <View style={styles.items}>
-                <Text>{item.lastName + ", " + item.firstName}</Text>
+                <TouchableOpacity onPress={ () => {
+                    this.setEmployeeEdited(item.id);
+                    Alert.alert(
+                        'Remove User',
+                        'Remove User from Job?',
+                        [
+                            {text: 'Yes', onPress: () => {
+                                this.deleteUser();
+                                }
+                            },
+                            {text: 'No'}
+                        ]
+                    )
+                }}>
+                <Text>{item.lastName + ", " + item.firstName}</Text>   
+                </TouchableOpacity>
+                
             </View>
         )
     }
@@ -165,10 +199,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 22
+        marginTop: 10
     },
     modalView: {
-        margin: 10,
+        margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
         padding: 55,
@@ -223,7 +257,12 @@ const styles = StyleSheet.create({
     list: {
         flexGrow: 0,
         height: 200
-    }
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
 });
  
  
