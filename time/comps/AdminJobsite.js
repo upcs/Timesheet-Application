@@ -11,7 +11,8 @@
  import { useState } from 'react';
  import TimeSheetList from './TimeSheetList.js';
  import SearchBar from './search_bar.js';
-import JobsList from './JobsList.js';
+ import AddEmployee from './AddEmployee.js'
+ import JobsList from './JobsList.js';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
@@ -24,9 +25,7 @@ import JobsList from './JobsList.js';
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.add} onPress={this.onPress}>
-                            <Text style={styles.text}>Add</Text>
-                        </TouchableOpacity>
+                        <AddEmployee></AddEmployee>
                     </View>
                     
                     

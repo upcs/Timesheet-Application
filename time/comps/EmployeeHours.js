@@ -1,3 +1,7 @@
+/*
+Author: caden deutscher
+Displays the hours for an employee on a default account
+*/
 import React from 'react';
 import {Color} from './Palette.js';
 import {Text, Divider, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
