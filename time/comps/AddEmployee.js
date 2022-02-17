@@ -5,15 +5,18 @@
  ******************************************************************/
  import React, {useState} from 'react';
  import {Color, style} from './Palette.js';
- import {View, Button, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput} from 'react-native'
+ import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert} from 'react-native'
  import Employees from "./EmployeeInfo";
+import Position from 'react-native/Libraries/Components/Touchable/Position';
+
 
 
 /**
  * Allows the admin to add an employee
  */
 export default function AddEmployee() {
-    const [employee, setEmployee] = useState(null);
+    const [empF, setEmpF] = useState(null);
+    const [empL, setEmpL] = useState(null);
     const [pass, setPass] = useState(null);
     const [notes, setNotes] = useState(null);
   
@@ -21,29 +24,79 @@ export default function AddEmployee() {
     //Render the component
 
     return (
-        <View style={styles.centeredView}>
+      <View style={styles.centeredView}>
         <Modal
           animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => {
             setModalVisible(!modalVisible);
+            //Reset text inside of modal on close
+            setEmpF(null);
+            setEmpF(null);
+            setPass(null);
+            setNotes(null);
           }}>
+          
           <View style={styles.centeredView}>
             <View style={styles.blur}>
               <View style={styles.modalView}>
+                <TouchableOpacity 
+                style={styles.exit}
+                onPress={ () => {
+                  Alert.alert(
+                      'Exit Addition',
+                      'Are you sure you want to cancel?',
+                      [
+                          {text: 'Yes', onPress: () => setModalVisible(!modalVisible), style: 'cancel'
+                            
+                          },
+                          {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
+                      ],
+                      {cancelable: false}
+                  )
+              }}
+                >
+                  <Text style={styles.textStyle}>X</Text>
+                </TouchableOpacity>
+                <ScrollView style={style.container}>
+                <View style = {styles.textView}>
+                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>First Name</Text>
+                </View>
+
                 <TextInput
                   style={styles.textbox}
-                  onChangeText={text => setEmployee(text)}
-                  value={employee}
-                  placeholder=" Employee Name"
+                  onChangeText={text => setEmpF(text)}
+                  value={empF}
+                  placeholder=" Employee First Name"
                 ></TextInput>
+
+                <View style = {styles.textView}>
+                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Last Name</Text>
+                </View>
+
+                <TextInput
+                  style={styles.textbox}
+                  onChangeText={text => setEmpL(text)}
+                  value={empL}
+                  placeholder=" Employee Last Name"
+                ></TextInput>
+
+                  <View style = {styles.textView}>
+                      <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Password</Text>
+                  </View>
+
                 <TextInput
                     style={styles.textbox}
                     onChangeText={text => setPass(text)}
                     value={pass}
                     placeholder=" Employee Password"
                 ></TextInput>
+
+                <View style = {styles.textView}>
+                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Notes</Text>
+                </View>
+
                 <TextInput
                     style={styles.textbox}
                     multiline
@@ -53,17 +106,20 @@ export default function AddEmployee() {
                     placeholder=" Notes for the worksite"
                 >
                 </TextInput>
+    
+
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => setModalVisible(!modalVisible)}>
-                  <Text style={styles.textStyle}>Hide Modal</Text>
+                  <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                 </Pressable>
+                </ScrollView>
               </View>
             </View>
           </View>
         </Modal>
         <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-          <Text style={styles.textStyle}>Add Employee</Text>
+          <Text  style={styles.textStyle}>Add Employee</Text>
         </Pressable>
       </View>
     
@@ -71,18 +127,23 @@ export default function AddEmployee() {
 };
 
 const styles = StyleSheet.create({
+    exit:{
+      backgroundColor: Color.MAROON,
+      alignContent: 'center',
+      width: '15%',
+      borderRadius: 10,
+      marginBottom: '10%'
+    },
     centeredView: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
     },
     modalView: {
-    
       width: '90%',
       height: '80%',
       backgroundColor: 'white',
       padding: '10%',
-      alignItems: 'center',
       shadowColor: '#000',
 
       shadowOffset: {
@@ -104,7 +165,7 @@ const styles = StyleSheet.create({
     buttonClose: {
       backgroundColor: Color.MAROON,
       padding: '3%',
-      position: 'absolute',
+      margin: '3%',
       bottom: '2%'
     },
     textStyle: {
@@ -113,10 +174,12 @@ const styles = StyleSheet.create({
       textAlign: 'center'
     },
     textbox: {
+      flex: 1,
       borderColor: 'black',
-      width: '100%',
+      width: '95%',
       borderWidth: 2,
       margin: '3%',
+      justifyContent: 'flex-start',
       textAlignVertical: 'top',
       padding: '1%'
     },
@@ -126,5 +189,19 @@ const styles = StyleSheet.create({
       backgroundColor : 'rgba(52, 52, 52, 0.8)',
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    modalText: {
+      textAlign: 'center',
+      color: 'white'
+    },
+    textView: {
+      backgroundColor: Color.MAROON,
+      width: '70%',
+      alignSelf: 'center'
+
+    },
+    container: {
+        width: '100%',
+        height: '100%'
     }
   });

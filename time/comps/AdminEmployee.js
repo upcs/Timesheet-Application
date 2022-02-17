@@ -12,6 +12,7 @@
  import TimeSheetList from './TimeSheetList.js';
  import SearchBar from './search_bar.js';
 import EmployeesList from './EmployeesList.js';  
+import AddEmployee from './AddEmployee.js';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
@@ -24,9 +25,7 @@ import EmployeesList from './EmployeesList.js';
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.add} onPress={this.onPress}>
-                            <Text style={styles.text}>Add</Text>
-                        </TouchableOpacity>
+                        <AddEmployee></AddEmployee>
                     </View>
                     
                     
