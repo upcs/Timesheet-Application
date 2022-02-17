@@ -18,18 +18,18 @@ export default function AddEmployee(props) {
     const [empF, setEmpF] = useState(null);
     const [empL, setEmpL] = useState(null);
     const [pass, setPass] = useState(null);
-    const[isAdmin, setAdmin] = useState(false);
+    const[isAdmin, setAdmin] = useState(0);
     
     //is modal shown?
     const [modalVisible, setModalVisible] = useState(false);
 
     //Set employee data
-    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null, password: null, usertype: null});
+    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null, password: null, usertype: isAdmin});
 
     //Send new employ to parent component
     const handleSubmit = () => {
       props.sendData(dataOut);
-      setDataOut({firstname: null, lastname: null, password: null, usertype: null});
+      setDataOut({firstname: null, lastname: null, password: null, usertype: isAdmin ? 1 : 0});
       setEmpF(null);
       setEmpL(null);
       setPass(null);
@@ -83,7 +83,7 @@ export default function AddEmployee(props) {
 
                 <TextInput
                   style={styles.textbox}
-                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, password: pass, usertype: isAdmin ? 0 : 1 })}}
+                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, password: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empF}
                   placeholder=" Employee First Name"
                 ></TextInput>
@@ -95,7 +95,7 @@ export default function AddEmployee(props) {
 
                 <TextInput
                   style={styles.textbox}
-                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, password: pass, usertype: isAdmin ? 0 : 1 })}}
+                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, password: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empL}
                   placeholder=" Employee Last Name"
                 ></TextInput>
@@ -107,7 +107,7 @@ export default function AddEmployee(props) {
 
                 <TextInput
                     style={styles.textbox}
-                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, password: text, usertype: isAdmin ? 0 : 1 })}}
+                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, password: text, usertype: isAdmin ? 1 : 0})}}
                     value={pass}
                     placeholder=" Employee Password"
                 ></TextInput>
