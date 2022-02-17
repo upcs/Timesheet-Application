@@ -5,7 +5,7 @@
  ******************************************************************/
  import React, {useState} from 'react';
  import {Color, style} from './Palette.js';
- import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert} from 'react-native'
+ import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
  import Employees from "./EmployeeInfo";
 import Position from 'react-native/Libraries/Components/Touchable/Position';
 
@@ -18,7 +18,7 @@ export default function AddEmployee() {
     const [empF, setEmpF] = useState(null);
     const [empL, setEmpL] = useState(null);
     const [pass, setPass] = useState(null);
-    const [notes, setNotes] = useState(null);
+    const[isAdmin, setAdmin] = useState(false);
   
     const [modalVisible, setModalVisible] = useState(false);
     //Render the component
@@ -31,11 +31,6 @@ export default function AddEmployee() {
           visible={modalVisible}
           onRequestClose={() => {
             setModalVisible(!modalVisible);
-            //Reset text inside of modal on close
-            setEmpF(null);
-            setEmpF(null);
-            setPass(null);
-            setNotes(null);
           }}>
           
           <View style={styles.centeredView}>
@@ -48,7 +43,7 @@ export default function AddEmployee() {
                       'Exit Addition',
                       'Are you sure you want to cancel?',
                       [
-                          {text: 'Yes', onPress: () => setModalVisible(!modalVisible), style: 'cancel'
+                          {text: 'Yes', onPress: () => {setEmpF(null), setEmpL(null), setPass(null), setModalVisible(!modalVisible)}, style: 'cancel'
                             
                           },
                           {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
@@ -93,19 +88,25 @@ export default function AddEmployee() {
                     placeholder=" Employee Password"
                 ></TextInput>
 
-                <View style = {styles.textView}>
-                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Notes</Text>
+                <View style = {styles.adEmpView}
+                 backgroundColor={isAdmin ? Color.MAROON : "black"}
+                 >
+                  <Text adjustsFontSizeToFit={true} style = {styles.sText} >{isAdmin ? "Admin" : "Basic"}</Text>
                 </View>
 
-                <TextInput
-                    style={styles.textbox}
-                    multiline
-                    numberOfLines={6}
-                    onChangeText={text => setNotes(text)}
-                    value={notes}
-                    placeholder=" Notes for the worksite"
-                >
-                </TextInput>
+                {/* SWITCH FOR CHANGING USER TYPE */}
+                <View>
+                      <Switch
+                       style={styles.switch}
+                       trackColor={{false: 'black', true: Color.MAROON}}
+                       thumbColor={isAdmin ? "white" : "black"}
+                       onValueChange={ () => {
+                          setAdmin(!isAdmin);
+                       }}
+                       value={isAdmin}
+                        >
+                        </Switch>
+                  </View>
     
 
                 <Pressable
@@ -125,7 +126,17 @@ export default function AddEmployee() {
     
     );
 };
-
+/*
+<TextInput
+style={styles.textbox}
+multiline
+numberOfLines={6}
+onChangeText={text => setNotes(text)}
+value={notes}
+placeholder=" Notes for the worksite"
+>
+</TextInput>
+*/
 const styles = StyleSheet.create({
     exit:{
       backgroundColor: Color.MAROON,
@@ -203,5 +214,19 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%'
-    }
+    },
+    switch:{
+      alignSelf: 'center',
+      marginBottom: '10%'
+  },
+  sText: {
+    alignSelf: 'center',
+    color: 'white'
+  },
+  adEmpView: {
+    width: '30%',
+    height: '8%',
+    alignSelf: 'center',
+    justifyContent: 'center'
+  }
   });
