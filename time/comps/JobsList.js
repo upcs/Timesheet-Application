@@ -14,6 +14,7 @@
  import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Modal, Alert, TouchableHighlightBase} from 'react-native'
  import FakeData from './FakeJobsiteData';
  import {Color} from './Palette';
+ import eData from './FakeEmployeeData'
  
  
  /**
@@ -24,9 +25,11 @@
 class JobsList extends React.Component {
     constructor(props) {
         super(props);
-        this.initFakeData = FakeData
+        this.initFakeData = FakeData;
+        this.initEData = eData;
         this.state = {
             FakeData: this.initFakeData,
+            eData: this.initEData,
             isModalVisible: false,
             modalTwo: false,
             address: '',
@@ -39,6 +42,10 @@ class JobsList extends React.Component {
 
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
+    }
+
+    setModalTwo = (visible) => {
+        this.setState({modalTwo: visible});
     }
 
     setAddress = (addy) => {
@@ -90,6 +97,33 @@ class JobsList extends React.Component {
         );
     };
 
+
+    //Render each employee
+    renderEmployee = ({item}) => {
+        const { modalTwo } = this.state;
+        return (
+            <View style={styles.items}>
+                <TouchableOpacity onPress={ () => {
+                    Alert.alert(
+                        'Add Employee',
+                        'Add Employee to Jobsite',
+                        [
+                            {text: 'Yes', onPress: () =>{
+                                    //this.deleteUser();
+                                    //this.setModalVisible(!isModalVisible);
+                                }, 
+                            },
+                            {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
+                        ],
+                        {cancelable: false}
+                    )
+                }}>
+                    <Text >{item.lastName + ", " + item.firstName}</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
     renderList = ({item}) => {
         return(
             <View style={styles.items}>
@@ -116,6 +150,7 @@ class JobsList extends React.Component {
     //Create the flatlist
     render() {
         const { isModalVisible } = this.state;
+        const { modalTwo } = this.state;
         return (
             <View>
                 <FlatList 
@@ -128,7 +163,7 @@ class JobsList extends React.Component {
                     transparent={true}
                     visible={isModalVisible}
                     onRequestClose= { () => {
-                        this.setModalVisible(!isModalVisible);
+                        this.setModalVisible(!isModalVisible); 
                     }}
                 >
                     <View style={styles.centeredView}>
@@ -190,6 +225,16 @@ class JobsList extends React.Component {
                                     <Text style={styles.textStyle}>Save Changes</Text>
                             </TouchableOpacity>
 
+                            {/* ADD EMPLOYEE */}
+                            <TouchableOpacity
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={ () => {
+                                        this.setModalVisible(!isModalVisible);
+                                        this.setModalTwo(!modalTwo);
+                                    }}>
+                                    <Text style={styles.textStyle}>Add Employee</Text>
+                            </TouchableOpacity>
+
                             {/* REMOVE JOB */}
                             <TouchableOpacity
                                 style={[styles.button, styles.buttonClose]}
@@ -213,6 +258,42 @@ class JobsList extends React.Component {
                         </View>
                     </View>
                 </Modal>
+
+                {/* Add Employee Modal */}
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={modalTwo}
+                    onRequestClose= { () => {
+                        this.setModalVisible(!modalTwo);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            
+                            {/* EXIT BUTTON */}
+                            <View style={styles.leftView}>
+                                <TouchableOpacity style={[styles.button, styles.buttonClose]} onPress={ () =>
+                                {
+                                    this.setModalTwo(!modalTwo);
+                                    this.setModalVisible(!isModalVisible);
+                                }}>
+                                    <Text style={styles.textStyle}>X</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            {/* Search Employees */}
+                            <Text style={styles.modalText}>Search Employees</Text>
+                            <FlatList 
+                                data={this.state.eData} 
+                                keyExtractor={item => item.id.toString()}
+                                renderItem={this.renderEmployee} 
+                            />
+                        </View>
+                    </View>
+                </Modal>
+
+                
             </View>
         );
     }
