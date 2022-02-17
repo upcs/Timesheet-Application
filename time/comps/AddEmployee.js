@@ -84,6 +84,7 @@ export default function AddEmployee(props) {
                 </View>
 
                 <TextInput
+                  id='fInput'
                   style={styles.textbox}
                   onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, password: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empF}
@@ -96,6 +97,7 @@ export default function AddEmployee(props) {
                 </View>
 
                 <TextInput
+                  id='lInput'
                   style={styles.textbox}
                   onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, password: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empL}
@@ -108,6 +110,7 @@ export default function AddEmployee(props) {
                   </View>
 
                 <TextInput
+                    id='pInput'
                     style={styles.textbox}
                     onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, password: text, usertype: isAdmin ? 1 : 0})}}
                     value={pass}
@@ -125,6 +128,7 @@ export default function AddEmployee(props) {
                 {/* SWITCH FOR CHANGING USER TYPE */}
                 <View>
                       <Switch
+                       id='aSwitch'
                        style={styles.switch}
                        trackColor={{false: 'black', true: Color.MAROON}}
                        thumbColor={isAdmin ? "white" : "black"}
