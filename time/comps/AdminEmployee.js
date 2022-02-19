@@ -32,13 +32,14 @@ import FakeEmployeeData from './FakeEmployeeData.js';
              <View style={styles.container}>
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
+                    
                     <View style={styles.buttonContainer}>
                         <AddEmployee sendData={addData} ></AddEmployee>
                     </View>
                     
                     
                 </View>
-                <EmployeesList addData={employList}></EmployeesList>
+                <EmployeesList></EmployeesList>
              </View>
          ) 
      }

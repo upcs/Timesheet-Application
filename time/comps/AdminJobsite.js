@@ -11,7 +11,7 @@
  import { useState } from 'react';
  import TimeSheetList from './TimeSheetList.js';
  import SearchBar from './search_bar.js';
- import AddEmployee from './AddEmployee.js'
+ import AddJobsite from './AddJobsite.js'
  import JobsList from './JobsList.js';
 
 
@@ -19,13 +19,19 @@
  class AdminJobsite extends React.Component {
      
      render() {
+        let jobData = {};
+       
+        const addData = (params) => {
+            jobData = params;
+            console.log(jobData);
+        }
         
          return (
              <View style={styles.container}>
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
                     <View style={styles.buttonContainer}>
-                        <AddEmployee></AddEmployee>
+                        <AddJobsite  sendData={addData}></AddJobsite>
                     </View>
                     
                     

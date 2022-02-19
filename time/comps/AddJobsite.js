@@ -1,5 +1,5 @@
 /*******************************************************************
- * Functionality for when the 'Add Employee' button is pressed
+ * Functionality for when the 'Add Jobsite' button is pressed
  * 
  * Author: Caden Deutscher
  ******************************************************************/
@@ -15,24 +15,23 @@
  */
 export default function AddEmployee(props) {
     //Sets for firstname, lastname, password, and if employee is an admin respectively
-    const [empF, setEmpF] = useState(null);
-    const [empL, setEmpL] = useState(null);
-    const [pass, setPass] = useState(null);
-    const[isAdmin, setAdmin] = useState(0);
+    const [jobN, setJobN] = useState(null);
+    const [jobA, setJobA] = useState(null);
+    const[notes, setNotes] = useState(null);
     
     //is modal shown?
     const [modalVisible, setModalVisible] = useState(false);
 
     //Set employee data
-    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null, password: null, usertype: isAdmin});
+    const[dataOut, setDataOut] = useState( {jName: null, jAd: null,  note: null});
 
     //Send new employ to parent component
     const handleSubmit = () => {
       props.sendData(dataOut);
-      setDataOut({firstname: null, lastname: null, password: null, usertype: isAdmin ? 1 : 0});
-      setEmpF(null);
-      setEmpL(null);
-      setPass(null);
+      setDataOut({jName: null, jAd: null, note: null});
+      setJobA(null);
+      setJobN(null);
+      setNotes(null);
   };
     //Render the component
 
@@ -63,7 +62,7 @@ export default function AddEmployee(props) {
                       'Are you sure you want to cancel?',
                       [
                         //On "Yes" exit the modal and set all the data to null
-                          {text: 'Yes', id:'yesAlert', onPress: () => {setEmpF(null), setEmpL(null), setPass(null), setModalVisible(!modalVisible)}, style: 'cancel'
+                          {text: 'Yes', id:'yesAlert', onPress: () => {setJobN(null), setJobA(null), setNotes(null), setModalVisible(!modalVisible)}, style: 'cancel'
                             
                           },
                           //On "No" do nothing
@@ -80,66 +79,48 @@ export default function AddEmployee(props) {
 
                 {/*First text input*/}
                 <View style = {styles.textView}>
-                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>First Name</Text>
+                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Job Name</Text>
                 </View>
 
                 <TextInput
-                  id='fInput'
+                  id='jnInput'
                   style={styles.textbox}
-                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, password: pass, usertype: isAdmin ? 1 : 0})}}
-                  value={empF}
-                  placeholder=" Employee First Name"
+                  onChangeText={text => {setJobN(text), setDataOut({jName: text, jAd: jobA,  note: notes})}}
+                  value={jobN}
+                  placeholder=" Jobsite Name"
                 ></TextInput>
 
                  {/*Second text input*/}
                 <View style = {styles.textView}>
-                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Last Name</Text>
+                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Address</Text>
                 </View>
 
                 <TextInput
-                  id='lInput'
-                  style={styles.textbox}
-                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, password: pass, usertype: isAdmin ? 1 : 0})}}
-                  value={empL}
-                  placeholder=" Employee Last Name"
+                   id='aInput'
+                   multiline
+                   numberOfLines={2}
+                   style={styles.textbox}
+                   onChangeText={text => {setJobA(text),setDataOut({jName: jobN, jAd: text, note: notes})}}
+                   value={jobA}
+                   placeholder=" Jobsite Address"
                 ></TextInput>
 
-                   {/*Third text input*/}
+                  {/*Third text input*/}
                   <View style = {styles.textView}>
-                      <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Password</Text>
+                      <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Notes</Text>
                   </View>
-
+                
                 <TextInput
-                    id='pInput'
-                    style={styles.textbox}
-                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, password: text, usertype: isAdmin ? 1 : 0})}}
-                    value={pass}
-                    placeholder=" Employee Password"
-                ></TextInput>
-
-                {/*Switch*/}
-                {/*Switch background color and text when switch is fliped*/}
-                <View style = {styles.adEmpView}
-                 backgroundColor={isAdmin ? Color.MAROON : "black"}
-                 >
-                  <Text adjustsFontSizeToFit={true} style = {styles.sText} >{isAdmin ? "Admin" : "Basic"}</Text>
-                </View>
-
-                {/* SWITCH FOR CHANGING USER TYPE */}
-                <View>
-                      <Switch
-                       id='aSwitch'
-                       style={styles.switch}
-                       trackColor={{false: 'black', true: Color.MAROON}}
-                       thumbColor={isAdmin ? "white" : "black"}
-                       onValueChange={ () => {
-                          setAdmin(!isAdmin);
-                          setDataOut({firstname: empF, lastname: empL, password: pass, usertype: isAdmin ? 0 : 1 });
-                       }}
-                       value={isAdmin}
-                        >
-                        </Switch>
-                  </View>
+                id='nInput'
+                style={styles.textbox}
+                multiline
+                numberOfLines={6}
+                onChangeText={text => {setNotes(text),setDataOut({jName: jobN, jAd: jobA, note: text})}}
+                value={notes}
+                placeholder=" Notes for the jobsite"
+                >
+                </TextInput>
+                
     
 
                 <Pressable
@@ -155,13 +136,12 @@ export default function AddEmployee(props) {
           </View>
         </Modal>
         <Pressable id='addButton' style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-          <Text  style={styles.textStyle}>Add Employee</Text>
+          <Text  style={styles.textStyle}>Add Jobsite</Text>
         </Pressable>
       </View>
     
     );
 };
-
 
 const styles = StyleSheet.create({
     exit:{
