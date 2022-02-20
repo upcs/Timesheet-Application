@@ -13,37 +13,72 @@
  import SearchBar from './search_bar.js';
  import AddEmployee from './AddEmployee.js'
  import JobsList from './JobsList.js';
+import FakeEmployeeData from './FakeEmployeeData.js';
+import { FlatList } from 'react-native-gesture-handler';
+
+import { Button } from 'react-native';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
  class AdminJobsite extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+          query: ""
+        };
+
+        this.items = FakeEmployeeData;
+        this.filteredItems = this.getFilteredItems.bind(this);
+        
+      }
+
+      setQuery(newQuery) {
+        query = newQuery;
+
+      }
+      
+
+      getFilteredItems(query, items) {
+        if (!query) {
+          return items;
+        }
+        return items.filter((employee) => employee.firstName.includes(query));
+    }
      
      render() {
-        
+
          return (
-             <View style={styles.container}>
+
+
+
+            <View style={styles.container}>
                  <View style={styles.upperbar}>
-                    <SearchBar style={styles.search}></SearchBar>
-                    <View style={styles.buttonContainer}>
-                        <AddEmployee></AddEmployee>
+                     <SearchBar style={styles.search} onChange={(e) => setQuery(e.target.value)}></SearchBar>
+                     <View style={styles.buttonContainer}>
+                         <AddEmployee></AddEmployee>
                     </View>
-                    
-                    
-                </View>
-                <JobsList></JobsList>
+
+                 </View>
+
+                
+                 <FlatList  data = {this.filteredItems.firstName} >
+                 <Button title = "hi">Hi</Button>
+                
+
+                 </FlatList>
+
+
              </View>
-         ) 
+                  
+         )
+         
      }
  }
  
  /*  Styles used for login screen */
  const styles = StyleSheet.create({
-     container: {
-        //  alignItems: 'center', 
-        //  justifyContent: 'center',
-        //  flex: 0.8
-        
-     },
+     
 
      upperbar: {
         
@@ -52,10 +87,7 @@
         
      },
 
-    //  logo: { 
-    //      aspectRatio: 0.9, 
-    //      resizeMode: 'contain'
-    //  },
+  
      add: {
        backgroundColor: Color.MAROON, 
        padding: 20, 
@@ -71,7 +103,7 @@
     
      },
      text: {
-         color: 'white',
+        
          fontSize: 14,    
         position: 'absolute',
         // margin: 'auto',

@@ -17,18 +17,42 @@ import { Text, View, StyleSheet, TouchableOpacity, Image, Button, TextInput} fro
 //Render the Company logo in the center of the screen 
 //With a sign-in button underneath
 class SearchBar extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            currValue: ""
+        };
+        
+        
+
+        
+    }
+
+      setValue(evt) {
+        
+        const val = evt.target.value;
+        this.setState({
+            currValue:  evt.target.value
+          });
+      }
+
     render() {
+
         return (
 
             // Vertical  layout 
             <View>
-                <TextInput style={styles.search} placeholder='Search here...'/>
+                <TextInput style={styles.search} placeholder='Search here...' onChange= {evt => this.setValue(evt)} value={this.state.currValue} />
             </View>
         
         
         
         );
     }
+
+
+   
 }
 
 
