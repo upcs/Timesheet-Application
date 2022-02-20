@@ -29,7 +29,7 @@ import { Button } from 'react-native';
         };
 
         this.items = FakeEmployeeData;
-        this.filteredItems = this.getFilteredItems.bind(this);
+        this.filteredItems = this.getFilteredItems("", this.items.firstName);
         
       }
 
@@ -40,10 +40,10 @@ import { Button } from 'react-native';
       
 
       getFilteredItems(query, items) {
-        if (!query) {
+        // if (!query) {
           return items;
-        }
-        return items.filter((employee) => employee.firstName.includes(query));
+        // }
+        // return items.filter((employee) => employee.firstName.includes(query));
     }
      
      render() {
@@ -62,8 +62,8 @@ import { Button } from 'react-native';
                  </View>
 
                 
-                 <FlatList  data = {this.filteredItems.firstName} >
-                 <Button title = "hi">Hi</Button>
+                 <FlatList  data = {this.filteredItems} >
+                
                 
 
                  </FlatList>
