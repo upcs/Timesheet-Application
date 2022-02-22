@@ -31,10 +31,10 @@ class SearchBar extends React.Component {
 
       setValue(evt) {
         
-        const val = evt.target.value;
+        val = evt.target.value;
         this.setState({
-            currValue:  evt.target.value
-          });
+            currValue :   evt.target.value
+         });
       }
 
     render() {
