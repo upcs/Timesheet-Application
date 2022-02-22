@@ -14,7 +14,8 @@
  import AddEmployee from './AddEmployee.js'
  import JobsList from './JobsList.js';
 import FakeEmployeeData from './FakeEmployeeData.js';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native';
 
 import { Button } from 'react-native';
 
@@ -25,25 +26,35 @@ import { Button } from 'react-native';
     constructor(props) {
         super(props);
         this.state = {
-          query: ""
+          //query: ""
         };
 
+        const {employees} = FakeEmployeeData;
         this.items = FakeEmployeeData;
-        this.filteredItems = this.getFilteredItems("", this.items.firstName);
+        this.query = "";
+        this.filteredItems = this.getFilteredItems(this.query, FakeEmployeeData);
+        const Item = ({ title }) => (
+          <View style={styles.item}>
+            <Text style={styles.title}>{title}</Text>
+          </View>
+        );
+        this.renderItem = ({ item }) => (
+          <Item title={item.firstName} />
+        );
         
       }
 
       setQuery(newQuery) {
-        query = newQuery;
+        return newQuery;
 
       }
       
 
       getFilteredItems(query, items) {
-        // if (!query) {
+         if (!query) {
           return items;
-        // }
-        // return items.filter((employee) => employee.firstName.includes(query));
+         }
+        return items.filter((employee) => employee.firstName.includes(query));
     }
      
      render() {
@@ -58,15 +69,16 @@ import { Button } from 'react-native';
                      <View style={styles.buttonContainer}>
                          <AddEmployee></AddEmployee>
                     </View>
-
+                    
                  </View>
+                 
+                 <SafeAreaView style={styles.container}>
+                  <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem} data = {this.filteredItems} ></FlatList>
+                 </SafeAreaView>
+                
+                
 
-                
-                 <FlatList  data = {this.filteredItems} >
-                
-                
-
-                 </FlatList>
+                 
 
 
              </View>
