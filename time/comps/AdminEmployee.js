@@ -11,32 +11,35 @@
  import { useState } from 'react';
  import TimeSheetList from './TimeSheetList.js';
  import SearchBar from './search_bar.js';
- import AddJobsite from './AddJobsite.js'
- import JobsList from './JobsList.js';
+import EmployeesList from './EmployeesList.js';  
+import AddEmployee from './AddEmployee.js';
+import FakeEmployeeData from './FakeEmployeeData.js';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
- class AdminJobsite extends React.Component {
+ class AdminEmployee extends React.Component {
+   
      
      render() {
-        let jobData = {};
+         let employList = {};
        
         const addData = (params) => {
-            jobData = params;
-            console.log(jobData);
+            employList = params;
+            console.log(employList);
         }
-        
+
          return (
              <View style={styles.container}>
                  <View style={styles.upperbar}>
                     <SearchBar style={styles.search}></SearchBar>
+                    
                     <View style={styles.buttonContainer}>
-                        <AddJobsite  sendData={addData}></AddJobsite>
+                        <AddEmployee sendData={addData} ></AddEmployee>
                     </View>
                     
                     
                 </View>
-                <JobsList></JobsList>
+                <EmployeesList></EmployeesList>
              </View>
          ) 
      }
@@ -90,4 +93,4 @@
     }
  });
  
- export default AdminJobsite;
+ export default AdminEmployee;

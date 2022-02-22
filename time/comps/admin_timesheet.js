@@ -10,7 +10,7 @@ import React, {useEffect, useState} from 'react';
 //import {Color, style} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, Image, Button} from 'react-native'
 import SearchBar from './search_bar'
-import ScrollableList from './scrollable_list';
+import TimeSheetList from './TimeSheetList';
 import Menu from './Menu';
 import CalendarButton from './calendar_button';
 
@@ -35,7 +35,7 @@ class AdminTimesheet extends React.Component {
                 <View style={styles.horizontal_layout_bottom}>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
                         <Text style={[styles.employees_hours, styles.text_employee]}>Employees:</Text>
-                        <ScrollableList style={styles.employees}></ScrollableList>
+                        <TimeSheetList style={styles.employees}></TimeSheetList>
                     </View>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
                         <Text style={[styles.employees_hours, styles.text_employee]}>Hours:</Text>

@@ -1,5 +1,6 @@
 /*****************
- * PLACEHOLDER BUTTON. WILL NOT BE COMPELTED THIS SPRINT
+ *author: caden deutscher
+ *renders a calendar that a user can select a date from
  * A lot of the code from here: https://github.com/react-native-datetimepicker/datetimepicker
  */
 
@@ -13,11 +14,15 @@
  * Button that loads calendar on press
  */
 export default function CalendarS(props) {
+
+  //States
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    //Set button text state
     const [buttonText, setButtonText] = useState(props.name);
 
+ //what to do when the user submits the calendar
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
@@ -38,7 +43,7 @@ export default function CalendarS(props) {
   const showDatepicker = () => {
     showMode('date');
   };
-
+  //function to change the text of the button
   const changeText = (text) =>{try {setButtonText(text); } catch(error){console.log("error")}}
   
 
