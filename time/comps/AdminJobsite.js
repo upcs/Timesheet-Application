@@ -24,20 +24,26 @@ import { Button } from 'react-native';
  class AdminJobsite extends React.Component {
 
     constructor(props) {
-        super(props);
+      super(props);
+        this.currValue = this.currValue.bind(this, );
         this.state = {
-          //query: ""
+          query: ""
         };
+
+      
 
         const {employees} = FakeEmployeeData;
         this.items = FakeEmployeeData;
-        this.query = "";
-        this.filteredItems = this.getFilteredItems(this.query, FakeEmployeeData);
+        //this.query = "";
+        
+        
+
         const Item = ({ title }) => (
           <View style={styles.item}>
             <Text style={styles.title}>{title}</Text>
           </View>
         );
+
         this.renderItem = ({ item }) => (
           <Item title={item.firstName} />
         );
@@ -55,17 +61,26 @@ import { Button } from 'react-native';
           return items;
          }
         return items.filter((employee) => employee.firstName.includes(query));
-    }
+      }
+
+      currValue(newValue) {
+        //console.log(newValue);
+        this.setState({query : newValue});
+       // console.log(this.state.query);
+        this.forceUpdate();
+      }
      
      render() {
 
+      this.filteredItems = this.getFilteredItems(this.state.query, FakeEmployeeData);
+      
          return (
 
 
 
             <View style={styles.container}>
                  <View style={styles.upperbar}>
-                     <SearchBar style={styles.search} onChange={(e) => setQuery(e.target.value)}></SearchBar>
+                     <SearchBar style={styles.search} currValue = {this.currValue}></SearchBar>
                      <View style={styles.buttonContainer}>
                          <AddEmployee></AddEmployee>
                     </View>
@@ -73,13 +88,9 @@ import { Button } from 'react-native';
                  </View>
                  
                  <SafeAreaView style={styles.container}>
-                  <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem} data = {this.filteredItems} ></FlatList>
+                    <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList>
                  </SafeAreaView>
-                
-                
-
-                 
-
+         
 
              </View>
                   

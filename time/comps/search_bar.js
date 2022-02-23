@@ -20,22 +20,21 @@ class SearchBar extends React.Component {
 
     constructor(props) {
         super(props);
+        this.currValue = this.currValue.bind(this); 
         this.state = {
-            currValue: ""
-        };
-        
-        
+            value: ""
+        }
 
         
     }
 
-      setValue(evt) {
+    currValue(text) {
         
-        val = evt.target.value;
-        this.setState({
-            currValue :   evt.target.value
-         });
-      }
+        //val = evt.target.value;
+        //console.log(text)
+        this.setState({value: text})
+        this.props.currValue(text);
+    }
 
     render() {
 
@@ -43,7 +42,7 @@ class SearchBar extends React.Component {
 
             // Vertical  layout 
             <View>
-                <TextInput style={styles.search} placeholder='Search here...' onChange= {evt => this.setValue(evt)} value={this.state.currValue} />
+                <TextInput style={styles.search} placeholder='Search here...' onChangeText= {this.currValue} value = {this.state.value}  />
             </View>
         
         

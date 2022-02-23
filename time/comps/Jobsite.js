@@ -1,7 +1,7 @@
 import React from 'react';
 import { Color } from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity} from 'react-native'
-import Menu from './Menu'
+
 
 class Jobsite extends React.Component {
     render() {
