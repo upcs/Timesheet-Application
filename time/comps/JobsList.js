@@ -213,6 +213,7 @@ class JobsList extends React.Component {
                             <View style={styles.textAndTitle}>
                                 <Text style={styles.titles}>Job Name:</Text>
                                 <TextInput 
+                                    id='jobName'
                                     style={styles.textArea} 
                                     defaultValue={this.state.jobName}
                                     onChangeText={ (text) =>{
@@ -223,8 +224,9 @@ class JobsList extends React.Component {
 
                             {/* CHANGE ADDRESS */}
                             <View style={styles.textAndTitle}>
-                                <Text style={styles.titles}>Job Name:</Text>
+                                <Text style={styles.titles}>Job Address:</Text>
                                 <TextInput 
+                                    id='jobAddress'
                                     style={styles.textArea} 
                                     defaultValue={this.state.address}
                                     onChangeText={ (text) =>{
@@ -258,6 +260,7 @@ class JobsList extends React.Component {
 
                             {/* ADD EMPLOYEE */}
                             <TouchableOpacity
+                                id='addEmployeeButton'
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         this.setModalVisible(!isModalVisible);
