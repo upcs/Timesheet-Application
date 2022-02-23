@@ -67,7 +67,6 @@ import { Color } from './Palette';
     }
 
     deleteUser = () => {
-        console.log(this.state.userEdited);
         const newEmployeeList = this.state.FakeData.filter(item => item.id !== this.state.userEdited)
         this.setState({FakeData: newEmployeeList});
     }
@@ -196,6 +195,7 @@ import { Color } from './Palette';
                             
                             {/* SAVE CHANGES */}
                             <TouchableOpacity
+                                id='saveChanges'
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         this.setModalVisible(!isModalVisible);
@@ -206,6 +206,7 @@ import { Color } from './Palette';
                             
                             {/* REMOVE USER */}
                             <TouchableOpacity
+                                id='removeUser'
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         Alert.alert(
