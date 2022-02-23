@@ -66,18 +66,39 @@ class JobsList extends React.Component {
     }
 
     setEList = (list) => {
-        this.setState({elist: list});
-        console.log(this.state.eList)
+        console.log(list);
+        this.setState({eList: list}, () => {}); 
+    }
+
+    deleteJob = () => {
+        const newJobList = this.state.FakeData.filter(item => item.id !== this.state.jobEdited)
+        this.setState({FakeData: newJobList});
+    }
+
+    saveJob = (edited) => {
+        const newJobList = this.state.FakeData.map( item =>
+            {
+                if (item.id === edited){
+                    item.address = this.state.address;
+                    item.jobName = this.state.jobName;
+                    return item;
+                }
+                return item;
+            })
+            this.setState({FakeData: newJobList});
     }
 
     deleteUser = () => {
-        //console.log(this.state.eList);
-        
+        const newEmployeeList = this.state.eList.filter(item => item.id !== this.state.employeeEdited);
+        this.setState({eList: newEmployeeList});
     }
-
-
-
-    
+ 
+    addUser = (item) => {
+        console.log(item);
+        const newEmployeeList = this.state.eList.unshift(item);
+        this.setState({eList: newEmployeeList});
+        console.log(this.state.eList);
+    }
 
  
     //Render each item as a button
@@ -114,6 +135,7 @@ class JobsList extends React.Component {
                                     Alert.alert(
                                         'Employee Added', 
                                         'Employee Added to Jobsite',
+                                        this.addUser(item),
                                         this.setModalTwo(!modalTwo),
                                         this.setModalVisible(!isModalVisible)
                                     )
@@ -222,7 +244,7 @@ class JobsList extends React.Component {
                             {/* EMPLOYEE LIST */}
                             <FlatList 
                                 style={styles.list}
-                                data={this.state.FakeData[this.state.jobEdited - 1].employees} 
+                                data={this.state.eList}  
                                 keyExtractor={item => item.id.toString()}
                                 renderItem={this.renderList} 
                             />
@@ -232,7 +254,7 @@ class JobsList extends React.Component {
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         this.setModalVisible(!isModalVisible);
-                                        this.updateEmployee(this.state.userEdited);
+                                        this.saveJob(this.state.jobEdited);
                                     }}>
                                     <Text style={styles.textStyle}>Save Changes</Text>
                             </TouchableOpacity>
@@ -252,11 +274,11 @@ class JobsList extends React.Component {
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         Alert.alert(
-                                            'Delete user',
-                                            'Would you like to delete this user?',
+                                            'Delete Job',
+                                            'Would you like to delete this job?',
                                             [
                                                 {text: 'Yes', onPress: () =>{
-                                                        //this.deleteJob();
+                                                        this.deleteJob();
                                                         this.setModalVisible(!isModalVisible);
                                                     }, 
                                                 },
