@@ -37,7 +37,7 @@ class JobsList extends React.Component {
             jobName: '',
             jobEdited: 1,
             employeeEdited: 1,
-            eList: this.initFakeData[1]
+            eList: null
         };
     }
 
@@ -66,7 +66,6 @@ class JobsList extends React.Component {
     }
 
     setEList = (list) => {
-        console.log(list);
         this.setState({eList: list}, () => {}); 
     }
 
@@ -94,10 +93,8 @@ class JobsList extends React.Component {
     }
  
     addUser = (item) => {
-        console.log(item);
-        const newEmployeeList = this.state.eList.unshift(item);
-        this.setState({eList: newEmployeeList});
-        console.log(this.state.eList);
+        this.state.eList.unshift(item);
+        return item;
     }
 
  
@@ -141,7 +138,7 @@ class JobsList extends React.Component {
                                     )
                                 }, 
                             },
-                            {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
+                            {text: 'No', style: 'cancel'}
                         ],
                         {cancelable: false}
                     )
@@ -282,7 +279,7 @@ class JobsList extends React.Component {
                                                         this.setModalVisible(!isModalVisible);
                                                     }, 
                                                 },
-                                                {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
+                                                {text: 'No', style: 'cancel'}
                                             ],
                                             {cancelable: false}
                                         )
