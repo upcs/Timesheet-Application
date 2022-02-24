@@ -29,6 +29,11 @@ describe('Testing if Modal renders and closes', () => {
     })
 
     it('Modal can render', () => {
+        wrapper.setState({isModalVisible: false});
+        eModal = shallow(wrapper.instance().renderItem({item: FakeData}));
+        eModal.find('#employeeButtonView').find('#employeeButton').props().onPress();
+        expect(wrapper.state('isModalVisible')).toBe(true);
+
         wrapper.setState({isModalVisible: false})
         wrapper.instance().setModalVisible(!wrapper.state('isModalVisible'));
         expect(wrapper.state('isModalVisible')).toBe(true);
@@ -79,7 +84,6 @@ describe('Modal Functionality', () => {
         wrapper.find('#removeUser').props().onPress();
         expect(Alert.alert.mock.calls.length).toBe(1);
         wrapper.instance().deleteUser();
-
         expect(wrapper.state('FakeData')).toEqual([]);
     })
 })
