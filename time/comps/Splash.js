@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
 
 export default function Splash() {
   const [appIsReady, setAppIsReady] = useState(false);
