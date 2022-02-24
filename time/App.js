@@ -11,6 +11,9 @@ import Login from './comps/login';
 import { Color } from './comps/Palette.js';
 import User from './comps/User';
 
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback, useEffect, useState } from 'react';
+
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
 import { UserInterfaceIdiom } from 'expo-constants';
@@ -23,6 +26,8 @@ import TimeCardStart from './comps/TimeCardStart';
 import AdminJobsite from './comps/AdminJobsite';
 import SearchBar from './comps/SearchBar';
 import AdminEmployee from './comps/AdminEmployee'
+import Splash from './comps/Splash';
+
 const Tab = createMaterialTopTabNavigator();
 
 
@@ -59,7 +64,9 @@ class App extends React.Component {
   render() {
     const signedIn = this.state.signedIn;
     const isAdmin = this.state.user == User.ADMIN;
+
     return (
+      <Splash>
       <SafeAreaView style={safeAreaAndroid.SafeArea}>
       <NavigationContainer>
         <Tab.Navigator>
@@ -95,6 +102,7 @@ class App extends React.Component {
         </Tab.Navigator>
       </NavigationContainer>   
       </SafeAreaView>
+      </Splash>
     );
   }
 }
