@@ -18,6 +18,19 @@ configure({ adapter: new Adapter() });
 
 
 
+//PALCEHOLDER TEST!
+let wrapper
+beforeEach(() => {
+    wrapper = shallow(<EmployeesList></EmployeesList>);
+})
+describe('Testing if Modal renders and closes', () => {
+    it('Test if List is not empty', () => {
+        const flatList = wrapper.find('#list');
+        expect(flatList.props().data).not.toEqual(null);
+    })
+})
+
+
 // let wrapper
 // beforeEach(() => {
 //     wrapper = shallow(<TimeCardStart></TimeCardStart>);

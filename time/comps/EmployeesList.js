@@ -139,7 +139,10 @@ import { Color } from './Palette';
                             
                             {/* THE EXIT BUTTON */}
                             <View style={styles.leftView}>
-                                <TouchableOpacity id='exitButton' style={[styles.button, styles.buttonClose]} onPress={ () =>
+                                <TouchableOpacity 
+                                id='exitButton' 
+                                style={[styles.button, styles.buttonClose]} 
+                                onPress={ () =>
                                 {
                                     this.setModalVisible(!isModalVisible);
                                 }}>
@@ -148,7 +151,9 @@ import { Color } from './Palette';
                             </View>
 
                             {/* USER'S NAME */}
-                            <Text style={styles.modalText}> {this.state.userFirst + " " + this.state.userLast}</Text>
+                            <Text style={styles.modalText}> 
+                                {this.state.userFirst + " " + this.state.userLast}
+                            </Text>
 
                             {/* CHANGE FIRST NAME */}
                             <View style={styles.textAndTitle}>
