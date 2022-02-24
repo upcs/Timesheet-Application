@@ -10,7 +10,28 @@ beforeEach(() => {
     wrapper = shallow(<JobsList></JobsList>);
 })
 
-describe('Modal Functionality', () => {
+describe('Modal 1 render', () => {
+    it('Can open succesfully', () => {
+
+    })
+
+    it('Can close successfully', () => {
+
+    })
+})
+
+
+describe('Modal 2 render', () => {
+    it('Can open succesfully', () => {
+
+    })
+
+    it('Can close successfully', () => {
+        
+    })
+})
+
+describe('Modal 1 funcitonality', () => {
     it('Allows for job name to be changed', () => {
         wrapper.find('#jobName').props().onChangeText("Hello World");
         expect(wrapper.state('jobName')).toEqual("Hello World");
@@ -30,4 +51,24 @@ describe('Modal Functionality', () => {
         expect(wrapper.state('isModalVisible')).toBe(true);
         expect(wrapper.state('modalTwo')).toBe(false);
     })
+
+    it('Allows for a user to be deleted', () => {
+
+    })
+
+    it('Allows for a job to be deleted', () => {
+
+    })
+
+    it('Allows for changes to be saved', () => {
+
+    })
 })
+
+
+describe('Modal 2 functionality', () => {
+    it('Allows for an employee to be added', () => {
+        
+    })
+})
+
