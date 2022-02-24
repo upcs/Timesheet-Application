@@ -4,11 +4,16 @@ name: Automated Testing
 on: 
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   tests:  
     name: Running Unit Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        node-version: [10.x, 12.x, 14.x, 15.x]
   
     steps: 
       - uses: actions/checkout@v2
@@ -17,6 +22,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
+        working-directory: ./time
         run: npm install
       - name: Run Tests
+        working-directory: ./time
         run: npm test
