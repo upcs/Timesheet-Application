@@ -24,7 +24,8 @@
     "react-native": "0.64.3",
     "react-native-google-signin": "^2.1.1",
     "react-native-web": "0.17.1",
-    "@react-native-community/datetimepicker": "4.0.0"
+    "@react-native-community/datetimepicker": "4.0.0",
+    "expo-splash-screen": "~0.14.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
