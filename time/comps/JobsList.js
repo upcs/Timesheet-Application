@@ -102,14 +102,19 @@ class JobsList extends React.Component {
     renderItem = ({item}) => {
         const { isModalVisible } = this.state;
         return (
-            <View style={styles.items}>
-                <TouchableOpacity onPress={ () => {
-                    this.setModalVisible(!isModalVisible);
-                    this.setAddress(item.address);
-                    this.setJobName(item.jobName);
-                    this.setJobEdited(item.id);
-                    this.setEList(item.employees);
-                }}>
+            <View 
+                id='jobsView'
+                style={styles.items}>
+                <TouchableOpacity 
+                    id='jobListButton'
+                    onPress={ () => {
+                        this.setModalVisible(!isModalVisible);
+                        this.setAddress(item.address);
+                        this.setJobName(item.jobName);
+                        this.setJobEdited(item.id);
+                        this.setEList(item.employees);
+                    }
+                }>
                     <Text >{item.jobName}</Text>
                 </TouchableOpacity>
             </View>
@@ -122,8 +127,12 @@ class JobsList extends React.Component {
         const { modalTwo } = this.state;
         const { isModalVisible } = this.state;
         return (
-            <View style={styles.items}>
-                <TouchableOpacity onPress={ () => {
+            <View 
+                id='employeeAddView'
+                style={styles.items}>
+                <TouchableOpacity 
+                    id='employeeToAdd'
+                    onPress={ () => {
                     Alert.alert(
                         'Add Employee',
                         'Add Employee to Jobsite',
@@ -258,6 +267,7 @@ class JobsList extends React.Component {
 
                             {/* SAVE CHANGES */}
                             <TouchableOpacity
+                                id='saveJobChanges'
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         this.setModalVisible(!isModalVisible);
@@ -279,6 +289,7 @@ class JobsList extends React.Component {
 
                             {/* REMOVE JOB */}
                             <TouchableOpacity
+                                id='removeJobButton'
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         Alert.alert(

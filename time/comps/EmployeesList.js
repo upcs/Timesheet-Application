@@ -98,7 +98,9 @@ import { Color } from './Palette';
      renderItem = ({item}) => {
         const { isModalVisible } = this.state;
          return (
-             <View style={styles.items}>
+             <View 
+                id='employeeButtonView'
+                style={styles.items}>
                  <TouchableOpacity id='employeeButton' onPress={() =>
                  {
                     this.setModalVisible(!isModalVisible);
