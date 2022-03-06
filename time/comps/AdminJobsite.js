@@ -112,6 +112,7 @@ import { FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { Button } from 'react-native';
 import AddJobsite from './AddJobsite.js'
+import FakeJobsiteData from './FakeJobsiteData.js';
 
 
 
@@ -120,15 +121,16 @@ import AddJobsite from './AddJobsite.js'
 
     constructor(props) {
       super(props);
-        this.currValue = this.currValue.bind(this, );
+        this.currValue = this.currValue.bind(this);
         this.state = {
           query: ""
         };
 
       
 
-        const {employees} = FakeEmployeeData;
-        this.items = FakeEmployeeData;
+        const {jobs} = FakeJobsiteData;
+        
+        this.items = FakeJobsiteData;
         //this.query = "";
         
         
@@ -140,7 +142,7 @@ import AddJobsite from './AddJobsite.js'
         );
 
         this.renderItem = ({ item }) => (
-          <Item title={item.firstName} />
+          <Item title={item.jobName} />
         );
         
       }
@@ -155,19 +157,20 @@ import AddJobsite from './AddJobsite.js'
          if (!query) {
           return items;
          }
-        return items.filter((employee) => employee.firstName.includes(query));
+        return items.filter((jobs) => jobs.jobName.includes(query));
       }
 
       currValue(newValue) {
         //console.log(newValue);
         this.setState({query : newValue});
-       // console.log(this.state.query);
+        console.log(this.state.query);
         this.forceUpdate();
+        
       }
      
      render() {
 
-      this.filteredItems = this.getFilteredItems(this.state.query, FakeEmployeeData);
+      this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
 
 
       //Added 
@@ -193,7 +196,8 @@ import AddJobsite from './AddJobsite.js'
                  </View>
                  
                  <SafeAreaView style={styles.container}>
-                    <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList>
+                    {/* <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList> */}
+                    <JobsList  data={this.filteredItems}></JobsList>
                  </SafeAreaView>
          
 
@@ -224,8 +228,8 @@ import AddJobsite from './AddJobsite.js'
        width: 100, 
        height: 10,
        alignItems: 'center',
-        position: 'absolute',
-        justifyContent: 'center',
+       position: 'absolute',
+       justifyContent: 'center',
        marginHorizontal: 50,
        
     
