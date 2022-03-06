@@ -110,8 +110,9 @@
 import FakeEmployeeData from './FakeEmployeeData.js';
 import { FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native';
-
 import { Button } from 'react-native';
+import AddJobsite from './AddJobsite.js'
+
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
@@ -167,6 +168,15 @@ import { Button } from 'react-native';
      render() {
 
       this.filteredItems = this.getFilteredItems(this.state.query, FakeEmployeeData);
+
+
+      //Added 
+      let jobData = {};
+       
+         const addData = (params) => {
+             jobData = params;
+            console.log(jobData);
+         }
       
          return (
 
@@ -176,7 +186,8 @@ import { Button } from 'react-native';
                  <View style={styles.upperbar}>
                      <SearchBar style={styles.search} currValue = {this.currValue}></SearchBar>
                      <View style={styles.buttonContainer}>
-                         <AddEmployee></AddEmployee>
+                       {/* <AddEmployee></AddEmployee> */}
+                       <AddJobsite  sendData={addData}></AddJobsite>
                     </View>
                     
                  </View>
