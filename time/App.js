@@ -23,6 +23,46 @@ import TimeCardStart from './comps/TimeCardStart';
 import AdminJobsite from './comps/AdminJobsite';
 import SearchBar from './comps/SearchBar';
 import AdminEmployee from './comps/AdminEmployee'
+
+// Import the functions you need from the SDKs you need
+
+import { initializeApp } from "firebase/app";
+
+import { getAnalytics } from "firebase/analytics";
+
+// TODO: Add SDKs for Firebase products that you want to use
+
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+
+// Your web app's Firebase configuration
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyBQYb6hi0bNHIrHkGL2mdKFL1lnhMFwXeU",
+
+  authDomain: "paint-46970.firebaseapp.com",
+
+  projectId: "paint-46970",
+
+  storageBucket: "paint-46970.appspot.com",
+
+  messagingSenderId: "54402484337",
+
+  appId: "1:54402484337:web:4b9d1cb00e07cd578df3d0",
+
+  measurementId: "G-Y9P77GNJTH"
+
+};
+
+
+// Initialize Firebase
+
+const app = initializeApp(firebaseConfig);
+
+const analytics = getAnalytics(app);
 const Tab = createMaterialTopTabNavigator();
 
 
