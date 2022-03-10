@@ -14,6 +14,8 @@
     "preset": "react-native"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "4.0.0",
+    "@react-native-firebase/app": "^14.5.1",
     "@react-navigation/material-top-tabs": "^6.1.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
@@ -23,8 +25,7 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-google-signin": "^2.1.1",
-    "react-native-web": "0.17.1",
-    "@react-native-community/datetimepicker": "4.0.0"
+    "react-native-web": "0.17.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -33,6 +34,6 @@
   },
   "resolutions": {
     "react-native/@jest/create-cache-key-function": "^26.0.0"
- },
+  },
   "private": true
 }
