@@ -1,3 +1,54 @@
+-----------------------------------------
+SPRINT 2 FEATURES
+----------------------------------------
+1.) Spash Screen with companu logo <br>
+2.) Edit Jobsite Modal <br>
+    2.1) When pressing on a job from the list of active jobs a modal pops up <br>
+    2.2) Has all the jobs current info <br>
+        2.2.1) Has textarea to change the job name <br>
+        2.2.2) Has a textarea to change the job address <br>
+        2.2.3) Has a list of employees assigned to job <br>
+            2.2.3.1) Pressing an employee closes current one and adds a new one with list of employees not assigned to the job <br>
+            2.2.3.2) Pressing an employee allows for them to be added to current job <br>
+            2.2.3.3) Pressing X closes modal and loads original modal <br>
+        2.2.4) Can save changes <br>
+        2.2.5) Can delete job <br>
+        2.2.6) Can press X to close Modal <br>
+3.) Edit Employee Modal <br>
+    3.1) When pressing on an employee from active employee list a modal pops up <br>
+    3.2) Has all the employee's info <br>
+        3.2.1) Textarea to change both first and last name <br>
+        3.2.2) Switch to change user account type <br>
+        3.2.3) Save changes button <br>
+        3.2.4) Delete employee button <br>
+        3.2.5) Exit modal button <br>
+4.) Add Employee Modal <br>
+    4.1) When pressing add employee button a modal pops up<br>
+        4.1.1) Can add employees name and password<br>
+        4.1.2) Can select user type<br>
+        4.2.3) Submit buttom <br>
+        4.2.4) Exit Button
+5.) Add Jobsite Modal <br>
+    5.1) When pressing add jobsite button a modal pops up <br>
+        5.1.1) Can change job name, address, adn add notes <br>
+        5.1.2) Submit button <br>
+        5.1.3) Exit button <br>
+6.) Searchbars<br>
+    6.1) Searchbars are now functional<br>
+7.) Some server side<br>
+    7.1) Some of the server side to interact between client and database complete<br>
+8.) Mock data<br>
+    8.1) Mock data stored which is used in app<br>
+9.) Testing<br>
+    9.1) Testing for edit job modal complete<br>
+    9.2) Testing for edit employee modal complete<br>
+    9.3) Testing for add employee modal complete<br>
+    9.4) Testing for add jobsite modal complete<br>
+
+
+
+
+
 ------------------------------------------
 SPRINT 1 FEATURES
 ------------------------------------------

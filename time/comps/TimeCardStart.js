@@ -43,7 +43,12 @@ var endTime = 0;
      */
     constructor(props){
         super(props);
-        this.state = {text : 'Start'};
+        this.state = {
+            text : 'Clock In',
+            hours: 0,
+            min: 0,
+            sec: 0
+        };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
         this.totalTime = this.totalTime.bind(this);
@@ -91,6 +96,8 @@ var endTime = 0;
             min -= minRollover * 60;
             hour += minRollover;
         }
+
+        this.setState({hours: hour, min: min, sec: sec});
     }
 
 
@@ -125,12 +132,12 @@ var endTime = 0;
         //Check if the user has already pressed the button
         isPressed ? (
             isPressed = false,
-            this.setState({text : 'Start'}),
+            this.setState({text : 'Clock In'}),
             this.timerOff()
         ) : (
             //Logging 
             isPressed = true,
-            this.setState({text : 'Stop'}),
+            this.setState({text : 'Clock Out'}),
             this.timerOn() 
         );
     };
@@ -147,7 +154,7 @@ var endTime = 0;
          return (
              <View style={styles.container}>
                  <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                 <TouchableOpacity style={isPressed ? styles.stop : styles.start} 
+                 <TouchableOpacity id='timerButton' style={isPressed ? styles.stop : styles.start} 
                  onPress={this.onPress}
                  backgroundColor='blue'>
                      <Text style={styles.text}>{text}</Text>
@@ -204,7 +211,7 @@ var endTime = 0;
     //Styles for text in the button
      text: {
          color: 'white',
-         fontSize: 40
+         fontSize: 30
      }
  });
  

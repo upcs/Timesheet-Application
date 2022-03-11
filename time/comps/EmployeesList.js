@@ -12,9 +12,9 @@
  ***********************************************************************/
  
 
- import React, {useEffect, useState} from 'react';
- import { Text, View, StyleSheet, TextInput, FlatList, Modal, TouchableOpacity, Alert, Switch} from 'react-native'
- import FakeData from './FakeEmployeeData';
+import React, {useEffect, useState} from 'react';
+import { Text, View, StyleSheet, TextInput, FlatList, Modal, TouchableOpacity, Alert, Switch} from 'react-native'
+import FakeData from './FakeEmployeeData';
 import { Color } from './Palette';
  
  
@@ -67,7 +67,6 @@ import { Color } from './Palette';
     }
 
     deleteUser = () => {
-        console.log(this.state.userEdited);
         const newEmployeeList = this.state.FakeData.filter(item => item.id !== this.state.userEdited)
         this.setState({FakeData: newEmployeeList});
     }
@@ -99,8 +98,10 @@ import { Color } from './Palette';
      renderItem = ({item}) => {
         const { isModalVisible } = this.state;
          return (
-             <View style={styles.items}>
-                 <TouchableOpacity onPress={() =>
+             <View 
+                id='employeeButtonView'
+                style={styles.items}>
+                 <TouchableOpacity id='employeeButton' onPress={() =>
                  {
                     this.setModalVisible(!isModalVisible);
                     this.setuserFirst(item.firstName);
@@ -121,16 +122,17 @@ import { Color } from './Palette';
         return (
             <View> 
                 <FlatList 
+                    id='list'
                     data={this.state.FakeData} 
                     keyExtractor={item => item.id.toString()}
                     renderItem={this.renderItem} 
                     />
                 <Modal
+                    id='employeeModal'
                     animationType='slide'
                     transparent={true}
                     visible = {isModalVisible}
                     onRequestClose = { () => {
-                        Alert.alert("modal has been closed");
                         this.setModalVisible(!isModalVisible);
                     }}
                 >
@@ -139,7 +141,10 @@ import { Color } from './Palette';
                             
                             {/* THE EXIT BUTTON */}
                             <View style={styles.leftView}>
-                                <TouchableOpacity style={[styles.button, styles.buttonClose]} onPress={ () =>
+                                <TouchableOpacity 
+                                id='exitButton' 
+                                style={[styles.button, styles.buttonClose]} 
+                                onPress={ () =>
                                 {
                                     this.setModalVisible(!isModalVisible);
                                 }}>
@@ -148,12 +153,15 @@ import { Color } from './Palette';
                             </View>
 
                             {/* USER'S NAME */}
-                            <Text style={styles.modalText}> {this.state.userFirst + " " + this.state.userLast}</Text>
+                            <Text style={styles.modalText}> 
+                                {this.state.userFirst + " " + this.state.userLast}
+                            </Text>
 
                             {/* CHANGE FIRST NAME */}
                             <View style={styles.textAndTitle}>
                                 <Text style={styles.titles}>First Name:</Text>
                                 <TextInput 
+                                    id='firstName'
                                     style={styles.textArea} 
                                     defaultValue={this.state.userFirst}
                                     onChangeText={ (text) =>{
@@ -166,6 +174,7 @@ import { Color } from './Palette';
                             <View style={styles.textAndTitle}>
                                 <Text style={styles.titles}>Last Name:</Text>
                                 <TextInput 
+                                    id='lastName'
                                     style={styles.textArea} 
                                     defaultValue={this.state.userLast}
                                     onChangeText={ (text) =>{
@@ -178,6 +187,7 @@ import { Color } from './Palette';
                             <View style={styles.textAndTitle}>
                                 <Text style={styles.titles}>Basic</Text>
                                 <Switch
+                                    id='adminSwitch'
                                     style={styles.switch}
                                     trackColor={{false: 'black', true: Color.MAROON}}
                                     thumbColor={isAdmin ? "white" : "black"}
@@ -192,6 +202,7 @@ import { Color } from './Palette';
                             
                             {/* SAVE CHANGES */}
                             <TouchableOpacity
+                                id='saveChanges'
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         this.setModalVisible(!isModalVisible);
@@ -202,6 +213,7 @@ import { Color } from './Palette';
                             
                             {/* REMOVE USER */}
                             <TouchableOpacity
+                                id='removeUser'
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={ () => {
                                         Alert.alert(
@@ -303,7 +315,7 @@ import { Color } from './Palette';
         padding: 15,
         marginTop: 10,
         marginBottom: 30
-    }
+    },
  });
  
  
