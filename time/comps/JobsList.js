@@ -90,16 +90,6 @@ class JobsList extends React.Component {
                 this.setState({eList: respo});
             })
         });
-
-        // console.log("list", this.state.eList);
-        // this.data.getJobEmployeeData(this.state.eList).then((res, rej) => {
-        //     this.setState({eList: res}, () => {
-        //         console.log(res);
-        //     });
-        // });
-
-        //this.data.getJobEmployees(this.state.jobEdited);
-        //this.setState({eList: list}, () => {}); 
     }
 
     deleteJob = () => {

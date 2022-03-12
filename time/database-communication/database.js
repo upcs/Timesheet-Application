@@ -2,9 +2,6 @@ import * as firebase from 'firebase'
 import 'firebase/firestore' 
 
 
-
-
-
 /**
  * Database class
  * 
@@ -311,7 +308,9 @@ class Database {
     }
 
     /**
-     * Get job employees
+     * Get a list of ID's for employees on a current job
+     * 
+     * @author Jude Gabriel
      */
     async getJobEmployeesID(id){
         var postData = [];
@@ -323,6 +322,12 @@ class Database {
         return postData;
     }
 
+
+    /**
+     * Get data for all employees in a list
+     * 
+     * @author Jude Gabriel
+     */
     async getJobEmployeeData(employeeID){
         console.log("id", employeeID);
         var postData = [];
