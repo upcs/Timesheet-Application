@@ -83,8 +83,6 @@ class JobsList extends React.Component {
     setEList = (id) => {
         this.data.getJobEmployeesID(id).then((res, rej) => {
             this.data.getAllAccounts().then((accResponse, accRej) => {
-                console.log("all users", accResponse);
-                console.log("on job", res);
                 this.setState({eData:this.data.getEmployeesNotOnJob(accResponse, res)});
             })
             this.data.getJobEmployeeData(res).then((respo, rejo) => {
@@ -113,14 +111,11 @@ class JobsList extends React.Component {
                 }
             }
         });
-        //this.data.removeEmployeeFromJob(this.state.jobEdited, this.state.employeeEdited);
-       // const newEmployeeList = this.state.eList.filter(item => item.id !== this.state.employeeEdited);
-        //this.setState({eList: newEmployeeList});
     }
  
     addUser = (item) => {
-        this.state.eList.unshift(item);
-        return item;
+        this.data.addEmployeeToJob(this.state.jobEdited, item);
+        this.setEList(this.state.jobEdited);
     }
 
  

@@ -394,9 +394,16 @@ class Database {
 
     /**
      * Add employee to job
+     * 
+     * Status: Done
+     * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
-    addEmployeeToJob(){
-
+    async addEmployeeToJob(jobId, employeeToAdd){
+        await this.db.collection("jobs").doc(jobId).collection("employees").add({
+            accountID: employeeToAdd.id
+        });
     }
 
     /**
