@@ -16,6 +16,7 @@
  import {Color} from './Palette';
  import eData from './FakeEmployeeData';
  import SearchBar from './search_bar';
+ import Database from '../database-communication/database.js'
  
  
  /**
@@ -26,19 +27,35 @@
 class JobsList extends React.Component {
     constructor(props) {
         super(props);
-        this.initFakeData = FakeData;
-        this.initEData = eData;
         this.state = {
-            FakeData: this.initFakeData,
-            eData: this.initEData,
+            FakeData: [],
+            eData: [],
             isModalVisible: false,
             modalTwo: false,
             address: '',
             jobName: '',
-            jobEdited: 1,
-            employeeEdited: 1,
+            jobEdited: '',
+            employeeEdited: '',
             eList: null
         };
+
+        this.data = new Database()
+    }
+
+    componentDidMount = () => {
+        this.data.getAllJobs().then((res, rej) => {
+            this.setState({FakeData: res}, () => {
+                //console.log(res);
+            });
+        });
+    }
+
+    updateState = () => {
+        this.data.getAllJobs().then((res, rej) => {
+            this.setState({FakeData: res}, () => {
+               //console.log(res);
+            });
+        });
     }
 
     setModalVisible = (visible) => {
@@ -65,8 +82,14 @@ class JobsList extends React.Component {
         this.setState({employeeEdited: edited});
     }
 
-    setEList = (list) => {
-        this.setState({eList: list}, () => {}); 
+    setEList = (id) => {
+        console.log("original job", this.state.jobEdited);
+        this.data.getJobEmployeesID(id).then((res, rej) => {
+            this.data.getJobEmployeeData(res).then((respo, rejo) => {
+                console.log("respo", respo);
+                this.setState({eList: respo});
+            })
+        });
     }
 
     deleteJob = () => {
@@ -75,16 +98,20 @@ class JobsList extends React.Component {
     }
 
     saveJob = (edited) => {
-        const newJobList = this.state.FakeData.map( item =>
-            {
-                if (item.id === edited){
-                    item.address = this.state.address;
-                    item.jobName = this.state.jobName;
-                    return item;
-                }
-                return item;
-            })
-            this.setState({FakeData: newJobList});
+        this.data.setJobName(this.state.jobEdited, this.state.jobName);
+        this.data.setJobAddress(this.state.jobEdited, this.state.address);
+        this.updateState();
+
+        // const newJobList = this.state.FakeData.map( item =>
+        //     {
+        //         if (item.id === edited){
+        //             item.address = this.state.address;
+        //             item.jobName = this.state.jobName;
+        //             return item;
+        //         }
+        //         return item;
+        //     })
+        //     this.setState({FakeData: newJobList});
     }
 
     deleteUser = () => {
@@ -110,12 +137,12 @@ class JobsList extends React.Component {
                     onPress={ () => {
                         this.setModalVisible(!isModalVisible);
                         this.setAddress(item.address);
-                        this.setJobName(item.jobName);
-                        this.setJobEdited(item.id);
-                        this.setEList(item.employees);
+                        this.setJobName(item.name);
+                        this.setJobEdited(item.id); 
+                        this.setEList(item.id);
                     }
                 }>
-                    <Text >{item.jobName}</Text>
+                    <Text >{item.name}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -180,7 +207,7 @@ class JobsList extends React.Component {
                         ]
                     )
                 }}>
-                    <Text>{item.lastName + ", " + item.firstName}</Text>   
+                    <Text>{item.lastname + ", " + item.firstname}</Text>   
                 </TouchableOpacity>
             </View>
         )
