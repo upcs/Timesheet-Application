@@ -13,19 +13,20 @@
  import SearchBar from './search_bar.js';
 import EmployeesList from './EmployeesList.js';  
 import AddEmployee from './AddEmployee.js';
-import FakeEmployeeData from './FakeEmployeeData.js';
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
  class AdminEmployee extends React.Component {
-   
+     constructor(props){
+         super(props);
+        this.myref = React.createRef();
+     }
      
      render() {
-         let employList = {};
        
         const addData = (params) => {
             employList = params;
-            console.log(employList);
+            this.myref.current.updateState();
         }
 
          return (
@@ -39,7 +40,7 @@ import FakeEmployeeData from './FakeEmployeeData.js';
                     
                     
                 </View>
-                <EmployeesList></EmployeesList>
+                <EmployeesList ref={this.myref}></EmployeesList>
              </View>
          ) 
      }
