@@ -14,11 +14,8 @@
 
 import React, {useEffect, useState} from 'react';
 import { Text, View, StyleSheet, TextInput, FlatList, Modal, TouchableOpacity, Alert, Switch} from 'react-native'
-import FakeData from './FakeEmployeeData';
 import { Color } from './Palette';
 import Database from '../database-communication/database.js'
-import * as firebase from 'firebase'
-import 'firebase/firestore' 
  
  /**
   * Creates a Scrollable List that can be selected
@@ -41,18 +38,16 @@ import 'firebase/firestore'
 
     componentDidMount = () => {
         this.data.getAllAccounts().then((res, rej) => {
-            //console.log(res)
             this.setState({FakeData: res}, () => {
-                console.log("State mounted");
+                //console.log("State mounted");
             });
         });
     }
 
     updateState = () => {
         this.data.getAllAccounts().then((res, rej) => {
-            //console.log(res)
             this.setState({FakeData: res}, () => {
-                console.log("State updated");
+               // console.log("State updated");
             });
         });
     }
@@ -85,7 +80,6 @@ import 'firebase/firestore'
     }
 
     setUserEdited = (edited) => {
-        //console.log("User Edited", edited);
         this.setState({userEdited: edited})
     }
 

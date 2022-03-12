@@ -1,7 +1,6 @@
 import * as firebase from 'firebase'
 import 'firebase/firestore' 
-import React, {useEffect, useState} from 'react';
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+
 
 
 
@@ -111,13 +110,13 @@ class Database {
     /**
      * Sets user type
      */
-    setUserType(id, type){
+    async setUserType(id, type){
         if(id != null){
             if(type == 1){
-                this.db.collection("accounts").doc(id).update({admin: 1});
+                await this.db.collection("accounts").doc(id).update({admin: 1});
             }
             else{
-                this.db.collection("accounts").doc(id).update({admin: 0});
+                await this.db.collection("accounts").doc(id).update({admin: 0});
             }
         }
     }
@@ -135,9 +134,9 @@ class Database {
      * Status: Needs to test more edge cases
      * Testing: Needed
      */
-    setUserFirst(id, first){
+    async setUserFirst(id, first){
         if(id != null){
-            this.db.collection("accounts").doc(id).update({firstname: first});
+            await this.db.collection("accounts").doc(id).update({firstname: first});
         }
     }
 
@@ -147,9 +146,9 @@ class Database {
      * Status: Needs to test more edge cases
      * Testing: Needed
      */
-    setuserLast(id, last){
+    async setuserLast(id, last){
         if(id != null){
-            this.db.collection("accounts").doc(id).update({lastname: last});
+            await this.db.collection("accounts").doc(id).update({lastname: last});
         }
     }
 
@@ -169,7 +168,6 @@ class Database {
         last.trim();
         email.trim();
 
-        console.log(first);
 
         if((!first) || (!last) || (!email)){
             console.log("null parameter");
