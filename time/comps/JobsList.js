@@ -177,6 +177,7 @@ class JobsList extends React.Component {
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
                         this.setEList(item.id);
+                        this.updateState();
                     }
                 }>
                     <Text >{item.name}</Text>
