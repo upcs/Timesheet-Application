@@ -45,7 +45,7 @@ class JobsList extends React.Component {
     componentDidMount = () => {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
-                //console.log("State mounted");
+                //console.log(res);
             });
         });
     }
@@ -53,7 +53,7 @@ class JobsList extends React.Component {
     updateState = () => {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
-               // console.log("State updated");
+               //console.log(res);
             });
         });
     }
@@ -82,8 +82,24 @@ class JobsList extends React.Component {
         this.setState({employeeEdited: edited});
     }
 
-    setEList = (list) => {
-        this.setState({eList: list}, () => {}); 
+    setEList = (id) => {
+        console.log("original job", this.state.jobEdited);
+        this.data.getJobEmployeesID(id).then((res, rej) => {
+            this.data.getJobEmployeeData(res).then((respo, rejo) => {
+                console.log("respo", respo);
+                this.setState({eList: respo});
+            })
+        });
+
+        // console.log("list", this.state.eList);
+        // this.data.getJobEmployeeData(this.state.eList).then((res, rej) => {
+        //     this.setState({eList: res}, () => {
+        //         console.log(res);
+        //     });
+        // });
+
+        //this.data.getJobEmployees(this.state.jobEdited);
+        //this.setState({eList: list}, () => {}); 
     }
 
     deleteJob = () => {
@@ -133,7 +149,7 @@ class JobsList extends React.Component {
                         this.setAddress(item.address);
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
-                        this.setEList(item.employees);
+                        this.setEList(item.id);
                     }
                 }>
                     <Text >{item.name}</Text>
@@ -201,7 +217,7 @@ class JobsList extends React.Component {
                         ]
                     )
                 }}>
-                    <Text>{item.lastName + ", " + item.firstName}</Text>   
+                    <Text>{item.lastname + ", " + item.firstname}</Text>   
                 </TouchableOpacity>
             </View>
         )

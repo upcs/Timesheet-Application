@@ -266,6 +266,11 @@ class Database {
 
     /**
      * Get all jobs 
+     * 
+     * Status: Needs to test more edge cases
+     * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
     async getAllJobs(){
         var postData = [];
@@ -308,8 +313,28 @@ class Database {
     /**
      * Get job employees
      */
-    getJobEmployees(){
+    async getJobEmployeesID(id){
+        var postData = [];
+        const data = await this.db.collection("jobs").doc(id).collection("employees").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                postData.push({...doc.data(), id: doc.id})
+            });
+          })
+        return postData;
+    }
 
+    async getJobEmployeeData(employeeID){
+        console.log("id", employeeID);
+        var postData = [];
+        for(var i = 0; i < employeeID.length; i++){
+            console.log(employeeID[i].accountID);
+            await this.db.collection("accounts").doc(employeeID[i].accountID).get()
+                .then((snapshot) => {
+                    console.log(snapshot.data());
+                    postData.push({...snapshot.data(), id: snapshot.id})
+                });
+        }
+        return postData;
     }
 
 
@@ -317,6 +342,11 @@ class Database {
 
     /**
      * Set job address
+     * 
+     * Status: Needs to test more edge cases
+     * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
     async setJobAddress(id, addy){
         if(id != null){
@@ -326,6 +356,11 @@ class Database {
 
     /**
      * Set job name
+     * 
+     * Status: Needs to test more edge cases
+     * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
     async setJobName(id, jobname){
         if(id != null){
