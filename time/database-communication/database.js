@@ -145,6 +145,8 @@ class Database {
      * 
      * Status: Needs to test more edge cases
      * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
     async setuserLast(id, last){
         if(id != null){
@@ -161,6 +163,8 @@ class Database {
      * Creates a new user account
      * 
      * Status: Needs more edge cases
+     * 
+     * @author Jude Gabriel
      */
      createUserAccount(first, last, email, admin){
         //Error check null parameters
@@ -207,9 +211,16 @@ class Database {
     
     /**
      * Deletes a users account
+     * 
+     * Status: Need to test id edge cases
+     *          Otherwise done
+     * 
+     * @author Jude Gabriel
      */
-    deleteUserAccount(){
-
+    async deleteUserAccount(id){
+        if(id != null){
+            await this.db.collection("accounts").doc(id).delete();
+        }
     }
 
 

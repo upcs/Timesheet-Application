@@ -18,9 +18,9 @@ import { Color } from './Palette';
 import Database from '../database-communication/database.js'
  
  /**
-  * Creates a Scrollable List that can be selected
+  * List of employees. All data can be edited
   * 
-  * Data predefined currently (Sprint 1)
+  * @author Jude Gabriel
   */
  class EmployeesList extends React.Component {
      constructor(props) {
@@ -84,8 +84,9 @@ import Database from '../database-communication/database.js'
     }
 
     deleteUser = () => {
-        const newEmployeeList = this.state.FakeData.filter(item => item.id !== this.state.userEdited)
-        this.setState({FakeData: newEmployeeList});
+        this.data.deleteUserAccount(this.state.userEdited);
+        //const newEmployeeList = this.state.FakeData.filter(item => item.id !== this.state.userEdited)
+        this.updateState();
     }
 
 
@@ -96,24 +97,6 @@ import Database from '../database-communication/database.js'
         this.data.setuserLast(this.state.userEdited, this.state.userLast);
         this.data.setUserType(this.state.userEdited, this.state.isAdmin);
         this.updateState();
-
-
-        // const newEmployeeList = this.state.FakeData.map( item =>
-        //     {
-        //         if (item.id === edited){
-        //             item.firstName = this.state.userFirst;
-        //             item.lastName = this.state.userLast;
-        //             if(this.state.isAdmin){
-        //                 item.userType = 1;
-        //             }
-        //             else{
-        //                 item.userType = 0;
-        //             }
-        //             return item;
-        //         }
-        //         return item;
-        //     })
-        //     this.setState({FakeData: newEmployeeList});
     }
 
 
