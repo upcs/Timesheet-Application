@@ -268,7 +268,12 @@ class Database {
      * Get all jobs 
      */
     getAllJobs(){
-
+        const data = await this.db.collection("accounts").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                postData.push({...doc.data(), id: doc.id})
+            });
+          })
+        return postData;
     }
 
     /**

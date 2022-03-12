@@ -68,12 +68,12 @@ describe('Modal Functionality', () => {
     })
 
     it('Allows for updated data to be saved', async () => {
-        data = new Database();
-        await data.getAllAccounts().then((res, rej) => {
-            wrapper.setState({FakeData: res}, () => {
-               console.log(wrapper.state('FakeData'));
-            });
-        });
+        // data = new Database();
+        // await data.getAllAccounts().then((res, rej) => {
+        //     wrapper.setState({FakeData: res}, () => {
+        //        console.log(wrapper.state('FakeData'));
+        //     });
+        // });
 
        // wrapper.setState({FakeData: [{firstName: 'John', lastName: 'Smith'}]});
         //console.log(wrapper.state('FakeData'));
