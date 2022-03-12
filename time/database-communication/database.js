@@ -267,8 +267,9 @@ class Database {
     /**
      * Get all jobs 
      */
-    getAllJobs(){
-        const data = await this.db.collection("accounts").get().then((querySnapshot) => {
+    async getAllJobs(){
+        var postData = [];
+        const data = await this.db.collection("jobs").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 postData.push({...doc.data(), id: doc.id})
             });
@@ -317,15 +318,19 @@ class Database {
     /**
      * Set job address
      */
-    setJobAddress(){
-
+    async setJobAddress(id, addy){
+        if(id != null){
+            await this.db.collection("jobs").doc(id).update({address: addy});
+        }
     }
 
     /**
      * Set job name
      */
-    setJobName(){
-
+    async setJobName(id, jobname){
+        if(id != null){
+            await this.db.collection("jobs").doc(id).update({name: jobname});
+        }
     }
 
     /**

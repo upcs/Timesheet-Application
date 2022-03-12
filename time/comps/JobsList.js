@@ -27,20 +27,35 @@
 class JobsList extends React.Component {
     constructor(props) {
         super(props);
-        this.initFakeData = FakeData;
-        this.initEData = eData;
-        let data = new Database();
         this.state = {
-            FakeData: this.initFakeData,
-            eData: this.initEData,
+            FakeData: [],
+            eData: [],
             isModalVisible: false,
             modalTwo: false,
             address: '',
             jobName: '',
-            jobEdited: 1,
-            employeeEdited: 1,
+            jobEdited: '',
+            employeeEdited: '',
             eList: null
         };
+
+        this.data = new Database()
+    }
+
+    componentDidMount = () => {
+        this.data.getAllJobs().then((res, rej) => {
+            this.setState({FakeData: res}, () => {
+                //console.log("State mounted");
+            });
+        });
+    }
+
+    updateState = () => {
+        this.data.getAllJobs().then((res, rej) => {
+            this.setState({FakeData: res}, () => {
+               // console.log("State updated");
+            });
+        });
     }
 
     setModalVisible = (visible) => {
@@ -77,16 +92,20 @@ class JobsList extends React.Component {
     }
 
     saveJob = (edited) => {
-        const newJobList = this.state.FakeData.map( item =>
-            {
-                if (item.id === edited){
-                    item.address = this.state.address;
-                    item.jobName = this.state.jobName;
-                    return item;
-                }
-                return item;
-            })
-            this.setState({FakeData: newJobList});
+        this.data.setJobName(this.state.jobEdited, this.state.jobName);
+        this.data.setJobAddress(this.state.jobEdited, this.state.address);
+        this.updateState();
+
+        // const newJobList = this.state.FakeData.map( item =>
+        //     {
+        //         if (item.id === edited){
+        //             item.address = this.state.address;
+        //             item.jobName = this.state.jobName;
+        //             return item;
+        //         }
+        //         return item;
+        //     })
+        //     this.setState({FakeData: newJobList});
     }
 
     deleteUser = () => {
@@ -112,12 +131,12 @@ class JobsList extends React.Component {
                     onPress={ () => {
                         this.setModalVisible(!isModalVisible);
                         this.setAddress(item.address);
-                        this.setJobName(item.jobName);
-                        this.setJobEdited(item.id);
+                        this.setJobName(item.name);
+                        this.setJobEdited(item.id); 
                         this.setEList(item.employees);
                     }
                 }>
-                    <Text >{item.jobName}</Text>
+                    <Text >{item.name}</Text>
                 </TouchableOpacity>
             </View>
         );
