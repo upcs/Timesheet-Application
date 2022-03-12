@@ -16,6 +16,7 @@
  import {Color} from './Palette';
  import eData from './FakeEmployeeData';
  import SearchBar from './search_bar';
+ import Database from '../database-communication/database.js'
  
  
  /**
@@ -28,6 +29,7 @@ class JobsList extends React.Component {
         super(props);
         this.initFakeData = FakeData;
         this.initEData = eData;
+        let data = new Database();
         this.state = {
             FakeData: this.initFakeData,
             eData: this.initEData,

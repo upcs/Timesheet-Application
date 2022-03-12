@@ -16,7 +16,9 @@ import React, {useEffect, useState} from 'react';
 import { Text, View, StyleSheet, TextInput, FlatList, Modal, TouchableOpacity, Alert, Switch} from 'react-native'
 import FakeData from './FakeEmployeeData';
 import { Color } from './Palette';
- 
+import Database from '../database-communication/database.js'
+import * as firebase from 'firebase'
+import 'firebase/firestore' 
  
  /**
   * Creates a Scrollable List that can be selected
@@ -26,16 +28,36 @@ import { Color } from './Palette';
  class EmployeesList extends React.Component {
      constructor(props) {
          super(props);
-         this.initFakeData = FakeData
          this.state = {
-            FakeData: this.initFakeData,
+            FakeData: [],
             isModalVisible: false,
             userFirst: '',
             userLast: '',
             isAdmin: false,
-            userEdited: 0
+            userEdited: '',
          };
+         this.data = new Database();
     }
+
+    componentDidMount = () => {
+        this.data.getAllAccounts().then((res, rej) => {
+            //console.log(res)
+            this.setState({FakeData: res}, () => {
+                console.log("State mounted");
+            });
+        });
+    }
+
+    updateState = () => {
+        this.data.getAllAccounts().then((res, rej) => {
+            //console.log(res)
+            this.setState({FakeData: res}, () => {
+                console.log("State updated");
+            });
+        });
+    }
+
+    
 
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
@@ -63,6 +85,7 @@ import { Color } from './Palette';
     }
 
     setUserEdited = (edited) => {
+        //console.log("User Edited", edited);
         this.setState({userEdited: edited})
     }
 
@@ -74,22 +97,29 @@ import { Color } from './Palette';
 
 
     updateEmployee = (edited) => {
-        const newEmployeeList = this.state.FakeData.map( item =>
-            {
-                if (item.id === edited){
-                    item.firstName = this.state.userFirst;
-                    item.lastName = this.state.userLast;
-                    if(this.state.isAdmin){
-                        item.userType = 1;
-                    }
-                    else{
-                        item.userType = 0;
-                    }
-                    return item;
-                }
-                return item;
-            })
-            this.setState({FakeData: newEmployeeList});
+
+        this.data.setUserFirst(this.state.userEdited, this.state.userFirst);
+        this.data.setuserLast(this.state.userEdited, this.state.userLast);
+        this.data.setUserType(this.state.userEdited, this.state.isAdmin);
+        this.updateState();
+
+
+        // const newEmployeeList = this.state.FakeData.map( item =>
+        //     {
+        //         if (item.id === edited){
+        //             item.firstName = this.state.userFirst;
+        //             item.lastName = this.state.userLast;
+        //             if(this.state.isAdmin){
+        //                 item.userType = 1;
+        //             }
+        //             else{
+        //                 item.userType = 0;
+        //             }
+        //             return item;
+        //         }
+        //         return item;
+        //     })
+        //     this.setState({FakeData: newEmployeeList});
     }
 
 
@@ -104,13 +134,13 @@ import { Color } from './Palette';
                  <TouchableOpacity id='employeeButton' onPress={() =>
                  {
                     this.setModalVisible(!isModalVisible);
-                    this.setuserFirst(item.firstName);
-                    this.setuserLast(item.lastName);
-                    this.setUserType(item.userType);
+                    this.setuserFirst(item.firstname);
+                    this.setuserLast(item.lastname);
+                    this.setUserType(item.admin);
                     this.setUserEdited(item.id);
                  }}>
-                     <Text>{item.firstName + " "  + item.lastName}</Text>
-                 </TouchableOpacity>
+                     <Text>{item.firstname + " "  + item.lastname}</Text>
+                 </TouchableOpacity> 
              </View>
          );
      };
@@ -165,7 +195,8 @@ import { Color } from './Palette';
                                     style={styles.textArea} 
                                     defaultValue={this.state.userFirst}
                                     onChangeText={ (text) =>{
-                                        this.setState({userFirst: text})
+                                        this.setState({userFirst: text});
+
                                     }}>
                                 </TextInput>
                             </View>

@@ -27,47 +27,7 @@ const Tab = createMaterialTopTabNavigator();
 
 
 
-import * as firebase from 'firebase'
-import 'firebase/firestore' 
-
-const firebaseConfig = {
-
-  apiKey: "AIzaSyBQYb6hi0bNHIrHkGL2mdKFL1lnhMFwXeU",
-
-  authDomain: "paint-46970.firebaseapp.com",
-
-  databaseURL: "https://paint-46970-default-rtdb.firebaseio.com",
-
-  projectId: "paint-46970",
-
-  storageBucket: "paint-46970.appspot.com",
-
-  messagingSenderId: "54402484337",
-
-  appId: "1:54402484337:web:4b9d1cb00e07cd578df3d0",
-
-  measurementId: "G-Y9P77GNJTH"
-
-};
-
-if(firebase.apps.length == 0){
-  firebase.initializeApp(firebaseConfig);  
-}
-
-
-const db = firebase.firestore();
-db.collection("accounts").get().then((querySnapshot) => {
-  querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-  });
-})
-
-
-
-
-
-class App extends React.Component {
+class App extends React.Component {   
 
 
   state = { signedIn: 1, user: User.ADMIN };
