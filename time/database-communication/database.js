@@ -329,13 +329,10 @@ class Database {
      * @author Jude Gabriel
      */
     async getJobEmployeeData(employeeID){
-        console.log("id", employeeID);
         var postData = [];
         for(var i = 0; i < employeeID.length; i++){
-            console.log(employeeID[i].accountID);
             await this.db.collection("accounts").doc(employeeID[i].accountID).get()
                 .then((snapshot) => {
-                    console.log(snapshot.data());
                     postData.push({...snapshot.data(), id: snapshot.id})
                 });
         }
@@ -389,9 +386,19 @@ class Database {
 
     /**
      * Remove employee from job
+     * 
+     * Status: Done
+     * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
-    removeEmployeeFromJob(){
-
+    async removeEmployeeFromJob(jobID, empID){
+        console.log("job", jobID);
+        console.log("emp", empID);
+       if((jobID != null) && (empID != null)){
+        await this.db.collection("jobs").doc(jobID)
+            .collection("employees").doc(empID).delete();
+       }
     }
 
     /****** CREATE JOB *******/

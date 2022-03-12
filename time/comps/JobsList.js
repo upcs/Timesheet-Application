@@ -45,7 +45,6 @@ class JobsList extends React.Component {
     componentDidMount = () => {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
-                //console.log(res);
             });
         });
     }
@@ -53,7 +52,6 @@ class JobsList extends React.Component {
     updateState = () => {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
-               //console.log(res);
             });
         });
     }
@@ -83,10 +81,8 @@ class JobsList extends React.Component {
     }
 
     setEList = (id) => {
-        console.log("original job", this.state.jobEdited);
         this.data.getJobEmployeesID(id).then((res, rej) => {
             this.data.getJobEmployeeData(res).then((respo, rejo) => {
-                console.log("respo", respo);
                 this.setState({eList: respo});
             })
         });
@@ -101,22 +97,20 @@ class JobsList extends React.Component {
         this.data.setJobName(this.state.jobEdited, this.state.jobName);
         this.data.setJobAddress(this.state.jobEdited, this.state.address);
         this.updateState();
-
-        // const newJobList = this.state.FakeData.map( item =>
-        //     {
-        //         if (item.id === edited){
-        //             item.address = this.state.address;
-        //             item.jobName = this.state.jobName;
-        //             return item;
-        //         }
-        //         return item;
-        //     })
-        //     this.setState({FakeData: newJobList});
     }
 
     deleteUser = () => {
-        const newEmployeeList = this.state.eList.filter(item => item.id !== this.state.employeeEdited);
-        this.setState({eList: newEmployeeList});
+        this.data.getJobEmployeesID(this.state.jobEdited).then((res, rej) => {
+            for(var i = 0; i < res.length; i++){
+                if(res[i].accountID == this.state.employeeEdited){
+                    this.data.removeEmployeeFromJob(this.state.jobEdited, res[i].id);
+                    this.setEList(this.state.jobEdited);
+                }
+            }
+        });
+        //this.data.removeEmployeeFromJob(this.state.jobEdited, this.state.employeeEdited);
+       // const newEmployeeList = this.state.eList.filter(item => item.id !== this.state.employeeEdited);
+        //this.setState({eList: newEmployeeList});
     }
  
     addUser = (item) => {
