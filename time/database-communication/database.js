@@ -308,6 +308,21 @@ class Database {
     }
 
     /**
+     * Get a list of all employees not on the job
+     * 
+     * Status: Done
+     * Testing: Needed
+     */
+    getEmployeesNotOnJob(allEmp, empOnJob){
+        for(var i = 0; i < empOnJob.length; i++){
+            allEmp = allEmp.filter(item => item.id !== empOnJob[i].accountID);
+        }
+
+        return allEmp;
+        
+    }
+
+    /**
      * Get a list of ID's for employees on a current job
      * 
      * @author Jude Gabriel
@@ -393,8 +408,6 @@ class Database {
      * @author Jude Gabriel
      */
     async removeEmployeeFromJob(jobID, empID){
-        console.log("job", jobID);
-        console.log("emp", empID);
        if((jobID != null) && (empID != null)){
         await this.db.collection("jobs").doc(jobID)
             .collection("employees").doc(empID).delete();

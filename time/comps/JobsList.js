@@ -82,6 +82,11 @@ class JobsList extends React.Component {
 
     setEList = (id) => {
         this.data.getJobEmployeesID(id).then((res, rej) => {
+            this.data.getAllAccounts().then((accResponse, accRej) => {
+                console.log("all users", accResponse);
+                console.log("on job", res);
+                this.setState({eData:this.data.getEmployeesNotOnJob(accResponse, res)});
+            })
             this.data.getJobEmployeeData(res).then((respo, rejo) => {
                 this.setState({eList: respo});
             })
@@ -173,7 +178,7 @@ class JobsList extends React.Component {
                         {cancelable: false}
                     )
                 }}>
-                    <Text >{item.lastName + ", " + item.firstName}</Text>
+                    <Text >{item.lastname + ", " + item.firstname}</Text>
                 </TouchableOpacity>
             </View>
         );
