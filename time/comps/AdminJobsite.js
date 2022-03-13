@@ -17,13 +17,17 @@
 
  //Jobsite Selection with a search bar and "add jobsite" button
  class AdminJobsite extends React.Component {
-     
+    constructor(props){
+        super(props);
+       this.myref = React.createRef();
+    }
      render() {
         let jobData = {};
        
         const addData = (params) => {
             jobData = params;
             console.log(jobData);
+            this.myref.current.updateState();
         }
         
          return (
@@ -36,7 +40,7 @@
                     
                     
                 </View>
-                <JobsList></JobsList>
+                <JobsList ref={this.myref}></JobsList>
              </View>
          ) 
      }

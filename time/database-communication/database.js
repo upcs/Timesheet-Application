@@ -399,8 +399,34 @@ class Database {
     /**
      * Creates a job
      */
-    createJob(){
-
+    createJob(add, jname, jnotes){
+          //Error check null parameters
+          add.trim();
+          jname.trim();
+          jnotes.trim();
+          let phs = 1;
+  
+  
+          if((!add) || (!jname)){
+              console.log("null parameter (name or address)");
+              return;
+          }
+          else if((add == " ") || (jname == " ") ){
+              console.log("null parameter (name or address");
+              return;
+          }
+          else if((add == "") || (jname == "")){
+              console.log("null parameter (name or address)");
+              return;
+          }
+  
+  
+          this.db.collection("jobs").add({
+              address: add,
+              name: jname,
+              notes: jnotes,
+              phase: phs
+          });
     }
 
     /****** DELETE JOB *******/

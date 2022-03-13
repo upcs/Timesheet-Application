@@ -7,13 +7,14 @@
  import {Color, style} from './Palette.js';
  import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
  import Employees from "./EmployeeInfo";
-
+ import Database from '../database-communication/database.js'
 
 
 /**
  * Allows the admin to add an employee
  */
 export default function AddEmployee(props) {
+    let data = new Database();
     //Sets for firstname, lastname, password, and if employee is an admin respectively
     const [jobN, setJobN] = useState(null);
     const [jobA, setJobA] = useState(null);
@@ -28,6 +29,7 @@ export default function AddEmployee(props) {
     //Send new employ to parent component
     const handleSubmit = () => {
       props.sendData(dataOut);
+      data.createJob(dataOut.jAd,dataOut.jName,dataOut.note);
       setDataOut({jName: null, jAd: null, note: null});
       setJobA(null);
       setJobN(null);
