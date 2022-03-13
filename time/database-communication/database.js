@@ -308,6 +308,21 @@ class Database {
     }
 
     /**
+     * Get a list of all employees not on the job
+     * 
+     * Status: Done
+     * Testing: Needed
+     */
+    getEmployeesNotOnJob(allEmp, empOnJob){
+        for(var i = 0; i < empOnJob.length; i++){
+            allEmp = allEmp.filter(item => item.id !== empOnJob[i].accountID);
+        }
+
+        return allEmp;
+        
+    }
+
+    /**
      * Get a list of ID's for employees on a current job
      * 
      * @author Jude Gabriel
@@ -329,13 +344,10 @@ class Database {
      * @author Jude Gabriel
      */
     async getJobEmployeeData(employeeID){
-        console.log("id", employeeID);
         var postData = [];
         for(var i = 0; i < employeeID.length; i++){
-            console.log(employeeID[i].accountID);
             await this.db.collection("accounts").doc(employeeID[i].accountID).get()
                 .then((snapshot) => {
-                    console.log(snapshot.data());
                     postData.push({...snapshot.data(), id: snapshot.id})
                 });
         }
@@ -382,16 +394,31 @@ class Database {
 
     /**
      * Add employee to job
+     * 
+     * Status: Done
+     * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
-    addEmployeeToJob(){
-
+    async addEmployeeToJob(jobId, employeeToAdd){
+        await this.db.collection("jobs").doc(jobId).collection("employees").add({
+            accountID: employeeToAdd.id
+        });
     }
 
     /**
      * Remove employee from job
+     * 
+     * Status: Done
+     * Testing: Needed
+     * 
+     * @author Jude Gabriel
      */
-    removeEmployeeFromJob(){
-
+    async removeEmployeeFromJob(jobID, empID){
+       if((jobID != null) && (empID != null)){
+        await this.db.collection("jobs").doc(jobID)
+            .collection("employees").doc(empID).delete();
+       }
     }
 
     /****** CREATE JOB *******/
