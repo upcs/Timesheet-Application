@@ -15,7 +15,7 @@
  * Allows the admin to add an employee
  */
 export default function AddEmployee(props) {
-
+    //Get database
     let data = new Database();
 
     //Sets for firstname, lastname, password, and if employee is an admin respectively
@@ -34,20 +34,14 @@ export default function AddEmployee(props) {
     const handleSubmit = () => {
       //add the account
       props.sendData(dataOut);
+      //Create the new account
       data.createUserAccount(dataOut.firstname,dataOut.lastname,dataOut.email,dataOut.usertype);
+      //Set data to original values
       setEmpF(null);
       setEmpL(null);
       setPass(null);
   };
 
-   /** const componentDidMount = () => {
-        this.data.getAllAccounts().then((res, rej) => {
-            this.setState({FakeData: res}, () => {
-                //console.log("State mounted");
-            });
-        });
-    }
-    */
 
       
 

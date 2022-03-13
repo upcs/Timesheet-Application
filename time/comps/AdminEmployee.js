@@ -19,13 +19,15 @@ import AddEmployee from './AddEmployee.js';
  class AdminEmployee extends React.Component {
      constructor(props){
          super(props);
+         //get a reference of the updateState from EmployeeList
         this.myref = React.createRef();
      }
      
      render() {
-       
+       //This function is called whenever the add employee modal is submitted
         const addData = (params) => {
             employList = params;
+            //Call reference to updateState
             this.myref.current.updateState();
         }
 

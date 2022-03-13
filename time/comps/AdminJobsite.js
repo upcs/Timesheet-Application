@@ -19,6 +19,7 @@
  class AdminJobsite extends React.Component {
     constructor(props){
         super(props);
+        //Create reference of JobsList updateState
        this.myref = React.createRef();
     }
      render() {
@@ -27,6 +28,7 @@
         const addData = (params) => {
             jobData = params;
             console.log(jobData);
+            //Call updateState in JobsList
             this.myref.current.updateState();
         }
         

@@ -400,13 +400,14 @@ class Database {
      * Creates a job
      */
     createJob(add, jname, jnotes){
-          //Error check null parameters
+          //Trim values
           add.trim();
           jname.trim();
           jnotes.trim();
+          //Phase will be 1 to start
           let phs = 1;
   
-  
+        //Error check null parameters
           if((!add) || (!jname)){
               console.log("null parameter (name or address)");
               return;
@@ -420,7 +421,7 @@ class Database {
               return;
           }
   
-  
+          //Submit to database
           this.db.collection("jobs").add({
               address: add,
               name: jname,

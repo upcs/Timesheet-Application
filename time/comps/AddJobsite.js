@@ -14,7 +14,9 @@
  * Allows the admin to add an employee
  */
 export default function AddEmployee(props) {
+    //create instance of DB
     let data = new Database();
+
     //Sets for firstname, lastname, password, and if employee is an admin respectively
     const [jobN, setJobN] = useState(null);
     const [jobA, setJobA] = useState(null);
@@ -28,8 +30,11 @@ export default function AddEmployee(props) {
 
     //Send new employ to parent component
     const handleSubmit = () => {
+      //Send mock data to parent
       props.sendData(dataOut);
+      //Create the jobsite in the database
       data.createJob(dataOut.jAd,dataOut.jName,dataOut.note);
+      //Set all values back to null after submission
       setDataOut({jName: null, jAd: null, note: null});
       setJobA(null);
       setJobN(null);
