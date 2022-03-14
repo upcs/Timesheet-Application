@@ -237,18 +237,73 @@ class Database {
 
     }
 
-    /**
+    /*
+     * @author Caden 
+     * @date 3/14/2022
+     * 
      * Get daily time
      */
-    getDailyTime(){
+    async getDailyTime(id){
+        //get current date 
+        let today = new Date();
+        today.getDay()
+        let hours = 0;
+        /*
+        Get the correct user using the id, and find all punches that correspond to the current day
+        */
+        await this.db.collection("accounts").doc(id).collection("punch").where("day" == today.getDay).get().then(
+                function(querySnapshot){
+                    querySnapshot.forEach(function(doc){
+                        let data = doc.data();
+                      hours = hours + data.time;
+                    });
+            })
+            .catch(function(error){
+                console.log("error getting docs");
+            })
 
+            return hours; 
+    }
+    /*
+    @author Caden
+    @date 3/14/2022
+    @param day, month, and year
+    @return returns 0 - Sunday, 1 - Monday, 2 - Tuesday, 3 - Wednesday... 6 - Saturday
+    */
+    getDayOfWeek(day, month, year){
+       //get first two digits of the year
+        let firstTwoYear = parseInt(year.toString().substring(0,2));
+        //get last two digits of the year
+        let lastTwoYear =  parseInt(year.toString().substring(2));
+        let F = day + [(13*month-1)/5] +lastTwoYear+ [lastTwoYear/4] +[firstTwoYear/4]-2*firstTwoYear;
+        return F;
     }
 
     /**
      * Get weekly time
      */
-    getWeeklyTime(){
-
+    async getWeeklyTime(id){
+         //get current date 
+         let today = new Date();
+         today.getDay()
+         today.get
+         let hours = 0;
+         /*
+         Get the correct user using the id, and find all punches that correspond to the current day
+         */
+         await this.db.collection("accounts").doc(id).collection("punch").where("day" == today.getDay).get().then(
+                 function(querySnapshot){
+                     querySnapshot.forEach(function(doc){
+                         let data = doc.data();
+                       hours = hours + data.time;
+                     });
+             })
+             .catch(function(error){
+                 console.log("error getting docs");
+             })
+ 
+             return hours; 
+        
     }
 
     /**
