@@ -258,6 +258,21 @@ class Database {
         
     }
 
+    async getAllTime(id){
+        if(id == 0){
+            return;
+        }
+        var postData = [];
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+                })
+            return postData;
+        }
+    }
+
 
     /****** JOB GETTERS *******/
 

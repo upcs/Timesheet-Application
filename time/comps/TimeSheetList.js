@@ -12,7 +12,7 @@
 
 import React, {useEffect, useState} from 'react';
 import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity} from 'react-native'
-
+import Database from '../database-communication/database.js'
 
 /**
  * Creates a Scrollable List that can be selected
@@ -20,37 +20,37 @@ import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity} from 'r
  * Data predefined currently (Sprint 1)
  */
 class TimeSheetList extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             //Prepopulate with fake data
-           data: [
-              { item: "This is employee 1"},
-              { item: "This is employee 2"},
-              { item: "This is employee 3"},
-              { item: "This is employee 3" },
-              { item: "This is employee 4" },
-              { item: "This is employee 5"},
-              { item: "This is employee 6"},
-              { item: "This is employee 7"},
-              { item: "This is employee 8" },
-              { item: "This is employee 10"},
-              { item: "This is employee 11"},
-              { item: "This is employee 12"},
-              { item: "This is employee 13"},
-              { item: "This is employee 14"},
-              { item: "This is employee 15"},
-              { item: "This is employee 16"},
-           ],
+           data: [],
         };
+        this.data = new Database();
     }
+
+    componentDidMount = () => {
+        this.data.getAllAccounts().then((res, rej) => {
+            this.setState({data: res}, () => {
+            });
+        });
+    }
+
+    setEmployee = (id) => {
+        this.props.onChange(id);
+    }
+
+
+
 
     //Render each item as a button
     renderItem = ({item}) => {
         return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={this.onPress}>
-                    <Text >{item.item}</Text>
+                <TouchableOpacity onPress={() => {
+                    this.setEmployee(item.id);
+                }}>
+                    <Text >{item.firstname + " " + item.lastname}</Text>
                 </TouchableOpacity>
             </View>
         );
