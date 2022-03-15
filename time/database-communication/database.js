@@ -72,6 +72,19 @@ class Database {
 
     }
 
+    async getSignIn(email, password){
+        var id = '';
+        var user = '';
+        const data = await this.db.collection("accounts").where("email", "==", email).where("password", "==", password)
+                        .get().then((querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                id = doc.id
+                                user = doc.data().admin;
+                            })
+                        })
+        return [id, user];
+    }
+
     /**
      * Gets users email
      */
