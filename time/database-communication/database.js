@@ -280,6 +280,11 @@ class Database {
     }
 
     /**
+     * @author Caden
+     * @date 3/14/2022
+     * @param id of employee getting hours for
+     * @return weekly hours
+     * 
      * Get weekly time
      */
     async getWeeklyTime(id){
@@ -288,22 +293,54 @@ class Database {
          today.getDay()
          today.get
          let hours = 0;
-         /*
-         Get the correct user using the id, and find all punches that correspond to the current day
-         */
-         await this.db.collection("accounts").doc(id).collection("punch").where("day" == today.getDay).get().then(
-                 function(querySnapshot){
-                     querySnapshot.forEach(function(doc){
-                         let data = doc.data();
-                       hours = hours + data.time;
-                     });
-             })
-             .catch(function(error){
-                 console.log("error getting docs");
-             })
- 
-             return hours; 
-        
+         let start = 0;
+         let end = 0;
+         //Get the range to find the employ hours from
+        switch(this.getDayOfWeek(today.getDay,today.getMonth, today.getFullYear)){
+            case 0:
+                start = today.getDate - 6;
+                end = today.getDay;
+                break;
+            case 1:
+                start = today.getDay;
+                end = start + 6;
+                break;
+            case 2:
+                start = today.getDay - 1;
+                end = start + 6;
+                break;
+            case 3:
+                start = today.getDay - 2;
+                end = start + 6;
+                break;
+            case 4:
+                start = today.getDay - 3;
+                end = start + 6;
+                break;
+            case 5:
+                start = today.getDay - 4;
+                end = start + 6;
+                break;
+            case 6: 
+                start = today.getDay - 5;
+                end = start + 6;
+                break;
+        }
+        while(start != end){
+        await this.db.collection("accounts").doc(id).collection("punch").where("day" == start).get().then(
+            function(querySnapshot){
+                querySnapshot.forEach(function(doc){
+                    let data = doc.data();
+                  hours = hours + data.time;
+                });
+        })
+        .catch(function(error){
+            console.log("error getting docs");
+        })
+        //incrament start
+        start++;
+    }
+    return hours;
     }
 
     /**
