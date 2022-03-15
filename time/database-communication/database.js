@@ -242,27 +242,24 @@ class Database {
      * @date 3/14/2022
      * 
      * Get daily time
+     * STATUS: DONE
      */
     async getDailyTime(id){
         //get current date 
         let today = new Date();
         today.getDay()
-        let hours = 0;
+        var hours = 0;
         /*
         Get the correct user using the id, and find all punches that correspond to the current day
         */
-        await this.db.collection("accounts").doc(id).collection("punch").where("day" == today.getDay).get().then(
-                function(querySnapshot){
-                    querySnapshot.forEach(function(doc){
-                        let data = doc.data();
-                      hours = hours + data.time;
-                    });
-            })
-            .catch(function(error){
-                console.log("error getting docs");
-            })
-
-            return hours; 
+        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().day == today.getDate() ){
+                hours += doc.data().time;
+                }
+            });
+          })
+         return hours;
     }
     /*
     @author Caden
@@ -327,11 +324,12 @@ class Database {
                 break;
         }
         while(start != end){
-        await this.db.collection("accounts").doc(id).collection("punch").where("day" == start).get().then(
+        await this.db.collection("accounts").doc(id).collection("punch").get().then(
             function(querySnapshot){
                 querySnapshot.forEach(function(doc){
                     let data = doc.data();
                   hours = hours + data.time;
+                  console.log("error getting docs");
                 });
         })
         .catch(function(error){
