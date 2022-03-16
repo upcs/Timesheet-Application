@@ -65,6 +65,7 @@ class Login extends React.Component {
                     style={styles.textArea} 
                     //defaultValue='Email'
                     placeholder='Email'
+                    keyboardType='email-address'
                     onChangeText={(text) => {
                         this.setState({email: text})
                         }
@@ -75,6 +76,7 @@ class Login extends React.Component {
                     style={styles.textArea}  
                     //defaultValue='Password'
                     placeholder='Password'
+                    secureTextEntry='true'
                     onChangeText={(text) => {
                         this.setState({password: text})
                         }
