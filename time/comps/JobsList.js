@@ -16,7 +16,11 @@
  import {Color} from './Palette';
  import eData from './FakeEmployeeData';
  import SearchBar from './search_bar';
+
 import AdminJobsite from './AdminJobsite';
+
+ import Database from '../database-communication/database.js'
+
  
  
  /**
@@ -27,6 +31,7 @@ import AdminJobsite from './AdminJobsite';
 class JobsList extends React.Component {
     constructor(props) {
         super(props);
+
         //Changing
         this.initFakeData = props.data;
        // console.log(props.data);
@@ -36,16 +41,40 @@ class JobsList extends React.Component {
             //FakeData: this.initFakeData,
             FakeData: props.data,
             eData: this.initEData,
+
             isModalVisible: false,
             
             modalTwo: false,
             address: '',
             jobName: '',
-            jobEdited: 1,
-            employeeEdited: 1,
+            jobEdited: '',
+            employeeEdited: '',
             eList: null
         };
+
+        this.data = new Database()
     }
+
+    /**
+     * Check if component mounted
+     */
+    componentDidMount = () => {
+        this.data.getAllJobs().then((res, rej) => {
+            this.setState({FakeData: res}, () => {
+            });
+        });
+    }
+
+    /**
+     * Update the list of jobs
+     */
+    updateState = () => {
+        this.data.getAllJobs().then((res, rej) => {
+            this.setState({FakeData: res}, () => {
+            });
+        });
+    }
+
 
     static getDerivedStateFromProps(props, state) {
         if (props.data !== state.FakeData) {
@@ -59,64 +88,109 @@ class JobsList extends React.Component {
 
     
 
+=======
+    /**
+     * Set job modal visible
+     */
+
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
     }
 
+    /**
+     * Set employee modal visible 
+     */
     setModalTwo = (visible) => {
         this.setState({modalTwo: visible});
     }
 
+    /**
+     * Update the job address 
+     */
     setAddress = (addy) => {
         this.setState({address: addy})
     }
 
+    /**
+     * Update the job name 
+     */
     setJobName = (aName) => {
         this.setState({jobName: aName})
     }
 
+    /**
+     * Update which job is being edited 
+     */
     setJobEdited = (edited) => {
         this.setState({jobEdited: edited});
     }
 
+    /**
+     * Update which employee is being edited 
+     */
     setEmployeeEdited = (edited) => {
         this.setState({employeeEdited: edited});
     }
 
-    setEList = (list) => {
-        this.setState({eList: list}, () => {}); 
+    /**
+     * Set active and non-active employee lists 
+     */
+    setEList = (id) => {
+        this.data.getJobEmployeesID(id).then((res, rej) => {
+            this.data.getAllAccounts().then((accResponse, accRej) => {
+                this.setState({eData:this.data.getEmployeesNotOnJob(accResponse, res)});
+            })
+            this.data.getJobEmployeeData(res).then((respo, rejo) => {
+                this.setState({eList: respo});
+            })
+        });
     }
 
+    /**
+     * Delete the job
+     */
     deleteJob = () => {
         const newJobList = this.state.FakeData.filter(item => item.id !== this.state.jobEdited)
         this.setState({FakeData: newJobList});
     }
 
+    /**
+     * Save the job edits 
+     */
     saveJob = (edited) => {
-        const newJobList = this.state.FakeData.map( item =>
-            {
-                if (item.id === edited){
-                    item.address = this.state.address;
-                    item.jobName = this.state.jobName;
-                    return item;
-                }
-                return item;
-            })
-            this.setState({FakeData: newJobList});
+        this.data.setJobName(this.state.jobEdited, this.state.jobName);
+        this.data.setJobAddress(this.state.jobEdited, this.state.address);
+        this.setEList(this.state.jobEdited);
+        this.updateState();
     }
 
+    /**
+     * Remove an employee from the job
+     */
     deleteUser = () => {
-        const newEmployeeList = this.state.eList.filter(item => item.id !== this.state.employeeEdited);
-        this.setState({eList: newEmployeeList});
+        this.data.getJobEmployeesID(this.state.jobEdited).then((res, rej) => {
+            for(var i = 0; i < res.length; i++){
+                if(res[i].accountID == this.state.employeeEdited){
+                    this.data.removeEmployeeFromJob(this.state.jobEdited, res[i].id);
+                    this.setEList(this.state.jobEdited);
+                }
+            }
+        });
+        this.updateState();
     }
  
+    /**
+     * Add user to the job 
+     */
     addUser = (item) => {
-        this.state.eList.unshift(item);
-        return item;
+        this.data.addEmployeeToJob(this.state.jobEdited, item);
+        this.setEList(this.state.jobEdited);
     }
 
  
-    //Render each item as a button
+    /**
+     * Render Each job in the list
+     */
     renderItem = ({item}) => {
         const { isModalVisible } = this.state;
         return (
@@ -128,19 +202,22 @@ class JobsList extends React.Component {
                     onPress={ () => {
                         this.setModalVisible(!isModalVisible);
                         this.setAddress(item.address);
-                        this.setJobName(item.jobName);
-                        this.setJobEdited(item.id);
-                        this.setEList(item.employees);
+                        this.setJobName(item.name);
+                        this.setJobEdited(item.id); 
+                        this.setEList(item.id);
+                        this.updateState();
                     }
                 }>
-                    <Text >{item.jobName}</Text>
+                    <Text >{item.name}</Text>
                 </TouchableOpacity>
             </View>
         );
     };
 
 
-    //Render each employee
+    /**
+     * Render list of non-active employees
+     */
     renderEmployee = ({item}) => {
         const { modalTwo } = this.state;
         const { isModalVisible } = this.state;
@@ -170,13 +247,15 @@ class JobsList extends React.Component {
                         {cancelable: false}
                     )
                 }}>
-                    <Text >{item.lastName + ", " + item.firstName}</Text>
+                    <Text >{item.lastname + ", " + item.firstname}</Text>
                 </TouchableOpacity>
             </View>
         );
     };
 
-    //Render sublist of employees for each job
+    /**
+     * Render list of active employees 
+     */
     renderList = ({item}) => {
         return(
             <View 
@@ -198,13 +277,15 @@ class JobsList extends React.Component {
                         ]
                     )
                 }}>
-                    <Text>{item.lastName + ", " + item.firstName}</Text>   
+                    <Text>{item.lastname + ", " + item.firstname}</Text>   
                 </TouchableOpacity>
             </View>
         )
     }
  
-    //Create the flatlist
+    /**
+     * Render the component
+     */
     render() {
         const { isModalVisible } = this.state;
         const { modalTwo } = this.state;

@@ -7,6 +7,7 @@
  import {Color, style} from './Palette.js';
  import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
  import Employees from "./EmployeeInfo";
+ import Database from '../database-communication/database.js'
 
 
 
@@ -14,6 +15,9 @@
  * Allows the admin to add an employee
  */
 export default function AddEmployee(props) {
+    //Get database
+    let data = new Database();
+
     //Sets for firstname, lastname, password, and if employee is an admin respectively
     const [empF, setEmpF] = useState(null);
     const [empL, setEmpL] = useState(null);
@@ -24,16 +28,23 @@ export default function AddEmployee(props) {
     const [modalVisible, setModalVisible] = useState(false);
 
     //Set employee data
-    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null, password: null, usertype: isAdmin});
+    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null,email: null, usertype: isAdmin});
 
     //Send new employ to parent component
     const handleSubmit = () => {
+      //add the account
       props.sendData(dataOut);
-      setDataOut({firstname: null, lastname: null, password: null, usertype: isAdmin ? 1 : 0});
+      //Create the new account
+      data.createUserAccount(dataOut.firstname,dataOut.lastname,dataOut.email,dataOut.usertype);
+      //Set data to original values
       setEmpF(null);
       setEmpL(null);
       setPass(null);
   };
+
+
+      
+
     //Render the component
 
     return (
@@ -86,7 +97,7 @@ export default function AddEmployee(props) {
                 <TextInput
                   id='fInput'
                   style={styles.textbox}
-                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, password: pass, usertype: isAdmin ? 1 : 0})}}
+                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, email: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empF}
                   placeholder=" Employee First Name"
                 ></TextInput>
@@ -99,22 +110,22 @@ export default function AddEmployee(props) {
                 <TextInput
                   id='lInput'
                   style={styles.textbox}
-                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, password: pass, usertype: isAdmin ? 1 : 0})}}
+                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, email: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empL}
                   placeholder=" Employee Last Name"
                 ></TextInput>
 
                    {/*Third text input*/}
                   <View style = {styles.textView}>
-                      <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Password</Text>
+                      <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Email</Text>
                   </View>
 
                 <TextInput
                     id='pInput'
                     style={styles.textbox}
-                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, password: text, usertype: isAdmin ? 1 : 0})}}
+                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, email: text, usertype: isAdmin ? 1 : 0})}}
                     value={pass}
-                    placeholder=" Employee Password"
+                    placeholder=" Employee Email"
                 ></TextInput>
 
                 {/*Switch*/}
@@ -134,7 +145,7 @@ export default function AddEmployee(props) {
                        thumbColor={isAdmin ? "white" : "black"}
                        onValueChange={ () => {
                           setAdmin(!isAdmin);
-                          setDataOut({firstname: empF, lastname: empL, password: pass, usertype: isAdmin ? 0 : 1 });
+                          setDataOut({firstname: empF, lastname: empL, email: pass, usertype: isAdmin ? 0 : 1 });
                        }}
                        value={isAdmin}
                         >

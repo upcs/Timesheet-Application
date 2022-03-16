@@ -27,6 +27,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
  //Jobsite Selection with a search bar and "add jobsite" button
  class AdminJobsite extends React.Component {
 
+
     constructor(props) {
       super(props);
         this.currValue = this.currValue.bind(this);
@@ -76,6 +77,13 @@ import FakeJobsiteData from './FakeJobsiteData.js';
         
       }
      
+
+    constructor(props){
+        super(props);
+        //Create reference of JobsList updateState
+       this.myref = React.createRef();
+    }
+
      render() {
 
       this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
@@ -87,8 +95,15 @@ import FakeJobsiteData from './FakeJobsiteData.js';
          const addData = (params) => {
              jobData = params;
             console.log(jobData);
+
          }
       
+
+            //Call updateState in JobsList
+            this.myref.current.updateState();
+        }
+        
+
          return (
 
 
@@ -101,6 +116,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
                        <AddJobsite  sendData={addData}></AddJobsite>
                     </View>
                     
+
                  </View>
                  
                  <SafeAreaView style={styles.container}>
@@ -108,6 +124,11 @@ import FakeJobsiteData from './FakeJobsiteData.js';
                     <JobsList  data={this.filteredItems}></JobsList>
                  </SafeAreaView>
          
+
+
+                    
+                </View>
+                <JobsList ref={this.myref}></JobsList>
 
              </View>
                   

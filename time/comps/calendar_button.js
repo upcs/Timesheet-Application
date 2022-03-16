@@ -1,9 +1,3 @@
-/*****************
- * PLACEHOLDER BUTTON. WILL NOT BE COMPELTED THIS SPRINT
- * 
- */
-
-
  import React, { useState }  from 'react';
  import {Color} from './Palette.js';
  import {View, StyleSheet, ButtonGroup} from 'react-native'

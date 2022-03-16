@@ -6,11 +6,16 @@
  * 
  * Author: Harrison Winters (Build off of Jude Gabriel's Login component)
  * Date: February 5, 2022
+ * 
+ * Author: Tony Hayden
+ * Update: Added punches to database
+ * Date: March 15, 2022
  ************************************************/
 
 import React from 'react';
 import {Color} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
+import Database from '../database-communication/database.js'
  
 /* Global Variables for time tracking */
 var isPressed;
@@ -47,6 +52,8 @@ var endTime = 0;
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
         this.totalTime = this.totalTime.bind(this);
+
+        this.data = new Database();
     };
 
 

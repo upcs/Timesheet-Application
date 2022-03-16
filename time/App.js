@@ -24,12 +24,14 @@ import AdminJobsite from './comps/AdminJobsite';
 import SearchBar from './comps/SearchBar';
 import AdminEmployee from './comps/AdminEmployee'
 const Tab = createMaterialTopTabNavigator();
+import Database from './database-communication/database.js'
 
 
-class App extends React.Component {
+
+class App extends React.Component {   
 
 
-  state = { signedIn: 1, user: User.ADMIN };
+  //state = { signedIn: 0, user: User.ADMIN };
 
   constructor(props) {
     super(props);
@@ -38,47 +40,49 @@ class App extends React.Component {
     // If we pass functions to another component, by default they will be ran in their own context. using Function.bind
     // means that it will always use the scope of 'App'. in other words the 'this' keyword will always refernece the
     // same place as if the function was run here. at least i think so
-    this.login = this.login.bind(this);
-  }
-  login() {
-  /* login function in app should return some object representing server response
-      example:
-      {
-        status: 0 or 1,
-        username: string,
-        type: User type
-      }   */
-      console.log("Attepting log in");
-      this.setState({
-        signedIn: 1,
-        user: User.DEFAULT,
-      })
 
+    this.state = {
+      signedIn: 0,
+      id: '',
+      user: ''
+    }
+    this.login = this.login.bind(this);
+    this.data = new Database();
+  }
+  login(signin, uid, uType) {
+    console.log(signin, uid, uType);
+    this.setState({
+      signedIn: signin,
+      id: uid,
+      user: uType
+    }) 
   }
 
   render() {
-    const signedIn = this.state.signedIn;
-    const isAdmin = this.state.user == User.ADMIN;
+    
+    //const signedIn = this.state.signedIn;
+    //const isAdmin = this.state.user == User.ADMIN;
     return (
       <SafeAreaView style={safeAreaAndroid.SafeArea}>
       <NavigationContainer>
         <Tab.Navigator>
           {
-          signedIn ? (
-            isAdmin ? (
+          this.state.signedIn ? (
+            this.state.user ? (
               // Logged in as admin
               <>
                 <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
                 <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
-                <Tab.Screen name="Jobsite" component={AdminJobsite}></Tab.Screen>
+                <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
               </>
             ) : (
               // Logge in as default user
               <>
                 <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
-                <Tab.Screen name="EmployeeHours" component={EmployeeHours}></Tab.Screen>
+                <Tab.Screen name="home"children={()=><EmployeeHours dataParentToChild={this.state.id}/>}
+    />
               </>
             )
           ) : (
