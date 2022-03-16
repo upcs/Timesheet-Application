@@ -268,12 +268,7 @@ class Database {
     @return returns 0 - Sunday, 1 - Monday, 2 - Tuesday, 3 - Wednesday... 6 - Saturday
     */
     getDayOfWeek(day, month, year){
-       //get first two digits of the year
-        let firstTwoYear = parseInt(year.toString().substring(0,2));
-        //get last two digits of the year
-        let lastTwoYear =  parseInt(year.toString().substring(2));
-        let F = day + [(13*month-1)/5] +lastTwoYear+ [lastTwoYear/4] +[firstTwoYear/4]-2*firstTwoYear;
-        return F;
+       
     }
 
     /**
@@ -285,59 +280,77 @@ class Database {
      * Get weekly time
      */
     async getWeeklyTime(id){
+        /*
+        get the day of the week through zellers rule
+        */
          //get current date 
-         let today = new Date();
-         today.getDay()
-         today.get
-         let hours = 0;
-         let start = 0;
-         let end = 0;
-         //Get the range to find the employ hours from
-        switch(this.getDayOfWeek(today.getDay,today.getMonth, today.getFullYear)){
+         var today = new Date();
+         var hours = 0;
+         var start = 0;
+         var end = 0;
+         var day = today.getDate();
+         //Set Month in equation March is first month
+         var month = today.getMonth()-1;
+         if(month == 0 ){
+            month =12;
+         }
+         else if(month == -1) {
+            month = 11;
+         }
+         //get first two digits of the year
+        var firstTwoYear = parseInt(today.getFullYear().toString().substring(0,2));
+        //get last two digits of the year
+        var lastTwoYear =  parseInt(today.getFullYear().toString().substring(2));
+        var F = day + ((13*month-1)/5) +lastTwoYear+ (lastTwoYear/4) +(firstTwoYear/4)-(2*firstTwoYear);
+        console.log("THIS is F" + F);
+        F = Math.floor(F)%7;
+        /*
+        Determine the start and ends of the week
+        */
+        switch(F){
             case 0:
-                start = today.getDate - 6;
-                end = today.getDay;
+                start = today.getDate() - 6;
+                end = today.getDate();
                 break;
             case 1:
-                start = today.getDay;
+                start = today.getDate();
                 end = start + 6;
                 break;
             case 2:
-                start = today.getDay - 1;
+                start = today.getDate() - 1;
                 end = start + 6;
                 break;
             case 3:
-                start = today.getDay - 2;
+                start = today.getDate() - 2;
                 end = start + 6;
                 break;
             case 4:
-                start = today.getDay - 3;
+                start = today.getDate() - 3;
                 end = start + 6;
                 break;
             case 5:
-                start = today.getDay - 4;
+                start = today.getDate() - 4;
                 end = start + 6;
                 break;
             case 6: 
-                start = today.getDay - 5;
+                start = today.getDate() - 5;
                 end = start + 6;
                 break;
         }
-        while(start != end){
-        await this.db.collection("accounts").doc(id).collection("punch").get().then(
-            function(querySnapshot){
-                querySnapshot.forEach(function(doc){
-                    let data = doc.data();
-                  hours = hours + data.time;
-                  console.log("error getting docs");
-                });
-        })
-        .catch(function(error){
-            console.log("error getting docs");
-        })
-        //incrament start
-        start++;
-    }
+       /*
+       Return the time worked through out the week
+       */
+        while (start <= end){
+          await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().day == start ){
+                hours = hours + doc.data().time;
+                }
+            });
+          })
+          start++;
+        }
+    
     return hours;
     }
 

@@ -22,6 +22,12 @@ class EmployeeHours extends React.Component {
                 console.log("State mounted");
             });
         });
+        this.data.getWeeklyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
+            this.setState({weekly: res}, () => {
+                console.log("State mounted");
+            });
+        });
+        
     }
 
     updateState = () => {
@@ -30,6 +36,12 @@ class EmployeeHours extends React.Component {
                 console.log("State updated");
             });
         });
+        this.data.getWeeklyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
+            this.setState({weekly: res}, () => {
+             console.log("State mounted");
+            });
+        });
+        
     }
    
     render() {
