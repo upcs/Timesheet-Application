@@ -72,6 +72,19 @@ class Database {
 
     }
 
+    async getSignIn(email, password){
+        var id = '';
+        var user = '';
+        const data = await this.db.collection("accounts").where("email", "==", email).where("password", "==", password)
+                        .get().then((querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                id = doc.id
+                                user = doc.data().admin;
+                            })
+                        })
+        return [id, user];
+    }
+
     /**
      * Gets users email
      */
@@ -358,6 +371,21 @@ class Database {
      */
     getRangeTime(){
         
+    }
+
+    async getAllTime(id){
+        if(id == 0){
+            return;
+        }
+        var postData = [];
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+                })
+            return postData;
+        }
     }
 
 

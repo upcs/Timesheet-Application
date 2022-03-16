@@ -10,25 +10,79 @@
 
 import React from 'react';
 import {Color} from './Palette.js';
-import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image} from 'react-native'
 import USER from './User.js';
+import Database from '../database-communication/database.js';
 
 
 //Render the Company logo in the center of the screen 
 //With a sign-in button underneath
 class Login extends React.Component {
-
-    onPress() {
-       
+    constructor(props){
+        super(props);
+        this.state = {
+            email: '',
+            password: '',
+            signedIn: 0,
+            id: '',
+            user: '',
+            error: ''
+        }
+        this.data = new Database();
+        this.loginUser = this.loginUser.bind(this);
     }
+
+    loginUser = () => {
+        console.log("Hit login");
+        this.data.getSignIn(this.state.email, this.state.password).then((res, rej) => {
+            if(res[0] == ""){
+              this.setState({
+                signedIn: 0,
+                id: '',
+                user: '',
+                error: "Invalid Email or Password"
+              });
+            }
+            else{
+              this.setState({
+                signedIn: 1,
+                id: res[0],
+                user: res[1],
+                error: ''
+              });
+              this.props.route.params.login(this.state.signedIn, 
+                this.state.id, this.state.user);
+            }
+        });
+    }
+
+ 
     render() {
         return (
             <View style={styles.container}>
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                <TouchableOpacity style={styles.login} onPress={() => this.props.route.params.login()}>
-                
+                <TextInput 
+                    style={styles.textArea} 
+                    defaultValue='Email'
+                    onChangeText={(text) => {
+                        this.setState({email: text})
+                        }
+                    }
+                >
+                </TextInput> 
+                <TextInput
+                    style={styles.textArea}  
+                    defaultValue='Password'
+                    onChangeText={(text) => {
+                        this.setState({password: text})
+                        }
+                    }
+                >
+                </TextInput>
+                <TouchableOpacity style={styles.login} onPress={() => this.loginUser()}>
                     <Text style={styles.text}>Sign-in</Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>  
+                <Text style={styles.errorText}>{this.state.error}</Text>
             </View>
         ) 
     }
@@ -56,6 +110,16 @@ const styles = StyleSheet.create({
     text: {
         color: 'white',
         fontSize: 20
+    },
+    textArea: {
+        padding: 15,
+        marginBottom: 15,
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 15
+    },
+    errorText: {
+        padding: 30
     }
 });
 
