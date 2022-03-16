@@ -12,17 +12,18 @@ class EmployeeHours extends React.Component {
         super(props);
         this.state = {
             daily: 0,
-            weekly: 0
+            weekly: 0,
+            id: this.props.dataParentToChild
         };
         this.data = new Database();
     }
     componentDidMount = () => {
-        this.data.getDailyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
+        this.data.getDailyTime(this.state.id).then((res, rej) => {
             this.setState({daily: res}, () => {
                // console.log("State mounted");
             });
         });
-        this.data.getWeeklyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
+        this.data.getWeeklyTime(this.state.id).then((res, rej) => {
             this.setState({weekly: res}, () => {
               //  console.log("State mounted");
             });
@@ -31,12 +32,12 @@ class EmployeeHours extends React.Component {
     }
 
     updateState = () => {
-        this.data.getDailyTime().then((res, rej) => {
+        this.data.getDailyTime(this.state.id).then((res, rej) => {
             this.setState({daily: res}, () => {
                // console.log("State updated");
             });
         });
-        this.data.getWeeklyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
+        this.data.getWeeklyTime(this.state.id).then((res, rej) => {
             this.setState({weekly: res}, () => {
             // console.log("State mounted");
             });

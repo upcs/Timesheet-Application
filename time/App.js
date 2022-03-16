@@ -59,6 +59,7 @@ class App extends React.Component {
   }
 
   render() {
+    
     //const signedIn = this.state.signedIn;
     //const isAdmin = this.state.user == User.ADMIN;
     return (
@@ -73,14 +74,15 @@ class App extends React.Component {
                 <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
                 <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
-                <Tab.Screen name="Jobsite" component={AdminJobsite}></Tab.Screen>
+                <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
               </>
             ) : (
               // Logge in as default user
               <>
                 <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
                 <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
-                <Tab.Screen name="EmployeeHours" component={EmployeeHours}></Tab.Screen>
+                <Tab.Screen name="home"children={()=><EmployeeHours dataParentToChild={this.state.id}/>}
+    />
               </>
             )
           ) : (
