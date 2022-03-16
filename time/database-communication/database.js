@@ -250,18 +250,120 @@ class Database {
 
     }
 
-    /**
+    /*
+     * @author Caden 
+     * @date 3/14/2022
+     * 
      * Get daily time
+     * STATUS: DONE
      */
-    getDailyTime(){
-
+    async getDailyTime(id){
+        //get current date 
+        let today = new Date();
+        today.getDay()
+        var hours = 0;
+        /*
+        Get the correct user using the id, and find all punches that correspond to the current day
+        */
+        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().day == today.getDate() ){
+                hours += doc.data().time;
+                }
+            });
+          })
+         return hours;
+    }
+    /*
+    @author Caden
+    @date 3/14/2022
+    @param day, month, and year
+    @return returns 0 - Sunday, 1 - Monday, 2 - Tuesday, 3 - Wednesday... 6 - Saturday
+    */
+    getDayOfWeek(day, month, year){
+       
     }
 
     /**
+     * @author Caden
+     * @date 3/14/2022
+     * @param id of employee getting hours for
+     * @return weekly hours
+     * 
      * Get weekly time
      */
-    getWeeklyTime(){
-
+    async getWeeklyTime(id){
+        /*
+        get the day of the week through zellers rule
+        */
+         //get current date 
+         var today = new Date();
+         var hours = 0;
+         var start = 0;
+         var end = 0;
+         var day = today.getDate();
+         //Set Month in equation March is first month
+         var month = today.getMonth()-1;
+         if(month == 0 ){
+            month =12;
+         }
+         else if(month == -1) {
+            month = 11;
+         }
+         //get first two digits of the year
+        var firstTwoYear = parseInt(today.getFullYear().toString().substring(0,2));
+        //get last two digits of the year
+        var lastTwoYear =  parseInt(today.getFullYear().toString().substring(2));
+        var F = day + ((13*month-1)/5) +lastTwoYear+ (lastTwoYear/4) +(firstTwoYear/4)-(2*firstTwoYear);
+        F = Math.floor(F)%7;
+        /*
+        Determine the start and ends of the week
+        */
+        switch(F){
+            case 0:
+                start = today.getDate() - 6;
+                end = today.getDate();
+                break;
+            case 1:
+                start = today.getDate();
+                end = start + 6;
+                break;
+            case 2:
+                start = today.getDate() - 1;
+                end = start + 6;
+                break;
+            case 3:
+                start = today.getDate() - 2;
+                end = start + 6;
+                break;
+            case 4:
+                start = today.getDate() - 3;
+                end = start + 6;
+                break;
+            case 5:
+                start = today.getDate() - 4;
+                end = start + 6;
+                break;
+            case 6: 
+                start = today.getDate() - 5;
+                end = start + 6;
+                break;
+        }
+       /*
+       Return the time worked through out the week
+       */
+        while (start <= end){
+          await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().day == start ){
+                hours = hours + doc.data().time;
+                }
+            });
+          })
+          start++;
+        }
+    
+    return hours;
     }
 
     /**
