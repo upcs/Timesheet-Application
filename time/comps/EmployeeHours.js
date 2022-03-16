@@ -19,12 +19,12 @@ class EmployeeHours extends React.Component {
     componentDidMount = () => {
         this.data.getDailyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
             this.setState({daily: res}, () => {
-                console.log("State mounted");
+               // console.log("State mounted");
             });
         });
         this.data.getWeeklyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
             this.setState({weekly: res}, () => {
-                console.log("State mounted");
+              //  console.log("State mounted");
             });
         });
         
@@ -33,12 +33,12 @@ class EmployeeHours extends React.Component {
     updateState = () => {
         this.data.getDailyTime().then((res, rej) => {
             this.setState({daily: res}, () => {
-                console.log("State updated");
+               // console.log("State updated");
             });
         });
         this.data.getWeeklyTime("25yc7J1yFzaT3OVt5H8J").then((res, rej) => {
             this.setState({weekly: res}, () => {
-             console.log("State mounted");
+            // console.log("State mounted");
             });
         });
         

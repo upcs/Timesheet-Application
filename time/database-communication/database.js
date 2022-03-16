@@ -302,7 +302,6 @@ class Database {
         //get last two digits of the year
         var lastTwoYear =  parseInt(today.getFullYear().toString().substring(2));
         var F = day + ((13*month-1)/5) +lastTwoYear+ (lastTwoYear/4) +(firstTwoYear/4)-(2*firstTwoYear);
-        console.log("THIS is F" + F);
         F = Math.floor(F)%7;
         /*
         Determine the start and ends of the week
