@@ -239,6 +239,8 @@ class Database {
     /**
      * Clock in
      * 
+     * Creates a new punch for the user in the database
+     * 
      * Status: Done
      * 
      * @author Tony Hayden
@@ -270,6 +272,7 @@ class Database {
 
     /**
      * Clock out
+     * Updates the hours tab for the employee as well as the punches
      * 
      * Status: Not properly updating clock out hour/minute
      * 
@@ -310,9 +313,9 @@ class Database {
      * Get daily time
      * STATUS: DONE
      * 
-     * Update: Changed hour update calculation to use correctly named collection fields for the punches
-     * 3/16/22
+     * Update: 3/16/22
      * Tony Hayden
+     * Changed hour update calculation to use correctly named collection fields for the punches
      */
     async getDailyTime(id){
         //get current date 
@@ -347,6 +350,10 @@ class Database {
      * @return weekly hours
      * 
      * Get weekly time
+     * 
+     * Update: 3/16/2022
+     * Tony Hayden
+     * Adjusted time calculation to utilize the correct field names from the database
      */
     async getWeeklyTime(id){
         /*
@@ -412,7 +419,9 @@ class Database {
           await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", start).where("month", "==", today.getMonth()+1)
           .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                hours = hours + doc.data().time;
+                if(typeof(doc.data().totalPunchTimeInMinutes) != "undefined") {
+                    hours += Math.floor(doc.data().totalPunchTimeInMinutes / 60);
+                }
             });
           })
           start++;
