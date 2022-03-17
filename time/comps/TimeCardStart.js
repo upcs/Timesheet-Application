@@ -115,7 +115,6 @@ var endTime = 0;
     timerOff(){
         endTime = Date.now() - startTime;
         this.totalTime();
-        console.log("Punching out id:", this.state.id)
         this.data.punchOut(this.state.id);
     }
 
@@ -127,7 +126,6 @@ var endTime = 0;
      */
     timerOn(){
         startTime = Date.now();
-        console.log("Punching in id:", this.state.id)
         this.data.punchIn(this.state.id);
     };
 
