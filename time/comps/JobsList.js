@@ -16,21 +16,34 @@
  import {Color} from './Palette';
  import eData from './FakeEmployeeData';
  import SearchBar from './search_bar';
+
+import AdminJobsite from './AdminJobsite';
+
  import Database from '../database-communication/database.js'
+
  
  
  /**
   * Creates a Scrollable List that can be selected
-  * 
+  *
   * Data predefined currently (Sprint 1)
   */
 class JobsList extends React.Component {
     constructor(props) {
         super(props);
+
+        //Changing
+        this.initFakeData = props.data;
+       // console.log(props.data);
+        this.initEData = eData;
         this.state = {
-            FakeData: [],
-            eData: [],
+            //Changing
+            //FakeData: this.initFakeData,
+            FakeData: props.data,
+            eData: this.initEData,
+
             isModalVisible: false,
+            
             modalTwo: false,
             address: '',
             jobName: '',
@@ -62,9 +75,24 @@ class JobsList extends React.Component {
         });
     }
 
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.data !== state.FakeData) {
+          return {
+            FakeData: props.data ,
+          };
+        }
+        return null;
+      }
+
+
+    
+
+
     /**
      * Set job modal visible
      */
+
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
     }
