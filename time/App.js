@@ -77,12 +77,11 @@ class App extends React.Component {
                 <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
               </>
             ) : (
-              // Logge in as default user
+              // Logged in as default user
               <>
-                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
+                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart dataParentToChild={this.state.id}/>}/>
                 <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
-                <Tab.Screen name="home"children={()=><EmployeeHours dataParentToChild={this.state.id}/>}
-    />
+                <Tab.Screen name="home" children={()=><EmployeeHours dataParentToChild={this.state.id}/>}/>
               </>
             )
           ) : (

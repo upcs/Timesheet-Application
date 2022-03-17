@@ -238,16 +238,72 @@ class Database {
 
     /**
      * Clock in
+     * 
+     * Creates a new punch for the user in the database
+     * 
+     * Status: Done
+     * 
+     * @author Tony Hayden
      */
-     punchIn(){
+    async punchIn(id){
 
+        // Grab all needed date for the current punch in
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth() + 1;
+        let day = new Date().getDate();
+        let hour = new Date().getHours();
+        let minute = new Date().getMinutes();
+
+        var clocked = true;
+
+        //Create new punch for the user
+        await this.db.collection("accounts").doc(id).collection("punch").add({
+            clockedIn: clocked, 
+            year: year, 
+            month: month, 
+            day: day, 
+            clockInHour: hour, 
+            clockInMinute: minute,
+            clockOutHour: null,
+            clockOutMinute: null,
+            totalPunchTimeInMinutes: null
+        });
     }
 
     /**
      * Clock out
+     * Updates the hours tab for the employee as well as the punches
+     * 
+     * Status: Not properly updating clock out hour/minute
+     * 
+     * @author Tony Hayden
      */
-    punchOut(){
+    async punchOut(id){
 
+        // Grab the new date and time
+        let hour = new Date().getHours();
+        let minute = new Date().getMinutes();
+
+        var subCollectionID = '';
+        var totalTimeInMinutes = 0;
+
+        // Function to grab the ID of the punch that is currently clocked in, and calculate punch time
+        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().clockedIn == true ){
+                    subCollectionID = doc.id;
+                    totalTimeInMinutes = (((hour - doc.data().clockInHour) * 60) + (minute - doc.data().clockInMinute));
+                }
+            });
+        });
+
+        // Function to update the clockIn status, as well as log the clock out time determined by the hour and minute above
+        await this.db.collection("accounts").doc(id).collection("punch").doc(subCollectionID).update({
+            clockedIn: false, 
+            clockOutHour: hour, 
+            clockOutMinute: minute,
+            totalPunchTimeInMinutes: totalTimeInMinutes
+        });   
     }
 
     /*
@@ -256,6 +312,10 @@ class Database {
      * 
      * Get daily time
      * STATUS: DONE
+     * 
+     * Update: 3/16/22
+     * Tony Hayden
+     * Changed hour update calculation to use correctly named collection fields for the punches
      */
     async getDailyTime(id){
         //get current date 
@@ -268,7 +328,7 @@ class Database {
         await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", today.getDate()).where("month", "==", today.getMonth()+1)
         .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                hours += doc.data().time;
+                hours += Math.floor(doc.data().totalPunchTimeInMinutes / 60);
             });
           })
          return hours;
@@ -290,6 +350,10 @@ class Database {
      * @return weekly hours
      * 
      * Get weekly time
+     * 
+     * Update: 3/16/2022
+     * Tony Hayden
+     * Adjusted time calculation to utilize the correct field names from the database
      */
     async getWeeklyTime(id){
         /*
@@ -355,7 +419,9 @@ class Database {
           await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", start).where("month", "==", today.getMonth()+1)
           .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                hours = hours + doc.data().time;
+                if(typeof(doc.data().totalPunchTimeInMinutes) != "undefined") {
+                    hours += Math.floor(doc.data().totalPunchTimeInMinutes / 60);
+                }
             });
           })
           start++;

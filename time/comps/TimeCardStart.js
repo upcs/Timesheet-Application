@@ -9,7 +9,7 @@
  * 
  * Author: Tony Hayden
  * Update: Added punches to database
- * Date: March 15, 2022
+ * Date: March 16, 2022
  ************************************************/
 
 import React from 'react';
@@ -47,7 +47,8 @@ var endTime = 0;
             text : 'Clock In',
             hours: 0,
             min: 0,
-            sec: 0
+            sec: 0,
+            id: this.props.dataParentToChild,
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
@@ -108,10 +109,13 @@ var endTime = 0;
      * 
      * Called when user pressed 'Stop' 
      * Calls totalTime() to total the new time added
+     * 
+     * Adds new punch to DB
      */
     timerOff(){
         endTime = Date.now() - startTime;
         this.totalTime();
+        this.data.punchOut(this.state.id);
     }
 
 
@@ -122,6 +126,7 @@ var endTime = 0;
      */
     timerOn(){
         startTime = Date.now();
+        this.data.punchIn(this.state.id);
     };
 
 
