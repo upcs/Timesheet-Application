@@ -47,7 +47,8 @@ var endTime = 0;
             text : 'Clock In',
             hours: 0,
             min: 0,
-            sec: 0
+            sec: 0,
+            id: this.props.dataParentToChild,
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
@@ -108,10 +109,14 @@ var endTime = 0;
      * 
      * Called when user pressed 'Stop' 
      * Calls totalTime() to total the new time added
+     * 
+     * Adds new punch to DB
      */
     timerOff(){
         endTime = Date.now() - startTime;
         this.totalTime();
+        console.log("Punching out id:", this.state.id)
+        this.data.punchOut(this.state.id);
     }
 
 
@@ -122,6 +127,8 @@ var endTime = 0;
      */
     timerOn(){
         startTime = Date.now();
+        console.log("Punching in id:", this.state.id)
+        this.data.punchIn(this.state.id);
     };
 
 

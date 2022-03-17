@@ -238,16 +238,65 @@ class Database {
 
     /**
      * Clock in
+     * 
+     * Status: Done
+     * 
+     * @author Tony Hayden
      */
-     punchIn(){
+    async punchIn(id){
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth();
+        let day = new Date().getDate();
+        let hour = new Date().getHours();
+        let minute = new Date().getMinutes();
 
+        console.log(year);
+        console.log("IN DATABASE PUNCHIN:", id);
+
+        var clocked = true;
+
+        //Create new punch for the user
+        //await this.db.collection("jobs").doc(id).update({address: addy});
+        await this.db.collection("accounts").doc(id).collection("punch").add({
+            clockedIn: clocked, 
+            year: year, 
+            month: month, 
+            day: day, 
+            clockInHour: hour, 
+            clockInMinute: minute,
+            clockOutHour: null,
+            clockOutMinute: null
+
+        });
+        console.log("Clocked in");
     }
 
     /**
      * Clock out
+     * 
+     * Status: Not properly updating clock out hour/minute
+     * 
+     * @author Tony Hayden
      */
-    punchOut(){
+    async punchOut(id){
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth();
+        let day = new Date().getDate();
+        let hour = new Date().getHours();
+        let minute = new Date().getMinutes();
 
+        console.log("IN DATABASE PUNCHOUT:", id)
+
+        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().day == day && doc.data().month == month && doc.data().year == year && doc.data().clockedIn == true){
+                    doc.data().clockedIn = false;
+                    doc.data().clockOutHour = hour;
+                    doc.data().clockInMinute = minute;
+                    return console.log("Clocked out");
+                }
+            });
+          })
     }
 
     /*
