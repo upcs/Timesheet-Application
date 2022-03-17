@@ -265,11 +265,10 @@ class Database {
         /*
         Get the correct user using the id, and find all punches that correspond to the current day
         */
-        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+        await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", today.getDate()).where("month", "==", today.getMonth()+1)
+        .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                if(doc.data().day == today.getDate() ){
                 hours += doc.data().time;
-                }
             });
           })
          return hours;
@@ -353,11 +352,10 @@ class Database {
        Return the time worked through out the week
        */
         while (start <= end){
-          await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+          await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", start).where("month", "==", today.getMonth()+1)
+          .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                if(doc.data().day == start ){
                 hours = hours + doc.data().time;
-                }
             });
           })
           start++;
