@@ -310,7 +310,7 @@ class Database {
      * Get daily time
      * STATUS: DONE
      * 
-     * Update: Changed hour update calculation to use correctly named collection fields
+     * Update: Changed hour update calculation to use correctly named collection fields for the punches
      * 3/16/22
      * Tony Hayden
      */
