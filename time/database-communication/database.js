@@ -244,19 +244,17 @@ class Database {
      * @author Tony Hayden
      */
     async punchIn(id){
+
+        // Grab all needed date for the current punch in
         let year = new Date().getFullYear();
-        let month = new Date().getMonth();
+        let month = new Date().getMonth() + 1;
         let day = new Date().getDate();
         let hour = new Date().getHours();
         let minute = new Date().getMinutes();
 
-        console.log(year);
-        console.log("IN DATABASE PUNCHIN:", id);
-
         var clocked = true;
 
         //Create new punch for the user
-        //await this.db.collection("jobs").doc(id).update({address: addy});
         await this.db.collection("accounts").doc(id).collection("punch").add({
             clockedIn: clocked, 
             year: year, 
@@ -265,10 +263,9 @@ class Database {
             clockInHour: hour, 
             clockInMinute: minute,
             clockOutHour: null,
-            clockOutMinute: null
-
+            clockOutMinute: null,
+            totalPunchTimeInMinutes: null
         });
-        console.log("Clocked in");
     }
 
     /**
@@ -279,24 +276,31 @@ class Database {
      * @author Tony Hayden
      */
     async punchOut(id){
-        let year = new Date().getFullYear();
-        let month = new Date().getMonth();
-        let day = new Date().getDate();
+
+        // Grab the new date and time
         let hour = new Date().getHours();
         let minute = new Date().getMinutes();
 
-        console.log("IN DATABASE PUNCHOUT:", id)
+        var subCollectionID = '';
+        var totalTimeInMinutes = 0;
 
+        // Function to grab the ID of the punch that is currently clocked in, and calculate punch time
         await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                if(doc.data().day == day && doc.data().month == month && doc.data().year == year && doc.data().clockedIn == true){
-                    doc.data().clockedIn = false;
-                    doc.data().clockOutHour = hour;
-                    doc.data().clockInMinute = minute;
-                    return console.log("Clocked out");
+                if(doc.data().clockedIn == true ){
+                    subCollectionID = doc.id;
+                    totalTimeInMinutes = (((hour - doc.data().clockInHour) * 60) + (minute - doc.data().clockInMinute));
                 }
             });
-          })
+        });
+
+        // Function to update the clockIn status, as well as log the clock out time determined by the hour and minute above
+        await this.db.collection("accounts").doc(id).collection("punch").doc(subCollectionID).update({
+            clockedIn: false, 
+            clockOutHour: hour, 
+            clockOutMinute: minute,
+            totalPunchTimeInMinutes: totalTimeInMinutes
+        });   
     }
 
     /*
@@ -305,6 +309,10 @@ class Database {
      * 
      * Get daily time
      * STATUS: DONE
+     * 
+     * Update: Changed hour update calculation to use correctly named collection fields
+     * 3/16/22
+     * Tony Hayden
      */
     async getDailyTime(id){
         //get current date 
@@ -317,7 +325,7 @@ class Database {
         await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 if(doc.data().day == today.getDate() ){
-                hours += doc.data().time;
+                hours += (Math.floor(doc.data().totalPunchTimeInMinutes / 60));
                 }
             });
           })
