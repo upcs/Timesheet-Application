@@ -1,3 +1,42 @@
+------------------------------------------
+SPRINT 3 FEATURES
+------------------------------------------
+1.) FireStore Database <br>
+    1.1) Majority of Server Side completed<br>
+    1.2) Database heirarchy completed<br>
+2.) Code Coverage Reported<br>
+3.) Sign in<br>
+    3.1) Users may now sign in via company email <br>
+4.) Admin Employee List<br>
+    4.1) Admin Employee List now populated with employees from database<br>
+5.) Edit Employee<br>
+    5.1) Editing an employee changes their information in the database<br>
+    5.2) Deleting employee removes employee from database<br>
+6.) Admin Job List<br>
+    6.1) Admin Job List now populated with jobs from database<br>
+7.) Edit Job List<br>
+    7.1) Editing a job now edits job info in database<br>
+    7.2) Deleting a job removes job from database<br>
+    7.3) List of employee per job updates with employees that are on the job<br>
+    7.4) Add employee to job list prepopulated with employees that are not on the job<br>
+    7.5) Removing an employee from job removes them from that collection in database<br>
+8.) Add Employee <br>
+    6.1) Creating an employee now adds the employee to the database<br>
+9.) Add Job<br>
+    9.1) Creating a job now adds the job to the database<br>
+10.) Employee Daily/Weekly Time<br>
+    10.1) Employee Daily/Weekly Time page pulls data from database<br>
+11.) Time punch<br>
+    11.1) Clocking in and out adds a time punch to database<br>
+12.) Select Job<br>
+    12.1) Employees can select which job they would like to bill to<br>
+13.) Search Bars<br>
+    13.1) Search bars functional using current info from database<br>
+
+
+
+
+
 -----------------------------------------
 SPRINT 2 FEATURES
 ----------------------------------------

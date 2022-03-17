@@ -22,7 +22,7 @@ export default function AddEmployee(props) {
     const [empF, setEmpF] = useState(null);
     const [empL, setEmpL] = useState(null);
     const [pass, setPass] = useState(null);
-    const[isAdmin, setAdmin] = useState(0);
+    const[isAdmin, setAdmin] = useState(0); 
     
     //is modal shown?
     const [modalVisible, setModalVisible] = useState(false);
