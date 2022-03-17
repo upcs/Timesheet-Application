@@ -88,7 +88,7 @@ class JobsList extends React.Component {
 
     
 
-=======
+
     /**
      * Set job modal visible
      */
