@@ -76,7 +76,7 @@ class Login extends React.Component {
                     style={styles.textArea}  
                     //defaultValue='Password'
                     placeholder='Password'
-                    secureTextEntry='true'
+                    secureTextEntry={true}
                     onChangeText={(text) => {
                         this.setState({password: text})
                         }
