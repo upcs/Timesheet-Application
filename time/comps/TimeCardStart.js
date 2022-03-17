@@ -6,6 +6,10 @@
  * 
  * Author: Harrison Winters (Build off of Jude Gabriel's Login component)
  * Date: February 5, 2022
+ * 
+ * Author: Tony Hayden
+ * Update: Added punches to database
+ * Date: March 16, 2022
  ************************************************/
 
 
@@ -16,6 +20,7 @@
 import React from 'react';
 import {Color} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
+import Database from '../database-communication/database.js'
  
 /* Global Variables for time tracking */
 var isPressed;
@@ -47,11 +52,14 @@ var endTime = 0;
             text : 'Clock In',
             hours: 0,
             min: 0,
-            sec: 0
+            sec: 0,
+            id: this.props.dataParentToChild,
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
         this.totalTime = this.totalTime.bind(this);
+
+        this.data = new Database();
     };
 
 
@@ -106,10 +114,13 @@ var endTime = 0;
      * 
      * Called when user pressed 'Stop' 
      * Calls totalTime() to total the new time added
+     * 
+     * Adds new punch to DB
      */
     timerOff(){
         endTime = Date.now() - startTime;
         this.totalTime();
+        this.data.punchOut(this.state.id);
     }
 
 
@@ -120,6 +131,7 @@ var endTime = 0;
      */
     timerOn(){
         startTime = Date.now();
+        this.data.punchIn(this.state.id);
     };
 
 
