@@ -63,7 +63,9 @@ class Login extends React.Component {
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                 <TextInput 
                     style={styles.textArea} 
-                    defaultValue='Email'
+                    //defaultValue='Email'
+                    placeholder='Email'
+                    keyboardType='email-address'
                     onChangeText={(text) => {
                         this.setState({email: text})
                         }
@@ -72,7 +74,9 @@ class Login extends React.Component {
                 </TextInput> 
                 <TextInput
                     style={styles.textArea}  
-                    defaultValue='Password'
+                    //defaultValue='Password'
+                    placeholder='Password'
+                    secureTextEntry='true'
                     onChangeText={(text) => {
                         this.setState({password: text})
                         }
@@ -112,6 +116,8 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     textArea: {
+        width: '80%',
+        textAlign: 'center',
         padding: 15,
         marginBottom: 15,
         borderColor: 'black',

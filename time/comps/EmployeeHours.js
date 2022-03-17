@@ -2,11 +2,49 @@
 Author: caden deutscher
 Displays the hours for an employee on a default account
 */
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Color} from './Palette.js';
 import {Text, Divider, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
+import Database from '../database-communication/database.js';
 
 class EmployeeHours extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            daily: 0,
+            weekly: 0,
+            id: this.props.dataParentToChild
+        };
+        this.data = new Database();
+    }
+    componentDidMount = () => {
+        this.data.getDailyTime(this.state.id).then((res, rej) => {
+            this.setState({daily: res}, () => {
+               // console.log("State mounted");
+            });
+        });
+        this.data.getWeeklyTime(this.state.id).then((res, rej) => {
+            this.setState({weekly: res}, () => {
+              //  console.log("State mounted");
+            });
+        });
+        
+    }
+
+    updateState = () => {
+        this.data.getDailyTime(this.state.id).then((res, rej) => {
+            this.setState({daily: res}, () => {
+               // console.log("State updated");
+            });
+        });
+        this.data.getWeeklyTime(this.state.id).then((res, rej) => {
+            this.setState({weekly: res}, () => {
+            // console.log("State mounted");
+            });
+        });
+        
+    }
+   
     render() {
         return (
             //Container for all text
@@ -17,7 +55,7 @@ class EmployeeHours extends React.Component {
                 </View>
                 {/**Hours for the day */}
                 <View style={styles.divideResult}>
-                    <Text adjustsFontSizeToFit={true} style={styles.text}>5 hours</Text>
+                    <Text adjustsFontSizeToFit={true} style={styles.text}>{this.state.daily}</Text>
                 </View>
                 {/**First hour label (Week) */}
                 <View style={styles.divideText}>
@@ -25,7 +63,7 @@ class EmployeeHours extends React.Component {
                 </View>
                 {/**Hours for the week */}
                 <View style={styles.divideResult}>
-                    <Text adjustsFontSizeToFit={true} style={styles.text}>35 hours</Text>
+                    <Text adjustsFontSizeToFit={true} style={styles.text}>{this.state.weekly}</Text>
                 </View>
             </View>
         ) 
