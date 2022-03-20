@@ -11,10 +11,10 @@
 import React from 'react';
 import {Color} from './Palette.js';
 import { Text, View, StyleSheet, TouchableOpacity, TextInput, Image} from 'react-native'
-import USER from './User.js';
+
 import Database from '../database-communication/database.js';
 
-
+import User from '../database-communication/user.js'
 //Render the Company logo in the center of the screen 
 //With a sign-in button underneath
 class Login extends React.Component {
@@ -50,6 +50,10 @@ class Login extends React.Component {
                 user: res[1],
                 error: ''
               });
+
+              User.setId(res[0]);
+              User.setUser(res[1]);
+
               this.props.route.params.login(this.state.signedIn, 
                 this.state.id, this.state.user);
             }
@@ -67,6 +71,7 @@ class Login extends React.Component {
                     //defaultValue='Email'
                     placeholder='Email'
                     keyboardType='email-address'
+                    secureTextEntry={true}
                     onChangeText={(text) => {
                         this.setState({email: text.toLowerCase()})
                         }
@@ -77,7 +82,7 @@ class Login extends React.Component {
                     style={styles.textArea}  
                     //defaultValue='Password'
                     placeholder='Password'
-                    secureTextEntry='true'
+                    secureTextEntry={true}
                     onChangeText={(text) => {
                         this.setState({password: text})
                         }
