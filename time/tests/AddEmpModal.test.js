@@ -5,6 +5,11 @@ import { configure } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 configure({ adapter: new Adapter() });
 
+beforeEach(() => {
+   jest.useFakeTimers();
+})
+
+
 describe('test functionality of AddEmp', () => {
 
     it('Test if modal becomes visible when add employee is clicked', () => {

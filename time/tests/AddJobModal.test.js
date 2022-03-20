@@ -5,12 +5,17 @@ import { configure } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 configure({ adapter: new Adapter() });
 
+beforeEach(() => {
+   jest.useFakeTimers();
+})
+
+
 describe('test if AddEmployee renders', () => {
     it('Test if modal becomes visible when add employee is clicked', () => {
        const wrapper = shallow(<AddJobsite></AddJobsite>);
        wrapper.find('#addButton').props().onPress();
        expect(wrapper.find('#theModal').props().visible).toBe(true);
-    });
+      });
     it('Test adding text input', () => {
       const wrapper = shallow(<AddJobsite></AddJobsite>);
       wrapper.find('#addButton').props().onPress();
