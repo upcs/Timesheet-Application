@@ -19,10 +19,13 @@ configure({ adapter: new Adapter() });
 
 
 //PALCEHOLDER TEST!
-let wrapper
+let wrapper;
 beforeEach(() => {
     wrapper = shallow(<EmployeesList></EmployeesList>);
+    jest.useFakeTimers();
 })
+
+
 describe('Testing if Modal renders and closes', () => {
     it('Test if List is not empty', () => {
         const flatList = wrapper.find('#list');
@@ -31,16 +34,15 @@ describe('Testing if Modal renders and closes', () => {
 })
 
 
-// let wrapper
-// beforeEach(() => {
-//     wrapper = shallow(<TimeCardStart></TimeCardStart>);
-// })
 
-// describe('Timer Functionality', () => {
-//     it('Starts and stops with the correct time', () => {
-//         wrapper.find('#timerButton').props().onPress();
-//         jest.setTimeOut(2000);
+//ACTUAL TEST
+
+// describe('Timer Functionality', async () => {
+//     it('Starts and stops with the correct time', async () => {
+//         await wrapper.find('#timerButton').props().onPress();
+//         await jest.setTimeout(2000);
 //         wrapper.find('#timerButton').props().onPress();
 //         expect(wrapper.state('sec')).toEqual(2);
+//         jest.useRealTimers();
 //     })
 // })

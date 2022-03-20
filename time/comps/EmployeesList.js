@@ -39,7 +39,6 @@ import Database from '../database-communication/database.js'
     componentDidMount = () => {
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({FakeData: res}, () => {
-                //console.log("State mounted");
             });
         });
     }
@@ -47,7 +46,6 @@ import Database from '../database-communication/database.js'
     updateState = () => {
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({FakeData: res}, () => {
-               // console.log("State updated");
             });
         });
     }
@@ -85,7 +83,6 @@ import Database from '../database-communication/database.js'
 
     deleteUser = () => {
         this.data.deleteUserAccount(this.state.userEdited);
-        //const newEmployeeList = this.state.FakeData.filter(item => item.id !== this.state.userEdited)
         this.updateState();
     }
 

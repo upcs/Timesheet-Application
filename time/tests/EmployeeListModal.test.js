@@ -21,9 +21,10 @@ FakeData = [
 let wrapper
 beforeEach(() => {
     wrapper = shallow(<EmployeesList></EmployeesList>);
+    jest.useFakeTimers();
 })
 
-describe('Testing if Modal renders and closes', () => {
+ describe('Testing if Modal renders and closes', () => {
     it('Test if List is not empty', () => {
         const flatList = wrapper.find('#list');
         expect(flatList.props().data).not.toEqual(null);
@@ -48,7 +49,7 @@ describe('Testing if Modal renders and closes', () => {
     })
 })
 
-describe('Modal Functionality', () => {
+ describe('Modal Functionality', () => {
     it('Allows for first name to be changed', () => {
         wrapper.find('#firstName').props().onChangeText("Hello World");
         expect(wrapper.state('userFirst')).toEqual("Hello World");
@@ -67,34 +68,33 @@ describe('Modal Functionality', () => {
         expect(wrapper.state('isAdmin')).toBe(true);
     })
 
-    it('Allows for updated data to be saved', async () => {
-        // data = new Database();
-        // await data.getAllAccounts().then((res, rej) => {
-        //     wrapper.setState({FakeData: res}, () => {
-        //        console.log(wrapper.state('FakeData'));
-        //     });
-        // });
-
-       // wrapper.setState({FakeData: [{firstName: 'John', lastName: 'Smith'}]});
-        //console.log(wrapper.state('FakeData'));
-       // wrapper.setState({isModalVisible: true, userEdited: '25yc7J1yFzaT3OVt5H8J'});
-        wrapper.find('#firstName').props().onChangeText("Hello");
-        expect(wrapper.state('userFirst')).toEqual("Hello");
-        wrapper.find('#lastName').props().onChangeText("World");
-        expect(wrapper.state('userLast')).toEqual("World");
-        wrapper.find('#adminSwitch').props().onValueChange();
-        expect(wrapper.state('isAdmin')).toBe(true);
-       // await wrapper.find('#saveChanges').props().onPress();
-        
-        //expect(wrapper.state('FakeData')[0]).toStrictEqual({id: '25yc7J1yFzaT3OVt5H8J', firstname:'Hello', lastname: 'World', admin: 1, email: 'smith@gmail.com'})
+    it('Allows for updated data to be saved',  () => {
+        data = new Database();
+        data.getAllAccounts().then((res, rej) => {
+            console.log("res", res);
+            wrapper.setState({FakeData: res});
+            wrapper.setState({isModalVisible: true, userEdited: '25yc7J1yFzaT3OVt5H8J'});
+            wrapper.find('#firstName').props().onChangeText("Hello");
+            expect(wrapper.state('userFirst')).toEqual("Hello");
+            wrapper.find('#lastName').props().onChangeText("World");
+            expect(wrapper.state('userLast')).toEqual("World");
+            wrapper.find('#adminSwitch').props().onValueChange();
+            expect(wrapper.state('isAdmin')).toBe(true);
+            wrapper.find('#saveChanges').props().onPress();
+            
+            expect(wrapper.state('FakeData')[0]).toStrictEqual({id: '25yc7J1yFzaT3OVt5H8J', firstname:'Hello', lastname: 'World', admin: 1, email: 'smith@gmail.com'})
+        }).catch((err) => {
+            console.log("err", err);
+        })
     })
 
     it('Allows for a user to be deleted', () => {
+        const deleteUsrFunc = jest.spyOn(wrapper.instance(), "deleteUser");
         wrapper.setState({FakeData: FakeData, isModalVisible: true, userEdited: 1});
         Alert.alert = jest.fn();
         wrapper.find('#removeUser').props().onPress();
         expect(Alert.alert.mock.calls.length).toBe(1);
-        //wrapper.instance().deleteUser();
-        //expect(wrapper.state('FakeData')).toEqual([]);
+        wrapper.instance().deleteUser(1);
+        expect(deleteUsrFunc).toHaveBeenCalled();
     })
 })

@@ -5,6 +5,7 @@ import { configure } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { Alert } from 'react-native';
 import { TestWatcher } from 'jest';
+import Database from '../database-communication/database.js'
 configure({ adapter: new Adapter() });
 
 EmployeeData = [
@@ -24,6 +25,8 @@ JobData = [
 let wrapper
 beforeEach(() => {
     wrapper = shallow(<JobsList></JobsList>);
+    jest.useFakeTimers();
+     
 })
 
 describe('Modal 1 render', () => {
@@ -90,7 +93,10 @@ describe('Modal 1 funcitonality', () => {
         expect(wrapper.state('modalTwo')).toBe(true);
     })
 
-    it('Allows for an employee to be deleted', () => {
+    it('Allows for an employee to be deleted', async () => {
+        const getUsrFunc = jest.spyOn(wrapper.instance().data, "getJobEmployeesID");
+        const deleteUsrFunc = jest.spyOn(wrapper.instance().data, "getJobEmployeesID")
+        const upState = jest.spyOn(wrapper.instance(), "updateState")
         wrapper.setState({eList: EmployeeData});
         wrapper.setState({employeeEdited: 22})
         Alert.alert = jest.fn();
@@ -98,8 +104,10 @@ describe('Modal 1 funcitonality', () => {
         employee.find('#employeeJobView').find('#employeeInJob').props().onPress();
         expect(Alert.alert.mock.calls.length).toBe(1);
         wrapper.instance().setEmployeeEdited(22);
-        wrapper.instance().deleteUser();
-        expect(wrapper.find('#employeeJobList').props().data).toEqual([]);
+        await wrapper.instance().deleteUser();
+        expect(getUsrFunc).toHaveBeenCalled();
+        expect(deleteUsrFunc).toHaveBeenCalled();
+        expect(upState).toHaveBeenCalled();
     })
 
     it('Allows for a job to be deleted', () => {
@@ -112,18 +120,29 @@ describe('Modal 1 funcitonality', () => {
     })
 
     it('Allows for changes to be saved', () => {
-        wrapper.setState({FakeData: JobData, isModalVisible: true, jobEdited: 1})
-        wrapper.find('#jobName').props().onChangeText("Hello");
-        expect(wrapper.state('jobName')).toEqual("Hello");
-        wrapper.find('#jobAddress').props().onChangeText("World");
-        expect(wrapper.state('address')).toEqual("World");
-        wrapper.find('#saveJobChanges').props().onPress();
-        expect(wrapper.state('FakeData')).toStrictEqual([{id: 1, jobName: 'Hello', 
-                                                                address: 'World', 
-                                                                employees: [{id: 1, 
-                                                                            firstName: 'Employee1', 
-                                                                            lastName: 'One', 
-                                                                            userType: 1}]}])
+        data = new Database();
+        const setJob = jest.spyOn(wrapper.instance().data, "setJobName");
+        const setAdd = jest.spyOn(wrapper.instance().data, "setJobAddress");
+        const setEl = jest.spyOn(wrapper.instance(), "setEList")
+        const upState = jest.spyOn(wrapper.instance(), "updateState")
+
+        data.getAllAccounts().then((res, rej) => {
+            console.log("res", res);
+            wrapper.setState({FakeData: res});
+            wrapper.setState({FakeData: JobData, isModalVisible: true, jobEdited: 1})
+            wrapper.find('#jobName').props().onChangeText("Hello");
+            expect(wrapper.state('jobName')).toEqual("Hello");
+            wrapper.find('#jobAddress').props().onChangeText("World");
+            expect(wrapper.state('address')).toEqual("World");
+            wrapper.find('#saveJobChanges').props().onPress();
+            expect(setJob).toHaveBeenCalled();
+            expect(setAdd).toHaveBeenCalled();
+            expect(setEl).toHaveBeenCalled();
+            expect(upState).toHaveBeenCalled();
+
+        }).catch((err) => {
+            console.log("err", err);
+        })
     })
 })
 
@@ -131,12 +150,15 @@ describe('Modal 1 funcitonality', () => {
 describe('Modal 2 functionality', () => {
     it('Allows for an employee to be added', () => {
         Alert.alert = jest.fn();
+        const addEmp = jest.spyOn(wrapper.instance().data, "addEmployeeToJob");
+        const setEl = jest.spyOn(wrapper.instance(), "setEList")
         employee = shallow(wrapper.instance().renderEmployee({item: EmployeeData2}));
         employee.find('#employeeAddView').find('#employeeToAdd').props().onPress();
         expect(Alert.alert.mock.calls.length).toBe(1);
         wrapper.setState({eList: EmployeeData});
-        expect(wrapper.instance().addUser({item: EmployeeData2})).toStrictEqual(
-            {item: [{id: 23, firstName: 'Employee', lastName: 'Two', userType: 1}]});
+        wrapper.instance().addUser();
+        expect(addEmp).toHaveBeenCalled();
+        expect(setEl).toHaveBeenCalled();
     })
 
     it('Re-opens the first modal when closed', () => {
