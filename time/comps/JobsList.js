@@ -33,16 +33,19 @@ class JobsList extends React.Component {
         super(props);
 
         //Changing
-        this.initFakeData = props.data;
+       // this.initFakeData = [];
        // console.log(props.data);
         this.initEData = eData;
         this.state = {
+            FakeData: [],
+            eData: [],
+            stInitialFake: [],
             //Changing
             //FakeData: this.initFakeData,
-            FakeData: props.data,
-            eData: this.initEData,
+            // FakeData: props.data,
+            // eData: this.initEData,
 
-            isModalVisible: false,
+             isModalVisible: false,
             
             modalTwo: false,
             address: '',
@@ -53,6 +56,25 @@ class JobsList extends React.Component {
         };
 
         this.data = new Database()
+        
+        
+    }
+
+    //iData = this.initFakeData;
+
+    /**
+     * 
+     * Send Job Data to AdminJobsite for Search feature
+     * Harrison
+     */
+
+    sendData = () => {
+        //console.log(this.state.eList);
+        // this.props.parentCallback(this.state.FakeData);
+        console.log(this.state.stInitialFake);
+        this.props.parentCallback(this.state.stInitialFake);
+
+        
     }
 
     /**
@@ -62,6 +84,11 @@ class JobsList extends React.Component {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
+
+            //added
+            //this.setState({initFakeData : res})
+            //this.stInitialFake = res;
+            this.setState({stInitialFake : res});
         });
     }
 
@@ -72,20 +99,41 @@ class JobsList extends React.Component {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
+
+            
+            // this.setState({initFakeData : res})((
+            // this.stInitialFake = res;
+            this.setState({stInitialFake : res});
         });
     }
 
 
     static getDerivedStateFromProps(props, state) {
-        if (props.data !== state.FakeData) {
+
+        if (!props.query) {
+            console.log('no query');
+            console.log(state.stInitialFake)
+            return {
+                FakeData : state.stInitialFake,
+            };
+            
+        }
+
+        if (props.data !== state.stInitialFake) {
+          console.log("changed");
           return {
-            FakeData: props.data ,
+            FakeData : props.data 
+           
           };
         }
-        return null;
+
+        
+        return  null;
+        
       }
 
 
+      
     
 
 
@@ -287,9 +335,18 @@ class JobsList extends React.Component {
      * Render the component
      */
     render() {
+        
+        //Send data when prop "request" is true
+        if (this.props.request) {
+            this.sendData();
+            console.log('request recieved')
+        }
+
+
         const { isModalVisible } = this.state;
         const { modalTwo } = this.state;
         return (
+            
             <View>
                 <FlatList 
                     id='jobsList'

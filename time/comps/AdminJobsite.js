@@ -31,28 +31,30 @@ import FakeJobsiteData from './FakeJobsiteData.js';
     constructor(props) {
       super(props);
         this.currValue = this.currValue.bind(this);
+        this.callbackFunction = this.callbackFunction.bind(this);
+        //Create reference of JobsList updateState
+        this.myref = React.createRef();
         this.state = {
-          query: ""
+          query: [],
+          jobsDataChild: [],
+          requesting: false,
         };
 
-      
-
         const {jobs} = FakeJobsiteData;
-        
-        this.items = FakeJobsiteData;
-        //this.query = "";
-        
-        
 
-        const Item = ({ title }) => (
-          <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
-          </View>
-        );
 
-        this.renderItem = ({ item }) => (
-          <Item title={item.jobName} />
-        );
+
+       function Item({ title }) {
+          return (
+            <View style={styles.item}>
+              <Text style={styles.title}>{title}</Text>
+            </View>
+          );
+        }
+
+          this.renderItem = ({ item }) => (
+            <Item title={item.jobName} />
+          );
         
       }
 
@@ -60,77 +62,94 @@ import FakeJobsiteData from './FakeJobsiteData.js';
         return newQuery;
 
       }
+
+      //Added
+      //Callback Function from JobsList
+      callbackFunction(childData) {
+        this.setState({jobsDataChild : childData});
+        this.setState({requesting : false});
+        console.log('callback recieved');
+      }
       
 
       getFilteredItems(query, items) {
+        console.log("query: %s", query);
          if (!query) {
           return items;
          }
-        return items.filter((jobs) => jobs.jobName.includes(query));
+        return items.filter((jobs) => jobs.name.includes(query));
       }
 
       currValue(newValue) {
         //console.log(newValue);
         this.setState({query : newValue});
         console.log(this.state.query);
+
+        this.setState({requesting : true});
+        
+
+        //adding from previous requestData function
+       // this.child.current.sendData();
+
+        
+
+        console.log(this.state.requesting);
+
         this.forceUpdate();
         
       }
+
+      requestData() {
+        //this.child.current.sendData();
+        //console.log('Search bar changed');
+
+      }
      
 
-    constructor(props){
-        super(props);
-        //Create reference of JobsList updateState
-       this.myref = React.createRef();
-    }
 
      render() {
 
-      this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
+      //this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
+      this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
+      //this.callbackFunction = this.callbackFunction();
 
 
       //Added 
       let jobData = {};
        
-         const addData = (params) => {
-             jobData = params;
-            console.log(jobData);
+    const addData = (params) => {
+        jobData = params;
+        console.log(jobData);
 
-         }
-      
+        //Call updateState in JobsList
+        this.myref.current.updateState();
+    }
 
-            //Call updateState in JobsList
-            this.myref.current.updateState();
-        }
-        
 
          return (
-
-
-
+       
             <View style={styles.container}>
                  <View style={styles.upperbar}>
                      <SearchBar style={styles.search} currValue = {this.currValue}></SearchBar>
                      <View style={styles.buttonContainer}>
                        {/* <AddEmployee></AddEmployee> */}
                        <AddJobsite  sendData={addData}></AddJobsite>
-                    </View>
+                      </View>
                     
 
                  </View>
                  
                  <SafeAreaView style={styles.container}>
                     {/* <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList> */}
-                    <JobsList  data={this.filteredItems}></JobsList>
+                    <JobsList ref={this.myref} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></JobsList> 
+                     {/* <JobsList ref={this.myref}></JobsList> */}
                  </SafeAreaView>
          
 
 
                     
                 </View>
-                <JobsList ref={this.myref}></JobsList>
-
-             </View>
+               
                   
          )
          
@@ -167,7 +186,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
         
          fontSize: 14,    
         position: 'absolute',
-        // margin: 'auto',
         textAlign: 'center',
     },
 
