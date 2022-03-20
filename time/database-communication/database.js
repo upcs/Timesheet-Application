@@ -725,8 +725,10 @@ class Database {
     /**
      * Deletes a job
      */
-    deleteJob(){
-
+    async deleteJob(id){
+        if(id != null){
+            await this.db.collection("jobs").doc(id).delete();
+        }
     }
 
 

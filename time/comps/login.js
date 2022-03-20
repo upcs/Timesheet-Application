@@ -71,7 +71,7 @@ class Login extends React.Component {
                     //defaultValue='Email'
                     placeholder='Email'
                     keyboardType='email-address'
-                    secureTextEntry={true}
+                    secureTextEntry={false}
                     onChangeText={(text) => {
                         this.setState({email: text.toLowerCase()})
                         }

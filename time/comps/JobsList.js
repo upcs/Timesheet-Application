@@ -122,8 +122,8 @@ class JobsList extends React.Component {
      * Delete the job
      */
     deleteJob = () => {
-        const newJobList = this.state.FakeData.filter(item => item.id !== this.state.jobEdited)
-        this.setState({FakeData: newJobList});
+        this.data.deleteJob(this.state.jobEdited);
+        this.updateState();
     }
 
     /**
