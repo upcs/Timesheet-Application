@@ -93,7 +93,7 @@ describe('Modal 1 funcitonality', () => {
         expect(wrapper.state('modalTwo')).toBe(true);
     })
 
-    it('Allows for an employee to be deleted', async () => {
+    it('Allows for an employee to be deleted', () => {
         const getUsrFunc = jest.spyOn(wrapper.instance().data, "getJobEmployeesID");
         const deleteUsrFunc = jest.spyOn(wrapper.instance().data, "getJobEmployeesID")
         const upState = jest.spyOn(wrapper.instance(), "updateState")
@@ -104,7 +104,7 @@ describe('Modal 1 funcitonality', () => {
         employee.find('#employeeJobView').find('#employeeInJob').props().onPress();
         expect(Alert.alert.mock.calls.length).toBe(1);
         wrapper.instance().setEmployeeEdited(22);
-        await wrapper.instance().deleteUser();
+        wrapper.instance().deleteUser();
         expect(getUsrFunc).toHaveBeenCalled();
         expect(deleteUsrFunc).toHaveBeenCalled();
         expect(upState).toHaveBeenCalled();
