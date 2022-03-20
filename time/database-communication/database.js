@@ -1,6 +1,6 @@
 import * as firebase from 'firebase'
 import 'firebase/firestore' 
-
+import User from './user'
 
 /**
  * Database class
@@ -238,42 +238,161 @@ class Database {
 
     /**
      * Clock in
+     * 
+     * Creates a new punch for the user in the database
+     * 
+     * Status: Done
+     * 
+     * @author Tony Hayden
      */
-     punchIn(){
+    async punchIn(id){
 
+        // Grab all needed date for the current punch in
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth() + 1;
+        let day = new Date().getDate();
+        let hour = new Date().getHours();
+        let minute = new Date().getMinutes();
+
+        var clocked = true;
+        const timeIn = Date.now();
+        //Create new punch for the user
+        await this.db.collection("accounts").doc(id).collection("punch").add({
+            clockedIn: clocked, 
+            
+            timeIn,
+            timeOut: null,
+
+            year: year, 
+            month: month, 
+            day: day, 
+            clockInHour: hour, 
+            clockInMinute: minute,
+            clockOutHour: null,
+            clockOutMinute: null,
+            totalPunchTimeInMinutes: null,
+
+        });
     }
 
     /**
      * Clock out
+     * Updates the hours tab for the employee as well as the punches
+     * 
+     * Status: Not properly updating clock out hour/minute
+     * 
+     * @author Tony Hayden
+     * 
+     * Update: 3/19/22
+     * Justin Lee
+     * Added simplified time handling
      */
-    punchOut(){
+    async punchOut(id){
 
+        // Grab the new date and time
+        let hour = new Date().getHours();
+        let minute = new Date().getMinutes();
+
+        var subCollectionID = '';
+        var totalTimeInMinutes = 0;
+
+        const timeOut = Date.now();
+        let duration;
+        // Function to grab the ID of the punch that is currently clocked in, and calculate punch time
+        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                if(data.clockedIn == true ){
+                    subCollectionID = doc.id;
+                    duration = timeOut - data.timeIn;
+                    
+                    totalTimeInMinutes = (((hour - data.clockInHour) * 60) + (minute - data.clockInMinute));
+                    
+                }
+            });
+        });
+
+        // Function to update the clockIn status, as well as log the clock out time determined by the hour and minute above
+        await this.db.collection("accounts").doc(id).collection("punch").doc(subCollectionID).update({
+            clockedIn: false, 
+            timeOut,
+            duration,
+
+            clockOutHour: hour, 
+            clockOutMinute: minute,
+            totalPunchTimeInMinutes: duration / (1000 * 60),            
+        });   
     }
 
     /*
+    @author Justin
+    @date 3/19/22
+
+    get duration worked since given time
+    STATUS: done,
+
+    */
+    async getDurationWorkedSinceTime(time) {
+
+        let totalDuration;
+        await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time)
+            .get().then(querySnapshot => {
+                // Reduce to accumulate time over all elements of array
+                totalDuration = querySnapshot.reduce((sum, doc) => {
+                    // Get data
+                    const data = doc.data();
+                    // If our shift began before midnight,
+                    if (data.inTime < time) {
+                        // only include the part of it that occured in this day.
+                        return sum + data.outTime - time;
+                    } else {
+                        // otherwise, return the whole shift.
+                        return sum + data.outTime - data.inTime;
+                    }
+                }, 0);
+        });
+        return totalDuration;
+    }
+
+     /*
      * @author Caden 
      * @date 3/14/2022
      * 
      * Get daily time
      * STATUS: DONE
+     * 
+     * Update: 3/16/22
+     * Tony Hayden
+     * Changed hour update calculation to use correctly named collection fields for the punches
+     * 
+     * Update: 3/19/2022
+     * Justin Lee
+     * Added modified time handling
      */
+
     async getDailyTime(id){
         //get current date 
+       /*
         let today = new Date();
         today.getDay()
         var hours = 0;
         /*
         Get the correct user using the id, and find all punches that correspond to the current day
         */
-        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+       /* await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", today.getDate()).where("month", "==", today.getMonth()+1)
+        .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                if(doc.data().day == today.getDate() ){
-                hours += doc.data().time;
-                }
+                hours += Math.floor(doc.data().totalPunchTimeInMinutes / 60);
             });
           })
-         return hours;
+         return hours; */
+        
+        const midnight = new Date().setHours(0, 0, 0, 0); 
+    
+        return this.getDurationWorkedSinceTime(midnight) / (1000 * 60 * 60);
     }
+
+    
     /*
     @author Caden
     @date 3/14/2022
@@ -291,11 +410,15 @@ class Database {
      * @return weekly hours
      * 
      * Get weekly time
+     * 
+     * Update: 3/16/2022
+     * Tony Hayden
+     * Adjusted time calculation to utilize the correct field names from the database
      */
     async getWeeklyTime(id){
-        /*
-        get the day of the week through zellers rule
-        */
+       /*
+        //get the day of the week through zellers rule
+        ///
          //get current date 
          var today = new Date();
          var hours = 0;
@@ -316,9 +439,9 @@ class Database {
         var lastTwoYear =  parseInt(today.getFullYear().toString().substring(2));
         var F = day + ((13*month-1)/5) +lastTwoYear+ (lastTwoYear/4) +(firstTwoYear/4)-(2*firstTwoYear);
         F = Math.floor(F)%7;
-        /*
-        Determine the start and ends of the week
-        */
+        //
+        //Determine the start and ends of the week
+        //
         switch(F){
             case 0:
                 start = today.getDate() - 6;
@@ -348,22 +471,32 @@ class Database {
                 start = today.getDate() - 5;
                 end = start + 6;
                 break;
-        }
-       /*
-       Return the time worked through out the week
-       */
-        while (start <= end){
-          await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                if(doc.data().day == start ){
-                hours = hours + doc.data().time;
-                }
-            });
-          })
-          start++;
-        }
-    
-    return hours;
+                
+       
+       //
+       //Return the time worked through out the week
+       //
+       while (start <= end){
+        await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", start).where("month", "==", today.getMonth()+1)
+        .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+              if(typeof(doc.data().totalPunchTimeInMinutes) != "undefined") {
+                  hours += Math.floor(doc.data().totalPunchTimeInMinutes / 60);
+              }
+          });
+        })
+        start++;
+      }
+      */
+        
+       const d = new Date();
+       // set d to be midnight...
+       d.setHours(0, 0, 0, 0);
+       // sunday is (current day of the week) ago from today
+       const sunday = new Date(t.getTime() - 1000*24*60*60*t.getDay());
+
+       return this.getDurationWorkedSinceTime(sunday) / (60 * 60 * 1000);
+      
     }
 
     /**

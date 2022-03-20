@@ -6,17 +6,19 @@
  * 
  * Author: Harrison Winters (Build off of Jude Gabriel's Login component)
  * Date: February 5, 2022
- * 
- * Author: Tony Hayden
- * Update: Added punches to database
- * Date: March 15, 2022
  ************************************************/
+
+
+ 
+ 
+ //Company Logo with large "Start" button in the center of the screen
 
 import React from 'react';
 import {Color} from './Palette.js';
-import { Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
-import Database from '../database-communication/database.js'
+import { Picker, Text, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
  
+import Database from '../database-communication/database.js';
+import User from '../database-communication/user.js'
 /* Global Variables for time tracking */
 var isPressed;
 var sec = 0;
@@ -34,6 +36,8 @@ var endTime = 0;
  *      -Start/Stop Button for timing shifts
  *      -Daily time text
  */
+
+
  class TimeCardStart extends React.Component {
 
     /**
@@ -44,15 +48,15 @@ var endTime = 0;
     constructor(props){
         super(props);
         this.state = {
-            text : 'Clock In',
-            hours: 0,
-            min: 0,
-            sec: 0
+            todayTime: 0,
+            lastTimerIn: 0,
+            previousTodayDuration: 0,
+            currentDuration: 0,
+            isTimerOn: false,
+            timerUpdater: null,
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
-        this.totalTime = this.totalTime.bind(this);
-
         this.data = new Database();
     };
 
@@ -62,45 +66,7 @@ var endTime = 0;
      * 
      * Takes their current running time and adds it to the daily banked time
      */
-    totalTime(){
-        //Calculate the hours
-        let newHour = Math.floor(endTime / 3600000);
-        endTime -= newHour * 3600000;
-        hour += newHour;
-
-        //Calculate minutes
-        let newMin =  Math.floor(endTime / 60000);
-        endTime -= newMin * 60000;
-        min += newMin;
-
-        //Check if a new hour needs to be rolled over
-        if(min >= 60){
-            let minRollover = Math.floor(min / 60);
-            min -= minRollover * 60;
-            hour += minRollover;
-        }
-
-        //Calculate new seconds
-        let newSec = Math.floor(endTime / 1000);
-        endTime = 0;
-        sec += newSec;
-
-        //Check if a new minute needs to be rolled over
-        if(sec >= 60){
-            let secRollover = Math.floor(sec / 60);
-            sec -= secRollover * 60;
-            min += secRollover;
-        }
-
-        //Check again for a new hour rollover after latest minute rollover
-        if(min >= 60){
-            let minRollover = Math.floor(min / 60);
-            min -= minRollover * 60;
-            hour += minRollover;
-        }
-
-        this.setState({hours: hour, min: min, sec: sec});
-    }
+    
 
 
     /**
@@ -110,9 +76,22 @@ var endTime = 0;
      * Calls totalTime() to total the new time added
      */
     timerOff(){
-        endTime = Date.now() - startTime;
-        this.totalTime();
-    }
+        let { todayTime, currentDuration, lastTimerIn, timerUpdater,  } = this.state;
+
+      //  todayTime += currentDuration;
+        let previousTodayDuration = todayTime;
+        currentDuration = 0;
+        
+        clearInterval(timerUpdater);
+
+        this.setState({ 
+            lastTimerIn, todayTime, currentDuration, previousTodayDuration,
+            isTimerOn: false,
+            timerUpdater: null,
+        });
+
+        this.data.punchOut(User.getId());
+    }   
 
 
     /**
@@ -120,8 +99,30 @@ var endTime = 0;
      * 
      * Called when the user presses 'Start" 
      */
+
+    
+    
+
     timerOn(){
-        startTime = Date.now();
+
+        this.setState({
+            isTimerOn: true,
+            lastTimerIn: Date.now(),
+            timerUpdater: window.setInterval(() => {
+                let { currentDuration, lastTimerIn, todayTime, previousTodayDuration } = this.state;
+                const actualCurrentDuration = Math.floor((Date.now() - lastTimerIn) / 1000);
+                currentDuration++;
+                if (actualCurrentDuration > currentDuration + 2) {
+                    currentDuration = actualCurrentDuration;
+                }
+                todayTime = previousTodayDuration + currentDuration;
+                this.setState({currentDuration, todayTime});
+                
+            }, 1000)
+
+        });
+
+        this.data.punchIn(User.getId());
     };
 
 
@@ -131,17 +132,11 @@ var endTime = 0;
       * Starts or stopes a timer and updates the state
       */
     onPress = () => { 
-        //Check if the user has already pressed the button
-        isPressed ? (
-            isPressed = false,
-            this.setState({text : 'Clock In'}),
-            this.timerOff()
-        ) : (
-            //Logging 
-            isPressed = true,
-            this.setState({text : 'Clock Out'}),
-            this.timerOn() 
-        );
+        if (this.state.isTimerOn) {
+            this.timerOff();
+        } else {
+            this.timerOn();
+        }
     };
 
 
@@ -152,16 +147,52 @@ var endTime = 0;
      * @returns the timecard component 
      */
      render() {
-         const {text} = this.state;
-         return (
-             <View style={styles.container}>
-                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                 <TouchableOpacity id='timerButton' style={isPressed ? styles.stop : styles.start} 
-                 onPress={this.onPress}
-                 backgroundColor='blue'>
-                     <Text style={styles.text}>{text}</Text>
-                 </TouchableOpacity> 
-                 <Text>Today's Time: {hour} hours, {min} minutes, {sec} seconds</Text> 
+        const { currentDuration, isTimerOn, todayTime } = this.state;
+        const style = isTimerOn ? styles.stop : styles.start
+        const text = isTimerOn ? "Stop" : "Start";
+        
+        const d = new Date(todayTime * 1000);
+        const hours = d.getUTCHours();
+        const minutes = d.getUTCMinutes();
+        const seconds = d.getUTCSeconds();
+        const timeString = [hours, minutes, seconds].map(value =>  ("0" + value).slice(-2)).join(':');
+        const jobList = [
+            <Picker.Item label="Java" value="java" />
+        ];
+        let currentJob = "java";
+        return (
+            <View style={styles.container}>
+                <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+                <View>
+                    <Text style={styles.current_time}>{currentDuration}</Text>
+                    <View style={styles.timerButtonOuter}>
+                        <TouchableOpacity 
+                            id='timerButton' 
+                            style={[styles.button, style]} 
+                            onPress={this.onPress}
+                            backgroundColor='blue'
+                        >
+                            <Text style={styles.text}>{text}</Text>
+                        </TouchableOpacity> 
+                        <View style={styles.pickerRow}>
+                            <Text>
+                            Current Job:
+                            </Text>
+                            <Picker
+                                selectedValue={currentJob}
+                                style={styles.picker}
+                                onValueChange={
+                                    (choice, index) => this.setChosenJob(choice)
+                                }    
+                            >
+                                {jobList}
+                            </Picker>
+                        </View>
+                        
+                    </View>
+                </View>
+                
+                 <Text>Today's Time: {timeString}</Text> 
              </View>
             ) 
         }
@@ -183,31 +214,41 @@ var endTime = 0;
      logo: { 
          aspectRatio: 0.7, 
          resizeMode: 'contain',
-         marginTop: 170,
+         marginTop: 100,
      },
 
      //Styles for start button
+     timerButtonOuter: {
+         borderRadius: 40,
+         borderColor: "#FF0000",
+         borderWidth: 5,
+         width: 250,
+        
+         height: 250,
+         overflow: 'hidden',
+     },
+     pickerRow: {
+        flexDirection: 'row',
+        width: '100%',
+        height: 100,
+     },
+     button: {
+        width: '100%',
+        overflow: 'hidden',
+        borderRadius: 35,
+        height: 90,
+        borderWidth: 5,
+        alignItems: 'center',
+     },
      start: {
-       backgroundColor: 'green', 
-       padding: 40, 
-       borderRadius: 40,
-       width: 250, 
-       alignItems: 'center',
-       marginBottom: 170,
-       borderWidth: 5,
        borderColor: '#138564',
+       backgroundColor: 'green',
      },
 
      //Styles for stop button
      stop: {
+        borderColor: '#882244',
         backgroundColor: Color.MAROON, 
-        padding: 40, 
-        borderRadius: 40,
-        width: 250, 
-        alignItems: 'center',
-        marginBottom: 170,
-        borderWidth: 5,
-        borderColor: '#138564',
     },
 
     //Styles for text in the button

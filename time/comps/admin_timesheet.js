@@ -65,6 +65,8 @@ class AdminTimesheet extends React.Component {
         return (
             // Vertical  layout 
             <View style={styles.vertical_layout}>
+
+
                  {/* Horizontal Layout for serch and date selection */}
                 <View style={styles.horizontal_layout_top}>
                     <View style={styles.search}><SearchBar></SearchBar></View>
