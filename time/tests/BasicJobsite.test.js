@@ -8,5 +8,6 @@ configure({ adapter: new Adapter() });
 describe('test Basic Jobsite', () => {
     it('test if Jobsite renders', () => {
        const wrapper = shallow(<Jobsite></Jobsite>);
+       jest.useFakeTimers();
     });
 });
