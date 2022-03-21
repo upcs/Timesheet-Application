@@ -74,9 +74,12 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
       getFilteredItems(query, items) {
         console.log("query: %s", query);
-         if (!query) {
+        if (!query || query.length == 0) {
+          console.log("returning all items");
+          console.log(items);
           return items;
-         }
+        }
+        console.log("filtering data based on query");
         return items.filter((jobs) => jobs.name.includes(query));
       }
 
@@ -99,11 +102,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
         
       }
 
-      requestData() {
-        //this.child.current.sendData();
-        //console.log('Search bar changed');
-
-      }
      
 
 

@@ -32,6 +32,7 @@ class JobsList extends React.Component {
     constructor(props) {
         super(props);
 
+        
         //Changing
        // this.initFakeData = [];
        // console.log(props.data);
@@ -45,14 +46,15 @@ class JobsList extends React.Component {
             // FakeData: props.data,
             // eData: this.initEData,
 
-             isModalVisible: false,
+            isModalVisible: false,
             
             modalTwo: false,
             address: '',
             jobName: '',
             jobEdited: '',
             employeeEdited: '',
-            eList: null
+            eList: null,
+            
         };
 
         this.data = new Database()
@@ -89,6 +91,7 @@ class JobsList extends React.Component {
             //this.setState({initFakeData : res})
             //this.stInitialFake = res;
             this.setState({stInitialFake : res});
+            this.sendData(this.state.stInitialFake);
         });
     }
 
@@ -104,6 +107,7 @@ class JobsList extends React.Component {
             // this.setState({initFakeData : res})((
             // this.stInitialFake = res;
             this.setState({stInitialFake : res});
+            
         });
     }
 
@@ -337,7 +341,9 @@ class JobsList extends React.Component {
     render() {
         
         //Send data when prop "request" is true
-        if (this.props.request) {
+        if (this.props.request ) {
+            
+            
             this.sendData();
             console.log('request recieved')
         }
