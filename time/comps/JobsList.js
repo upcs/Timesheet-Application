@@ -41,10 +41,7 @@ class JobsList extends React.Component {
             FakeData: [],
             eData: [],
             stInitialFake: [],
-            //Changing
-            //FakeData: this.initFakeData,
-            // FakeData: props.data,
-            // eData: this.initEData,
+
 
             isModalVisible: false,
             
@@ -64,7 +61,6 @@ class JobsList extends React.Component {
         
     }
 
-    //iData = this.initFakeData;
 
     /**
      * 
@@ -73,8 +69,6 @@ class JobsList extends React.Component {
      */
 
     sendData = () => {
-        //console.log(this.state.eList);
-        // this.props.parentCallback(this.state.FakeData);
         console.log(this.state.stInitialFake);
         this.props.parentCallback(this.state.stInitialFake); 
     }
