@@ -34,7 +34,7 @@ import AddEmployee from './AddEmployee.js';
          return (
              <View style={styles.container}>
                  <View style={styles.upperbar}>
-                    <SearchBar style={styles.search}></SearchBar>
+                    <SearchBar style={styles.search} currValue = {this.currValue}></SearchBar>
                     
                     <View style={styles.buttonContainer}>
                         <AddEmployee sendData={addData} ></AddEmployee>
