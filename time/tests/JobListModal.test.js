@@ -111,12 +111,17 @@ describe('Modal 1 funcitonality', () => {
     })
 
     it('Allows for a job to be deleted', () => {
+        const deleteJobFunc = jest.spyOn(wrapper.instance(), "deleteJob");
+        const deleteJobFunc2 = jest.spyOn(wrapper.instance().data, "deleteJob");
+        const upState = jest.spyOn(wrapper.instance(), "updateState")
         wrapper.setState({FakeData: JobData, isModalVisible: true, jobEdited: 1});
         Alert.alert = jest.fn();
         wrapper.find('#removeJobButton').props().onPress();
         expect(Alert.alert.mock.calls.length).toBe(1);
         wrapper.instance().deleteJob();
-        expect(wrapper.state('FakeData')).toEqual([])
+        expect(deleteJobFunc).toHaveBeenCalled();
+        expect(deleteJobFunc2).toHaveBeenCalled();
+        expect(upState).toHaveBeenCalled();
     })
 
     it('Allows for changes to be saved', () => {
