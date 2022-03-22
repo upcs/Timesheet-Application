@@ -54,6 +54,8 @@ class JobsList extends React.Component {
             jobEdited: '',
             employeeEdited: '',
             eList: null,
+
+            doOnce: true,
             
         };
 
@@ -74,9 +76,7 @@ class JobsList extends React.Component {
         //console.log(this.state.eList);
         // this.props.parentCallback(this.state.FakeData);
         console.log(this.state.stInitialFake);
-        this.props.parentCallback(this.state.stInitialFake);
-
-        
+        this.props.parentCallback(this.state.stInitialFake); 
     }
 
     /**
@@ -90,6 +90,7 @@ class JobsList extends React.Component {
             //added
             //this.setState({initFakeData : res})
             //this.stInitialFake = res;
+            //console.log("Console Did Mount");
             this.setState({stInitialFake : res});
             this.sendData(this.state.stInitialFake);
         });
@@ -341,9 +342,18 @@ class JobsList extends React.Component {
     render() {
         
         //Send data when prop "request" is true
+        if (this.state.doOnce == true) {
+            this.data.getAllJobs().then((res, rej) => {
+                this.setState({stInitialFake : res});
+                this.sendData(this.state.stInitialFake);
+            });
+
+            this.setState({doOnce : false});
+        }
+
+
         if (this.props.request ) {
-            
-            
+                      
             this.sendData();
             console.log('request recieved')
         }

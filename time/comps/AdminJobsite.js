@@ -80,7 +80,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
           return items;
         }
         console.log("filtering data based on query");
-        return items.filter((jobs) => jobs.name.includes(query));
+        return items.filter((jobs) => jobs.name.toString().toLowerCase().includes(query.toString().toLowerCase()));
       }
 
       currValue(newValue) {
