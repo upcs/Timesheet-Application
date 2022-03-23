@@ -8,7 +8,7 @@
 
 import React, {useRef, useEffect, useState} from 'react';
 //import {Color, style} from './Palette.js';
-import { Text, View, StyleSheet, TouchableOpacity, Image, Button} from 'react-native'
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, Button} from 'react-native'
 import SearchBar from './search_bar'
 import TimeSheetList from './TimeSheetList';
 import Menu from './Menu';
@@ -35,30 +35,48 @@ class AdminTimesheet extends React.Component {
 
     onListPress = (id) => {
         this.setState({currEmployee: id}); 
-        this.getTime();
+        this.getTime(id);
     }
 
-    getTime = (date1, date2) => {
-        //Check if date 1 and date 2 are null
+    /**
+     * Set the list of employee punches
+     */
+    getTime = (id, date1, date2) => {
+        //If both dates are null get all punches
         if((date1 == null) && (date2 == null)){
-            //Get all time?
-            this.data.getAllTime(this.state.currEmployee).then((res, rej) => {
-                console.log("res", res[0]);
-                //this.setState({time: res[0]});
-                //console.log("time", this.state.time);
-            });
+            this.getAllEmployeeTime(id);
         }
 
-        //Check if date 1 is null
+        //If data 1 is null get time up to date 2
         else if(date1 == null){
-            //Get time up to date 2
         }
 
-        //Check if date2 is null 
+        //If date 2 is null get time from date 1 
         else{
-            //Get time from date 1
         }
     }
+
+    /**
+     * Get all employee punches
+     */
+    getAllEmployeeTime = (id) => {
+        var somedata = [];
+        this.data.getAllTime(id).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined){
+                    break;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
+    }
+
 
 
     render() {
@@ -82,7 +100,9 @@ class AdminTimesheet extends React.Component {
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
                         <Text style={[styles.employees_hours, styles.text_employee]}>Hours:
                         </Text>
+                        <ScrollView>
                         <Text style={styles.hours}>{this.state.time}</Text>
+                        </ScrollView>
                     </View>
                 </View>
             </View>

@@ -516,7 +516,7 @@ class Database {
                 querySnapshot.forEach((doc) => {
                     postData.push({...doc.data(), id: doc.id})
                 });
-                })
+            })
             return postData;
         }
     }
