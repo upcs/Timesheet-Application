@@ -24,7 +24,15 @@ class AdminTimesheet extends React.Component {
         super(props);
         this.state = {
             currEmployee: '',
-            time: []
+            time: [], 
+            date1: null,
+            date1month: null,
+            date1day: null,
+            date1year: null, 
+            date2: null,
+            date2month: null,
+            date2day: null,
+            date2year: null, 
         };
         this.data = new Database();
     }
@@ -33,26 +41,69 @@ class AdminTimesheet extends React.Component {
         this.setState({currEmployee: 0})
     }
 
+    //When the list is pressed set the id of the employee pressed and get their time
     onListPress = (id) => {
         this.setState({currEmployee: id}); 
         this.getTime(id);
     }
 
+    //Passed into the child, called when date gets updated, updates each date in the state
+    updateDates = (date, cal) => {
+        if(cal == "From"){
+            this.setState(
+                {
+                    date1: date.toString().substring(4, 15),
+                    date1month: date.toString().substring(4, 7),
+                    date1day: date.toString().substring(8, 10),
+                    date1year:date.toString().substring(11, 15)
+                });
+            
+        }
+        else if(cal == "To"){
+            this.setState(
+                {
+                    date1: date.toString().substring(4, 15),
+                    date1month: date.toString().substring(4, 7),
+                    date1day: date.toString().substring(8, 10),
+                    date1year:date.toString().substring(11, 15)
+                });
+        }
+        else{
+            this.setState(
+                {
+                    date1: null,
+                    date1month: null,
+                    date1day: null,
+                    date1year: null, 
+                    date2: null,
+                    date2month: null,
+                    date2day: null,
+                    date2year: null, 
+                });
+            }
+    }
+
     /**
      * Set the list of employee punches
      */
-    getTime = (id, date1, date2) => {
+    getTime = (id) => {
         //If both dates are null get all punches
-        if((date1 == null) && (date2 == null)){
+        if((this.state.date1 == null) && (this.state.date2 == null)){
             this.getAllEmployeeTime(id);
         }
 
         //If data 1 is null get time up to date 2
-        else if(date1 == null){
+        else if(this.state.date1 == null){
+            this.getEmployeesFrom(this.state.date2day, this.state.date2month, this.state.date2year);
         }
 
         //If date 2 is null get time from date 1 
+        else if(this.state.date2 == null){
+        }
+
+        //If both are not null get range of punches over time
         else{
+
         }
     }
 
@@ -66,8 +117,8 @@ class AdminTimesheet extends React.Component {
                 return;
             }
             for(var i = 0; i < {res}.toString().length; i++){
-                if(res[i] == undefined){
-                    break;
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
                 }
                 somedata.push(
                     res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
@@ -75,6 +126,10 @@ class AdminTimesheet extends React.Component {
             }
             this.setState({time: somedata});
         });
+    }
+
+    getEmployeesFrom(day, month, year){
+        
     }
 
 
@@ -88,7 +143,7 @@ class AdminTimesheet extends React.Component {
                  {/* Horizontal Layout for serch and date selection */}
                 <View style={styles.horizontal_layout_top}>
                     <View style={styles.search}><SearchBar></SearchBar></View>
-                     <CalendarButton></CalendarButton> 
+                     <CalendarButton updateDates={this.updateDates}></CalendarButton> 
                 </View>
 
                 {/* Horizontal Layout for employees and Hours  */}
