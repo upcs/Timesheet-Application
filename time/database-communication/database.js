@@ -500,12 +500,75 @@ class Database {
     }
 
     /**
-     * Get time over a specific range
+     * Get time from a certain day until present
+     * 
+     * @author gabes
      */
-    getRangeTime(){
+    getTimeFrom(id, day, month, year){
+        //where((month==month && day>=day && year>=year) || (month>month && year>=year)
         
+        //Error check params
+        if((id == 0) ||(day == null) || (month == null) || (year == null)){
+            return;
+        }
+        var postData = [];
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").where("month", "=", "month").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+            })
+            for(var i = 0; i < postData.length; i++){
+                //year is less than year 
+                if(postData[i].year < year){
+                    //remove entry
+                }
+
+                //month is less than month 
+                else if(postData[i].month < month){
+                    if(year )
+                }
+                    //check if year is equal to or less than 
+                        //remove entry
+
+                //Day is less than day
+                    //Check if year is equal to or less than 
+                        //Remove entry 
+                    //Check if month is less than or equal to 
+                        //Remove entry 
+
+                //Otherwise Continue 
+                    
+            }
+        }
     }
 
+
+    /**
+     * Get time from first day until specified day
+     * 
+     * @author gabes
+     */
+    getTimeTo(){
+
+    }
+
+
+    /**
+     * Get time over a specified time range
+     * 
+     * @author gabes
+     */
+    getTimeRanged(){
+
+    }
+
+
+    /**
+     * Get all of an employees time
+     * 
+     * @author gabes
+     */
     async getAllTime(id){
         if(id == 0){
             return;

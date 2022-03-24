@@ -128,8 +128,26 @@ class AdminTimesheet extends React.Component {
         });
     }
 
-    getEmployeesFrom(day, month, year){
-        
+    /**
+     * Get an employees time from the specified date 
+     *
+     * @author gabes
+     */
+    getEmployeesFrom(id, day, month, year){
+        this.data.getAllTime(id, day, month, year).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
     }
 
 
