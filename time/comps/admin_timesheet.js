@@ -104,7 +104,8 @@ class AdminTimesheet extends React.Component {
 
         //If both are not null get range of punches over time
         else{
-
+            this.getEmployeesFromAndTo(id, this.state.date1day, this.state.date1month, this.state.date1year, 
+                this.state.date2day, this.state.date2month, this.state.date2year);
         }
     }
 
@@ -160,6 +161,24 @@ class AdminTimesheet extends React.Component {
      getEmployeesTo(id, day, month, year){
         var somedata = [];
         this.data.getTimeTo(id, day, month, year).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
+    }
+
+    getEmployeesFromAndTo(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear){
+        var somedata = [];
+        this.data.getTimeRanged(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear).then((res, rej) => {
             if(res == undefined){
                 return;
             }

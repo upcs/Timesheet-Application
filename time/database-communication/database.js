@@ -596,8 +596,87 @@ class Database {
      * 
      * @author gabes
      */
-    getTimeRanged(){
+    async getTimeRanged(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear){
+        //Turn month strings into numerical values
+        fromMonth = this.getMonth(fromMonth);
+        toMonth = this.getMonth(toMonth);
 
+
+        //Error check params
+        if((id == 0) ||(fromDay == null) || (fromMonth == null) || (fromYear == null) ||
+                (toDay == null) || (toMonth == null) || (toYear == null)){
+            return;
+        }
+
+        //Query punches and store in array
+        var postData = [];
+        var filteredData = []
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+            })
+
+            //Filter punches with invalid dates
+            for(var i = 0; i < postData.length; i++){
+                
+                //Lies between the two years
+                if((postData[i].year < toYear) && (postData[i]) > fromYear){
+                    filteredData.push(postData[i]);
+                }
+
+                //In fromYear but not toYear
+                //Push anything with a fromYear and a higher month or a higher day within same month
+                if(postData[i].year == fromYear){
+                    if(postData[i].year < toYear){
+                        if(postData[i].month > fromMonth){
+                            filteredData.push(postData[i]);
+                        }
+                        if(postData[i].month == fromMonth){
+                            if(postData[i].day >= fromDay){
+                                filteredData.push(postData[i]);
+                            }
+                        }
+                    }
+                }
+
+                if(postData[i].year == toYear){
+                    if(postData[i].year > fromYear){
+                        if(postData[i].month < toMonth){
+                            filteredData.push(postData[i]);
+                        }
+                        if(postData[i].month == toMonth){
+                            if(postData[i].day <= toDay){
+                                filteredData.push(postData[i]);
+                            }
+                        }
+                    }
+                }
+
+                if((postData[i].year == fromYear) && (postData[i].year == toYear)){
+                    if((postData[i].month == fromMonth) && (postData[i].month == toMonth)){
+                        if((postData[i].day >= fromDay) && (postData[i].day <= toDay)){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else if((postData[i].month > fromMonth) && (postData[i].month < toMonth)){
+                        filteredData.push(postData[i]);
+                    }
+                    else if((postData[i].month == fromMonth) && (postData[i] != toMonth)){
+                        if(postData[i].day >= fromDay){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else{
+                        if(postData[i].day <= toDay){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                }
+            }
+            return filteredData;
+        }
     }
 
 
