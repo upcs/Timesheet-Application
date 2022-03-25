@@ -62,10 +62,10 @@ class AdminTimesheet extends React.Component {
         else if(cal == "To"){
             this.setState(
                 {
-                    date1: date.toString().substring(4, 15),
-                    date1month: date.toString().substring(4, 7),
-                    date1day: date.toString().substring(8, 10),
-                    date1year:date.toString().substring(11, 15)
+                    date2: date.toString().substring(4, 15),
+                    date2month: date.toString().substring(4, 7),
+                    date2day: date.toString().substring(8, 10),
+                    date2year:date.toString().substring(11, 15)
                 });
         }
         else{
@@ -94,11 +94,12 @@ class AdminTimesheet extends React.Component {
 
         //If data 1 is null get time up to date 2
         else if(this.state.date1 == null){
-            this.getEmployeesFrom(this.state.date2day, this.state.date2month, this.state.date2year);
+            this.getEmployeesTo(id, this.state.date2day, this.state.date2month, this.state.date2year);
         }
 
         //If date 2 is null get time from date 1 
         else if(this.state.date2 == null){
+            this.getEmployeesFrom(id, this.state.date1day, this.state.date1month, this.state.date1year);
         }
 
         //If both are not null get range of punches over time
@@ -134,7 +135,31 @@ class AdminTimesheet extends React.Component {
      * @author gabes
      */
     getEmployeesFrom(id, day, month, year){
-        this.data.getAllTime(id, day, month, year).then((res, rej) => {
+        var somedata = [];
+        this.data.getTimeFrom(id, day, month, year).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
+    }
+
+    /**
+     * Get an employees time from the specified date 
+     *
+     * @author gabes
+     */
+     getEmployeesTo(id, day, month, year){
+        var somedata = [];
+        this.data.getTimeTo(id, day, month, year).then((res, rej) => {
             if(res == undefined){
                 return;
             }

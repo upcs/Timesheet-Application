@@ -10,6 +10,8 @@ import User from './user'
  * To use, instantiate database object and call functions to read/write data
  * 
  * @author Jude Gabriel
+ * @author Tony Hayden
+ * @author Caden Deutscher 
  */
 class Database {
 
@@ -504,42 +506,42 @@ class Database {
      * 
      * @author gabes
      */
-    getTimeFrom(id, day, month, year){
-        //where((month==month && day>=day && year>=year) || (month>month && year>=year)
-        
+    async getTimeFrom(id, day, month, year){
+        month = this.getMonth(month);
+
         //Error check params
         if((id == 0) ||(day == null) || (month == null) || (year == null)){
             return;
         }
+
+        //Query punches and store in array
         var postData = [];
+        var filteredData = []
         if(id != null){
-            const data = await this.db.collection("accounts").doc(id).collection("punch").where("month", "=", "month").get().then((querySnapshot) => {
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     postData.push({...doc.data(), id: doc.id})
                 });
             })
+
+            //Filter punches with invalid dates
             for(var i = 0; i < postData.length; i++){
-                //year is less than year 
-                if(postData[i].year < year){
-                    //remove entry
+                if(postData[i].year > year){
+                    filteredData.push(postData[i]);
                 }
 
-                //month is less than month 
-                else if(postData[i].month < month){
-                    if(year )
+                if(postData[i].year == year){
+                    if(postData[i].month == month){
+                        if(postData[i].day >= day){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else if(postData[i].month > month){
+                        filteredData.push(postData[i]);
+                    }
                 }
-                    //check if year is equal to or less than 
-                        //remove entry
-
-                //Day is less than day
-                    //Check if year is equal to or less than 
-                        //Remove entry 
-                    //Check if month is less than or equal to 
-                        //Remove entry 
-
-                //Otherwise Continue 
-                    
             }
+            return filteredData;
         }
     }
 
@@ -549,8 +551,43 @@ class Database {
      * 
      * @author gabes
      */
-    getTimeTo(){
+    async getTimeTo(id, day, month, year){
+        month = this.getMonth(month);
 
+        //Error check params
+        if((id == 0) ||(day == null) || (month == null) || (year == null)){
+            return;
+        }
+
+        //Query punches and store in array
+        var postData = [];
+        var filteredData = []
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+            })
+
+            //Filter punches with invalid dates
+            for(var i = 0; i < postData.length; i++){
+                if(postData[i].year < year){
+                    filteredData.push(postData[i]);
+                }
+
+                if(postData[i].year == year){
+                    if(postData[i].month == month){
+                        if(postData[i].day <= day){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else if(postData[i].month < month){
+                        filteredData.push(postData[i]);
+                    }
+                }
+            }
+            return filteredData;
+        }
     }
 
 
@@ -791,6 +828,43 @@ class Database {
     async deleteJob(id){
         if(id != null){
             await this.db.collection("jobs").doc(id).delete();
+        }
+    }
+
+
+    /**
+     * Turns month string into numerical month value
+     * 
+     * @author gabes
+     */
+    getMonth(month){
+        switch(month){
+            case 'Jan': 
+                return 1;
+            case 'Feb':
+                return 2
+            case 'Mar':
+                return 3;
+            case 'Apr':
+                return 4;
+            case 'May':
+                return 5;
+            case 'Jun':
+                return 6;
+            case 'Jul':
+                return 7;
+            case 'Aug':
+                return 8;
+            case 'Sep':
+                return 9;
+            case 'Oct':
+                return 10;
+            case 'Nov':
+                return 11;
+            case 'Dec':
+                return 12;
+            default:
+                return null;
         }
     }
 
