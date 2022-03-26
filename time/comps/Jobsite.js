@@ -87,8 +87,23 @@ class Jobsite extends React.Component {
                                     onPress={ () => {
                                         this.setModalVisible(!this.state.isModalVisible)}}
                                     >
-                                <Text style={styles.textStyle}>X</Text>
+                                 <Text style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
+                                <ScrollView style={styles.modalScrolV}>
+                                    <View style = {styles.modalHeader}>
+                                        <Text style ={styles.modalHeaderText}>Current Jobs</Text>
+                                    </View>
+                                    {/*
+                                    <FlatList 
+                                     id='list'
+                                     data={this.state.FakeData} 
+                                     keyExtractor={item => item.id.toString()}
+                                     renderItem={this.renderItem} 
+                                        />
+                                        */
+                                    }
+                                </ScrollView>
+
                             </View>
                         </View>
                     </View>
@@ -136,7 +151,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: '10%',
         shadowColor: '#000',
-  
         shadowOffset: {
           width: 0,
           height: 2,
@@ -219,6 +233,23 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'bold',
         fontSize: 35
+    },
+    modalHeaderText: {
+        fontSize: 35,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    modalHeader: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        alignSelf: 'center',
+        backgroundColor: Color.MAROON
+    },
+    modalScrolV: {
+        width: '100%',
+        height: '100%'
     }
 
 });
