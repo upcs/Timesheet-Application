@@ -1,40 +1,120 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Color } from './Palette.js';
-import { Text, View, StyleSheet, TouchableOpacity} from 'react-native'
+import { Text, View, StyleSheet, ScrollView,TouchableOpacity, Modal, Alert} from 'react-native'
 import Menu from './Menu'
+import Database from '../database-communication/database.js';
 
 class Jobsite extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            id: this.props.dataParentToChild,
+            isModalVisible: false,
+            phase: 1,
+            address: "123 abc lane",
+            notes: "I want candy",
+            name: "Job Name",
+            cJID: "Job ID"
+        }
+        this.data = new Database();
+    }
+
+    componentDidMount = () => {
+
+    }
+    setModalVisible = (visible) => {
+        this.setState({isModalVisible: visible});
+    }
+
+    setJobNotes = (note) => {
+        this.setState({notes: note});
+    }
+    setJobPhase = (jphase) => {
+        this.setState({phase: jphase});
+    }
+    setJobAddress = (jad) => {
+        this.setState({address: jad});
+    }
+    setJobName = (jn) => {
+        this.setState({name: jn});
+    }
+    setJobID = (ji) => {
+        this.setState({cJID: ji});
+    }
+
+
+    renderItem = ({item}) => {
+        const { isModalVisible } = this.state;
+         return (
+             <View 
+                id='employeeButtonView'
+                style={styles.items}>
+                 <TouchableOpacity id='employeeButton' onPress={() =>
+                 {
+                    this.setModalVisible(!isModalVisible);
+                    this.setJobNotes(item.notes);
+                    this.setJobPhase(item.phase);
+                    this.setJobAddress(item.admin);
+                    this.setJobName(item.name);
+                    this.setJobID(item.id);
+                 }}>
+                     <Text>{item.name}</Text>
+                 </TouchableOpacity> 
+             </View>
+         );
+     };
+
     render() {
         return (
             <View style={styles.containerMaster}>
-
-                {/* <View style={styles.containerTop}>
-                    <TouchableOpacity style={styles.navButton} onPress={this.onPress}>
-                        <Text adjustsFontSizeToFit={true} style={styles.navText}>Card</Text>
-                    </TouchableOpacity>
-                    <View style={styles.blankButton}></View>
-                    <TouchableOpacity style={styles.navButton} onPress={this.onPress}>
-                        <Text adjustsFontSizeToFit={true} style={styles.navText}>Job</Text>
-                    </TouchableOpacity>
-                    <View style={styles.blankButton}></View>
-                    <TouchableOpacity style={styles.navButton} onPress={this.onPress}>
-                        <Text adjustsFontSizeToFit={true} style={styles.navText}>Hours</Text>
-                    </TouchableOpacity>
-                </View> */}
-                
-                <View style={styles.containerBottom}>
-                    <View style={styles.jobInfoContainer}>
-                        <Text adjustsFontSizeToFit={true} style={styles.jobLocContainer}>Job Name FILLER</Text>
-                        <Text adjustsFontSizeToFit={true} style={styles.jobLocContainer}>Address: FILLER</Text>
+                <Modal
+                    id='employeeModal'
+                    animationType='slide'
+                    transparent={true}
+                    visible = {this.state.isModalVisible}
+                    onRequestClose = { () => {
+                        this.setModalVisible(!this.state.isModalVisible);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        {/*this View adds the blurred background behind the modal*/}
+                        <View style={styles.blur}>
+                            <View style={styles.modalView} id='modalView'>
+                                    <TouchableOpacity 
+                                    id='closeButton'
+                                    style={styles.exit}
+                                    //Make sure user wants to exit when 'x' is pressed
+                                    onPress={ () => {
+                                        this.setModalVisible(!this.state.isModalVisible)}}
+                                    >
+                                <Text style={styles.textStyle}>X</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
-                    <TouchableOpacity style={styles.docImageContainer} onPress={this.onPress}>
-                        <Text adjustsFontSizeToFit={true} style={styles.navText}>Safety Documents</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.docImageContainer} onPress={this.onPress}>
-                        <Text adjustsFontSizeToFit={true} style={styles.navText}>Pictures</Text>
+                </Modal>
+                
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity style={styles.switchJob} onPress={() => {
+                         this.setModalVisible(!this.state.isModalVisible);
+                    }}>  
+                             <Text adjustsFontSizeToFit={true} style={styles.headerText}>Jobsite</Text> 
                     </TouchableOpacity>
                 </View>
-                
+                <View style={styles.generalContainer}>
+                    <Text adjustsFontSizeToFit={true} style={styles.basicText}>Address</Text> 
+                    <Text adjustsFontSizeToFit={true} style={styles.basicText}>Phase</Text> 
+                </View>
+                <View style={styles.notesContainer}>
+                    <View style={styles.notesHeaderContainer}>
+                    <Text adjustsFontSizeToFit={true} style={styles.notesHeader}>Notes</Text>
+                    </View>
+                    <View style={styles.notesScrollContainer}>  
+                    <ScrollView>
+                        <Text adjustsFontSizeToFit={true} style={styles.notesText}>This is where notes go</Text>
+                    </ScrollView>
+                    </View>
+               </View>
             </View>
         )
     }
@@ -42,63 +122,105 @@ class Jobsite extends React.Component {
 
 /*  Styles used for Jobsite screen */
 const styles = StyleSheet.create({
+    headerContainer: {
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: Color.MAROON,
+        width: '100%',
+        height: '10%',
+        flex: 0.2
+    },
+    modalView: {
+        width: '90%',
+        height: '80%',
+        backgroundColor: 'white',
+        padding: '10%',
+        shadowColor: '#000',
+  
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
     containerMaster: {
         flex: 1
     },
-    containerTop: {
-        flex: 0.1,
-        backgroundColor: '#454545',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
+    notesContainer: {
+        flex: 0.6 
     },
-    //Large container taking up the bottom 90% of the screen
-    containerBottom: {
-        flex: 0.9,
-        backgroundColor: Color.BG
-    },
-    //Navigation buttons at the top of the screen
-    navButton: {
-        borderRadius: 10,
-        width: '25%',
-        height: '50%',
-        backgroundColor: Color.BUTTON,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    //Used to add a buffer between the nav buttons
-    blankButton: {
-        width: '8.3%'
-    },
-    //Navigation button text
-    navText: {
-        color: 'red',
-        fontSize: 50,
-        textAlign: 'center'
-    },
-    docImageContainer: {
-        flex: 0.35,
+    switchJob: {
+        backgroundColor: 'rgba(0,0,0,0.1)', 
         borderRadius: 30,
-        marginHorizontal: '10%',
-        marginVertical: '5%',
-        borderStyle: 'dotted',
-        borderColor: 'black',
-        borderWidth: 5,
+        width: 200, 
+        alignItems: 'center'   
+    },
+    notesHeaderContainer: {
+        alignItems: 'center', 
         justifyContent: 'center',
+        backgroundColor: Color.MAROON,
+        width: '100%',
+        height: '10%',
+        flex: 0.2
     },
-    
-    jobInfoContainer: {
-        flex: 0.3,
+    notesScrollContainer: {
+        flex: 0.7
+    },
+    generalContainer: {
+        alignItems: 'center', 
+        justifyContent: 'center',
+        flex: 0.3
+    },
+    exit:{
+        backgroundColor: Color.MAROON,
+        alignContent: 'center',
+        width: '15%',
+        borderRadius: 10,
+        marginBottom: '10%'
+      },
+      basicText: {
+        color: 'black',
+        fontWeight: 'normal',
+        marginBottom: 10,
+        marginTop: 10,
+        fontSize: 35
+    },
+    headerText: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 50
+    },
+    notesText: {
+        color: 'black',
+        fontWeight: 'normal',
+        marginHorizontal: '5%',
+        fontSize: 20
+    },
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center'
+      },
+      centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      blur: {
+        width: '100%',
+        height: '100%',
+        backgroundColor : 'rgba(52, 52, 52, 0.8)',
+        alignItems: 'center',
         justifyContent: 'center'
-    },
-    //Container used for the job name and Address
-    jobLocContainer: {
-        flex: 0.5,
-        color: 'red',
-        fontSize: 30,
-        textAlign: 'center',
-        margin: 20
+      },
+    notesHeader: {
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 35
     }
+
 });
 
 export default Jobsite;

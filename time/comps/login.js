@@ -68,7 +68,7 @@ class Login extends React.Component {
 
                 <TextInput 
                     style={styles.textArea} 
-                    //defaultValue='Email'
+                   // defaultValue='joey@gmail.com'
                     placeholder='Email'
                     keyboardType='email-address'
                     secureTextEntry={true}
@@ -80,7 +80,7 @@ class Login extends React.Component {
                 </TextInput> 
                 <TextInput
                     style={styles.textArea}  
-                    //defaultValue='Password'
+                   // defaultValue='test'
                     placeholder='Password'
                     secureTextEntry={true}
                     onChangeText={(text) => {

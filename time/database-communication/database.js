@@ -521,6 +521,18 @@ class Database {
         }
     }
 
+    async getJobsForEmp(id){
+        if(id == 0){
+            return;
+        }
+        var jobs = [];
+        await this.db.collection("jobs").where().then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+              
+          });
+        })
+        return jobs;
+    }
 
     /****** JOB GETTERS *******/
 
