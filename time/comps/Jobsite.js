@@ -20,7 +20,26 @@ class Jobsite extends React.Component {
     }
 
     componentDidMount = () => {
-
+        this.data.getJobAddress("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
+            this.setState({address: res}, () => {
+                console.log(res);
+            });
+        });
+        this.data.getJobNotes("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
+            this.setState({notes: res}, () => {
+                console.log(res);
+            });
+        });
+        this.data.getJobName("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
+            this.setState({name: res}, () => {
+                console.log(res);
+            });
+        });
+        this.data.getJobPhase("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
+            this.setState({phase: res}, () => {
+                console.log(res);
+            });
+        });
     }
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
@@ -113,12 +132,12 @@ class Jobsite extends React.Component {
                     <TouchableOpacity style={styles.switchJob} onPress={() => {
                          this.setModalVisible(!this.state.isModalVisible);
                     }}>  
-                             <Text adjustsFontSizeToFit={true} style={styles.headerText}>Jobsite</Text> 
+                             <Text adjustsFontSizeToFit={true} style={styles.headerText}>{this.state.name}</Text> 
                     </TouchableOpacity>
                 </View>
                 <View style={styles.generalContainer}>
-                    <Text adjustsFontSizeToFit={true} style={styles.basicText}>Address</Text> 
-                    <Text adjustsFontSizeToFit={true} style={styles.basicText}>Phase</Text> 
+                    <Text adjustsFontSizeToFit={true} style={styles.basicText}>Address: {this.state.address}</Text> 
+                    <Text adjustsFontSizeToFit={true} style={styles.basicText}>Current Phase: {this.state.phase}</Text> 
                 </View>
                 <View style={styles.notesContainer}>
                     <View style={styles.notesHeaderContainer}>
@@ -126,7 +145,7 @@ class Jobsite extends React.Component {
                     </View>
                     <View style={styles.notesScrollContainer}>  
                     <ScrollView>
-                        <Text adjustsFontSizeToFit={true} style={styles.notesText}>This is where notes go</Text>
+                        <Text adjustsFontSizeToFit={true} style={styles.notesText}>{this.state.notes}</Text>
                     </ScrollView>
                     </View>
                </View>
@@ -199,12 +218,14 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         marginBottom: 10,
         marginTop: 10,
-        fontSize: 35
+        fontSize: 25,
+        textAlign: 'center'
     },
     headerText: {
         color: 'black',
         fontWeight: 'bold',
-        fontSize: 50
+        fontSize: 30,
+        textAlign: 'center'
     },
     notesText: {
         color: 'black',

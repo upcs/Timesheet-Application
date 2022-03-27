@@ -526,9 +526,9 @@ class Database {
             return;
         }
         var jobs = [];
-        await this.db.collection("jobs").where().then((querySnapshot) => {
+        await this.db.collectionGroup("employees").where("accountID", "==", id).get().then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
-              
+              console.log(doc.id);
           });
         })
         return jobs;
@@ -564,24 +564,35 @@ class Database {
     /**
      * Get job address
      */
-    getJobAddress(){
-
+    async getJobAddress(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().address;
     }
 
     /**
      * Get job name
      */
-    getJobName(){
-
+    async getJobName(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().name;
     }
 
     /**
      * Get job phase
      */
-    getJobPhase(){
-
+    async getJobPhase(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().phase;
     }
 
+    /**
+     * 
+     * Get job noes
+     */
+    async getJobNotes(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().notes;
+    }
     /**
      * Get a list of all employees not on the job
      * 
