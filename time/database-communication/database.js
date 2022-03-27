@@ -562,6 +562,9 @@ class Database {
     }
 
     /**
+     * @author Caden Deutscher
+     * @params id(jobsite id)
+     * @return jobsite address
      * Get job address
      */
     async getJobAddress(id){
@@ -570,6 +573,9 @@ class Database {
     }
 
     /**
+     * @author Caden Deutscher
+     * @params id(jobsite id)
+     * @return jobsite name
      * Get job name
      */
     async getJobName(id){
@@ -578,6 +584,9 @@ class Database {
     }
 
     /**
+     * @author Caden Deutshcer
+     * @params id(jobsite id)
+     * @return jobsite phase
      * Get job phase
      */
     async getJobPhase(id){
@@ -586,7 +595,9 @@ class Database {
     }
 
     /**
-     * 
+     * @author Caden Deutscher
+     * @params id(jobsite id)
+     * @return jobsite notes
      * Get job noes
      */
     async getJobNotes(id){
