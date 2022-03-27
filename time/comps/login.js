@@ -33,7 +33,6 @@ class Login extends React.Component {
     }
 
     loginUser = () => {
-        console.log("Hit login");
         this.data.getSignIn(this.state.email, this.state.password).then((res, rej) => {
             if(res[0] == ""){
               this.setState({
