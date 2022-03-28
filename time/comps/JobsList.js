@@ -69,7 +69,7 @@ class JobsList extends React.Component {
      */
 
     sendData = () => {
-        console.log(this.state.stInitialFake);
+        
         this.props.parentCallback(this.state.stInitialFake); 
     }
 
@@ -104,6 +104,9 @@ class JobsList extends React.Component {
             this.setState({stInitialFake : res});
             
         });
+
+        //added 
+        this.forceUpdate();
     }
 
 
@@ -124,16 +127,11 @@ class JobsList extends React.Component {
             FakeData : props.data 
            
           };
-        }
-
-        
+        }  
         return  null;
         
-      }
+    }
 
-
-      
-    
 
 
     /**

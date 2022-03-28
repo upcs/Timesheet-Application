@@ -15,7 +15,10 @@
 
 import React from 'react';
 import {Color} from './Palette.js';
-import { Picker, Text, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
+
+//changing to avoid picker bug
+import {Text, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
+import { Picker } from "@react-native-picker/picker";
  
 import Database from '../database-communication/database.js';
 import User from '../database-communication/user.js'
@@ -227,7 +230,7 @@ var endTime = 0;
          height: 250,
          overflow: 'hidden',
      },
-     pickerRow: {
+     installRow: {
         flexDirection: 'row',
         width: '100%',
         height: 100,

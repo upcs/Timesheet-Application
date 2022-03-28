@@ -42,6 +42,8 @@ import AddEmployee from './AddEmployee.js';
     //Added
     //Callback Function from JobsList
     callbackFunction(childData) {
+
+      console.log(childData);
       this.setState({jobsDataChild : childData});
       this.setState({requesting : false});
       console.log('callback recieved');
@@ -56,15 +58,20 @@ import AddEmployee from './AddEmployee.js';
         return items;
       }
       console.log("filtering data based on query, query was: " + query);
-      return items.filter((jobs) => (jobs.firstname.toString().toLowerCase() + " " + jobs.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
+      console.log(items);
+      return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
     }
 
     currValue(newValue) {
       //console.log(newValue);
       this.setState({query : newValue});
+      console.log(newValue);
+      console.log("Here's the query in currValue");
+      
       console.log(this.state.query);
 
       this.setState({requesting : true});
+      console.log("Just set requesting to true in AdminEmployee");
       
       console.log(this.state.requesting);
       this.forceUpdate();
@@ -72,6 +79,10 @@ import AddEmployee from './AddEmployee.js';
     }
      
      render() {
+
+
+      this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
+      
        //This function is called whenever the add employee modal is submitted
         const addData = (params) => {
             employList = params;

@@ -68,15 +68,15 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       callbackFunction(childData) {
         this.setState({jobsDataChild : childData});
         this.setState({requesting : false});
-        console.log('callback recieved');
+        
       }
       
 
       getFilteredItems(query, items) {
-        console.log("query: %s", query);
+       
         if (!query || query.length == 0) {
-          console.log("returning all items");
-          console.log(items);
+          
+          
           return items;
         }
         console.log("filtering data based on query");
@@ -86,7 +86,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       currValue(newValue) {
         //console.log(newValue);
         this.setState({query : newValue});
-        console.log(this.state.query);
+        
 
         this.setState({requesting : true});
         
@@ -96,7 +96,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
         
 
-        console.log(this.state.requesting);
+       
 
         this.forceUpdate();
         
@@ -117,7 +117,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
        
     const addData = (params) => {
         jobData = params;
-        console.log(jobData);
+        
 
         //Call updateState in JobsList
         this.myref.current.updateState();

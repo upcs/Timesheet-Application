@@ -39,7 +39,7 @@ import Database from '../database-communication/database.js'
     }
 
     sendData = () => {
-        console.log(this.state.stInitialFake);
+        
         this.props.parentCallback(this.state.stInitialFake); 
     }
 
@@ -60,6 +60,9 @@ import Database from '../database-communication/database.js'
 
             this.setState({stInitialFake : res});
         });
+
+        //added 
+        this.forceUpdate();
     }
 
 
@@ -158,7 +161,7 @@ import Database from '../database-communication/database.js'
 
         //Send data when prop "request" is true
         if (this.state.doOnce == true) {
-            this.data.getAllJobs().then((res, rej) => {
+            this.data.getAllAccounts().then((res, rej) => {
                 this.setState({stInitialFake : res});
                 this.sendData(this.state.stInitialFake);
             });
@@ -167,7 +170,7 @@ import Database from '../database-communication/database.js'
         }
 
 
-        if (this.props.request ) {
+        if (this.props.request) {
                       
             this.sendData();
             console.log('request recieved')
