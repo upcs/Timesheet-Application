@@ -32,9 +32,22 @@ describe('An admin viewing employees times', () => {
     })
 
     it('Updates the states dates when pressing on an employee', () => {
-        var date = '----Mar----'
+        var date = '----Mar-14-2022-'
         instance = wrapper.instance();
         instance.updateDates(date, 'From');
         expect(wrapper.state('date1month')).toBe('Mar');
+        expect(wrapper.state('date1day')).toBe('14')
+        expect(wrapper.state('date1year')).toBe('2022')
+        instance.updateDates(date, 'To');
+        expect(wrapper.state('date2month')).toBe('Mar');
+        expect(wrapper.state('date2day')).toBe('14')
+        expect(wrapper.state('date2year')).toBe('2022')
+        instance.updateDates(date, 'somethingelse');
+        expect(wrapper.state('date1month')).toBe(null);
+        expect(wrapper.state('date1day')).toBe(null)
+        expect(wrapper.state('date1year')).toBe(null)
+        expect(wrapper.state('date2month')).toBe(null);
+        expect(wrapper.state('date2day')).toBe(null)
+        expect(wrapper.state('date2year')).toBe(null)
     })
 })
