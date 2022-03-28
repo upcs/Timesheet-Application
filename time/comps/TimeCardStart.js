@@ -16,10 +16,10 @@
 import React from 'react';
 import {Color} from './Palette.js';
 
-//changing to avoid picker bug
-import {Text, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
-import { Picker } from "@react-native-picker/picker";
- 
+import { Picker, Text, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
+import TimeUtil from './TimeUtil.js';
+
+
 import Database from '../database-communication/database.js';
 import User from '../database-communication/user.js'
 /* Global Variables for time tracking */
@@ -154,14 +154,16 @@ var endTime = 0;
         const style = isTimerOn ? styles.stop : styles.start
         const text = isTimerOn ? "Clock-Out" : "Clock-In";
         
-        const d = new Date(todayTime * 1000);
+        /*const d = new Date(todayTime * 1000);
         const hours = d.getUTCHours();
         const minutes = d.getUTCMinutes();
         const seconds = d.getUTCSeconds();
         const timeString = [hours, minutes, seconds].map(value =>  ("0" + value).slice(-2)).join(':');
+        */
         const jobList = [
             <Picker.Item label="Java" value="java" />
         ];
+        const timeString = TimeUtil.convertMsToReadable(todayTime * 1000);
         let currentJob = "java";
         return (
             <View style={styles.container}>
@@ -177,19 +179,26 @@ var endTime = 0;
                         >
                             <Text style={styles.text}>{text}</Text>
                         </TouchableOpacity> 
-                        <View style={styles.pickerRow}>
+                        <View style={[styles.pickerOuter, {
+                            flexDirection: "row",
+                        }]}>
                             <Text>
                             Current Job:
                             </Text>
-                            <Picker
+                            <View style={[styles.picker, {
+                                backgroundColor: "red",
+                            }]}>
+                                <Picker
                                 selectedValue={currentJob}
-                                style={styles.picker}
+                         
                                 onValueChange={
                                     (choice, index) => this.setChosenJob(choice)
                                 }    
-                            >
-                                {jobList}
-                            </Picker>
+                                >
+                                    {jobList}
+                                    </Picker>
+                            </View>
+                                
                         </View>
                         
                     </View>
@@ -230,10 +239,13 @@ var endTime = 0;
          height: 250,
          overflow: 'hidden',
      },
-     installRow: {
+
+     picker: {
         flexDirection: 'row',
         width: '100%',
-        height: 100,
+        height: '100%',
+        borderRadius: 3,
+        borderWidth: 1,
      },
      button: {
         width: '100%',
