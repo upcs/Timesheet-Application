@@ -151,7 +151,7 @@ var endTime = 0;
         const style = isTimerOn ? styles.stop : styles.start
         const text = isTimerOn ? "Stop" : "Start";
         
-        const d = new Date(todayTime * 1000);
+        /*const d = new Date(todayTime * 1000);
         const hours = d.getUTCHours();
         const minutes = d.getUTCMinutes();
         const seconds = d.getUTCSeconds();
@@ -159,6 +159,7 @@ var endTime = 0;
         const jobList = [
             <Picker.Item label="Java" value="java" />
         ];
+        const timeString = TimeUtil.convertMsToReadable(todayTime * 1000);
         let currentJob = "java";
         return (
             <View style={styles.container}>
