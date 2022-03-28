@@ -19,11 +19,70 @@ import AddEmployee from './AddEmployee.js';
  class AdminEmployee extends React.Component {
      constructor(props){
          super(props);
+         this.currValue = this.currValue.bind(this);
+         this.callbackFunction = this.callbackFunction.bind(this);
+
+         this.state = {
+            query: [],
+            jobsDataChild: [],
+            requesting: false,
+          };
+
          //get a reference of the updateState from EmployeeList
         this.myref = React.createRef();
      }
+
+     
+
+    setQuery(newQuery) {
+      return newQuery;
+
+    }
+
+    //Added
+    //Callback Function from JobsList
+    callbackFunction(childData) {
+
+      console.log(childData);
+      this.setState({jobsDataChild : childData});
+      this.setState({requesting : false});
+      console.log('callback recieved');
+    }
+    
+
+    getFilteredItems(query, items) {
+      console.log("query: %s", query);
+      if (!query || query.length == 0) {
+        console.log("returning all items");
+        console.log(items);
+        return items;
+      }
+      console.log("filtering data based on query, query was: " + query);
+      console.log(items);
+      return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
+    }
+
+    currValue(newValue) {
+      //console.log(newValue);
+      this.setState({query : newValue});
+      console.log(newValue);
+      console.log("Here's the query in currValue");
+      
+      console.log(this.state.query);
+
+      this.setState({requesting : true});
+      console.log("Just set requesting to true in AdminEmployee");
+      
+      console.log(this.state.requesting);
+      this.forceUpdate();
+      
+    }
      
      render() {
+
+
+      this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
+      
        //This function is called whenever the add employee modal is submitted
         const addData = (params) => {
             employList = params;
@@ -42,7 +101,7 @@ import AddEmployee from './AddEmployee.js';
                     
                     
                 </View>
-                <EmployeesList ref={this.myref}></EmployeesList>
+                <EmployeesList ref={this.myref} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></EmployeesList>
              </View>
          ) 
      }

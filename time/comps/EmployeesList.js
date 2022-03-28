@@ -32,14 +32,24 @@ import Database from '../database-communication/database.js'
             userLast: '',
             isAdmin: false,
             userEdited: '',
+            stInitialFake: [],
+            doOnce: true,
          };
          this.data = new Database();
+    }
+
+    sendData = () => {
+        
+        this.props.parentCallback(this.state.stInitialFake); 
     }
 
     componentDidMount = () => {
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
+
+            this.setState({stInitialFake : res});
+            this.sendData(this.state.stInitialFake);
         });
     }
 
@@ -47,8 +57,36 @@ import Database from '../database-communication/database.js'
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
+
+            this.setState({stInitialFake : res});
         });
+
+        //added 
+        this.forceUpdate();
     }
+
+
+    static getDerivedStateFromProps(props, state) {
+
+        if (!props.query) {
+            console.log('no query');
+            console.log(state.stInitialFake)
+            return {
+                FakeData : state.stInitialFake,
+            };
+            
+        }
+
+        if (props.data !== state.stInitialFake) {
+          console.log("changed");
+          return {
+            FakeData : props.data 
+           
+          };
+        }     
+        return  null;
+        
+      }
 
     
 
@@ -120,6 +158,29 @@ import Database from '../database-communication/database.js'
  
      //Create the flatlist 
      render() {
+
+        //Send data when prop "request" is true
+        if (this.state.doOnce == true) {
+            this.data.getAllAccounts().then((res, rej) => {
+                this.setState({stInitialFake : res});
+                this.sendData(this.state.stInitialFake);
+            });
+
+            this.setState({doOnce : false});
+        }
+
+
+        if (this.props.request) {
+                      
+            this.sendData();
+            console.log('request recieved')
+        }
+
+
+
+
+
+
         const { isModalVisible } = this.state;
         const {isAdmin} = this.state;
         return (

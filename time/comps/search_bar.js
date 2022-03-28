@@ -76,7 +76,7 @@
      currValue(text) {
          
          //val = evt.target.value;
-         //console.log(text)
+         //console.log(text);
          this.setState({value: text})
          this.props.currValue(text);
      }

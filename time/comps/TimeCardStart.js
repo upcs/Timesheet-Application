@@ -15,8 +15,11 @@
 
 import React from 'react';
 import {Color} from './Palette.js';
+
 import { Picker, Text, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
 import TimeUtil from './TimeUtil.js';
+
+
 import Database from '../database-communication/database.js';
 import User from '../database-communication/user.js'
 /* Global Variables for time tracking */
@@ -236,6 +239,7 @@ var endTime = 0;
          height: 250,
          overflow: 'hidden',
      },
+
      picker: {
         flexDirection: 'row',
         width: '100%',
