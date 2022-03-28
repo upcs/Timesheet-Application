@@ -322,7 +322,7 @@ class Database {
 
             clockOutHour: hour, 
             clockOutMinute: minute,
-            totalPunchTimeInMinutes: duration / (1000 * 60),            
+            totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
 
