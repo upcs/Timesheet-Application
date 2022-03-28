@@ -61,7 +61,6 @@ class App extends React.Component {
 
   }
   login(signin, uid, uType) {
-    console.log(signin, uid, uType);
     this.setState({
       signedIn: signin,
       id: uid,
@@ -70,7 +69,6 @@ class App extends React.Component {
   }
 
   loginAdmin() {
-    console.log("Attepting log in");
       this.setState({
         signedIn: 1,
         user: User.ADMIN,

@@ -69,7 +69,8 @@ class JobsList extends React.Component {
      */
 
     sendData = () => {
-        
+
+
         this.props.parentCallback(this.state.stInitialFake); 
     }
 
@@ -113,8 +114,6 @@ class JobsList extends React.Component {
     static getDerivedStateFromProps(props, state) {
 
         if (!props.query) {
-            console.log('no query');
-            console.log(state.stInitialFake)
             return {
                 FakeData : state.stInitialFake,
             };
@@ -122,7 +121,6 @@ class JobsList extends React.Component {
         }
 
         if (props.data !== state.stInitialFake) {
-          console.log("changed");
           return {
             FakeData : props.data 
            
@@ -344,10 +342,8 @@ class JobsList extends React.Component {
         }
 
 
-        if (this.props.request ) {
-                      
+        if (this.props.request ) {                 
             this.sendData();
-            console.log('request recieved')
         }
 
 

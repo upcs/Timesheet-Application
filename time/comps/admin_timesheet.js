@@ -8,7 +8,7 @@
 
 import React, {useRef, useEffect, useState} from 'react';
 //import {Color, style} from './Palette.js';
-import { Text, View, StyleSheet, TouchableOpacity, Image, Button} from 'react-native'
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, Button} from 'react-native'
 import SearchBar from './search_bar'
 import TimeSheetList from './TimeSheetList';
 import Menu from './Menu';
@@ -24,7 +24,15 @@ class AdminTimesheet extends React.Component {
         super(props);
         this.state = {
             currEmployee: '',
-            time: []
+            time: [], 
+            date1: null,
+            date1month: null,
+            date1day: null,
+            date1year: null, 
+            date2: null,
+            date2month: null,
+            date2day: null,
+            date2year: null, 
         };
         this.data = new Database();
     }
@@ -33,32 +41,159 @@ class AdminTimesheet extends React.Component {
         this.setState({currEmployee: 0})
     }
 
+    //When the list is pressed set the id of the employee pressed and get their time
     onListPress = (id) => {
         this.setState({currEmployee: id}); 
-        this.getTime();
+        this.getTime(id);
     }
 
-    getTime = (date1, date2) => {
-        //Check if date 1 and date 2 are null
-        if((date1 == null) && (date2 == null)){
-            //Get all time?
-            this.data.getAllTime(this.state.currEmployee).then((res, rej) => {
-                console.log("res", res[0]);
-                //this.setState({time: res[0]});
-                //console.log("time", this.state.time);
-            });
+    //Passed into the child, called when date gets updated, updates each date in the state
+    updateDates = (date, cal) => {
+        if(cal == "From"){
+            this.setState(
+                {
+                    date1: date.toString().substring(4, 15),
+                    date1month: date.toString().substring(4, 7),
+                    date1day: date.toString().substring(8, 10),
+                    date1year:date.toString().substring(11, 15)
+                });
+            
         }
-
-        //Check if date 1 is null
-        else if(date1 == null){
-            //Get time up to date 2
+        else if(cal == "To"){
+            this.setState(
+                {
+                    date2: date.toString().substring(4, 15),
+                    date2month: date.toString().substring(4, 7),
+                    date2day: date.toString().substring(8, 10),
+                    date2year:date.toString().substring(11, 15)
+                });
         }
-
-        //Check if date2 is null 
         else{
-            //Get time from date 1
+            this.setState(
+                {
+                    date1: null,
+                    date1month: null,
+                    date1day: null,
+                    date1year: null, 
+                    date2: null,
+                    date2month: null,
+                    date2day: null,
+                    date2year: null, 
+                });
+            }
+    }
+
+    /**
+     * Set the list of employee punches
+     */
+    getTime = (id) => {
+        //If both dates are null get all punches
+        if((this.state.date1 == null) && (this.state.date2 == null)){
+            this.getAllEmployeeTime(id);
+        }
+
+        //If data 1 is null get time up to date 2
+        else if(this.state.date1 == null){
+            this.getEmployeesTo(id, this.state.date2day, this.state.date2month, this.state.date2year);
+        }
+
+        //If date 2 is null get time from date 1 
+        else if(this.state.date2 == null){
+            this.getEmployeesFrom(id, this.state.date1day, this.state.date1month, this.state.date1year);
+        }
+
+        //If both are not null get range of punches over time
+        else{
+            this.getEmployeesFromAndTo(id, this.state.date1day, this.state.date1month, this.state.date1year, 
+                this.state.date2day, this.state.date2month, this.state.date2year);
         }
     }
+
+    /**
+     * Get all employee punches
+     */
+    getAllEmployeeTime = (id) => {
+        var somedata = [];
+        this.data.getAllTime(id).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
+    }
+
+    /**
+     * Get an employees time from the specified date 
+     *
+     * @author gabes
+     */
+    getEmployeesFrom(id, day, month, year){
+        var somedata = [];
+        this.data.getTimeFrom(id, day, month, year).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
+    }
+
+    /**
+     * Get an employees time from the specified date 
+     *
+     * @author gabes
+     */
+     getEmployeesTo(id, day, month, year){
+        var somedata = [];
+        this.data.getTimeTo(id, day, month, year).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
+    }
+
+    getEmployeesFromAndTo(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear){
+        var somedata = [];
+        this.data.getTimeRanged(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear).then((res, rej) => {
+            if(res == undefined){
+                return;
+            }
+            for(var i = 0; i < {res}.toString().length; i++){
+                if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
+                    continue;
+                }
+                somedata.push(
+                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
+                    res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            this.setState({time: somedata});
+        });
+    }
+
 
 
     render() {
@@ -70,7 +205,7 @@ class AdminTimesheet extends React.Component {
                  {/* Horizontal Layout for serch and date selection */}
                 <View style={styles.horizontal_layout_top}>
                     <View style={styles.search}><SearchBar></SearchBar></View>
-                     <CalendarButton></CalendarButton> 
+                     <CalendarButton updateDates={this.updateDates}></CalendarButton> 
                 </View>
 
                 {/* Horizontal Layout for employees and Hours  */}
@@ -82,7 +217,9 @@ class AdminTimesheet extends React.Component {
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
                         <Text style={[styles.employees_hours, styles.text_employee]}>Hours:
                         </Text>
+                        <ScrollView>
                         <Text style={styles.hours}>{this.state.time}</Text>
+                        </ScrollView>
                     </View>
                 </View>
             </View>

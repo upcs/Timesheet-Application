@@ -68,35 +68,29 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       callbackFunction(childData) {
         this.setState({jobsDataChild : childData});
         this.setState({requesting : false});
-        
+
       }
       
 
       getFilteredItems(query, items) {
-       
+
         if (!query || query.length == 0) {
-          
-          
+
           return items;
         }
-        console.log("filtering data based on query");
         return items.filter((jobs) => jobs.name.toString().toLowerCase().includes(query.toString().toLowerCase()));
       }
 
       currValue(newValue) {
         //console.log(newValue);
         this.setState({query : newValue});
-        
+
 
         this.setState({requesting : true});
         
 
         //adding from previous requestData function
        // this.child.current.sendData();
-
-        
-
-       
 
         this.forceUpdate();
         
@@ -117,7 +111,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
        
     const addData = (params) => {
         jobData = params;
-        
 
         //Call updateState in JobsList
         this.myref.current.updateState();
