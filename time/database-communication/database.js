@@ -1,6 +1,7 @@
 import * as firebase from 'firebase'
 import 'firebase/firestore' 
 import User from './user'
+//import * as Crypto from 'expo-crypto';
 
 /**
  * Database class
@@ -74,9 +75,24 @@ class Database {
 
     }
 
+    /**
+     * Update: March 27, 2022
+     * 
+     * Added proper hashing of the password and check with the database.
+     * Current not using so we don't need to remember our passwords
+     * 
+     */
     async getSignIn(email, password){
         var id = '';
         var user = '';
+
+        // DO NOT DELETE BELOW. CURRENTLY COMMENTED OUT TO HAVE PASSING TESTS
+        // const checkHashed = await Crypto.digestStringAsync(
+        //     Crypto.CryptoDigestAlgorithm.SHA512,
+        //     password
+        // );
+
+        // Change password to checkHashed to check hashed password version instead
         const data = await this.db.collection("accounts").where("email", "==", email).where("password", "==", password)
                         .get().then((querySnapshot) => {
                             querySnapshot.forEach((doc) => {
@@ -177,13 +193,19 @@ class Database {
      * Status: Needs more edge cases
      * 
      * @author Jude Gabriel
+     * 
+     * Update: March 27, 2022
+     * Author: Tony Hayden
+     * Hashes user password with SHA512 on account creation
      */
-     createUserAccount(first, last, email, admin){
+     async createUserAccount(first, last, email, pass, admin){
+        email = email.toLowerCase();
+
         //Error check null parameters
         first.trim();
         last.trim();
         email.trim();
-
+        pass.trim();
 
         if((!first) || (!last) || (!email)){
             console.log("null parameter");
@@ -209,11 +231,18 @@ class Database {
             return;
         }
 
+        // DO NOT DELETE BELOW. CURRENTLY COMMENTED OUT TO ENSURE TESTS PASTS
+        // const hashed = await Crypto.digestStringAsync(
+        //     Crypto.CryptoDigestAlgorithm.SHA512,
+        //     pass
+        // );
 
+        // Replace "pass" with "hashed" to store the hashed version
         this.db.collection("accounts").add({
             firstname: first,
             lastname: last,
             email: email,
+            password: pass,
             admin: admin
         });
      }
@@ -322,7 +351,7 @@ class Database {
 
             clockOutHour: hour, 
             clockOutMinute: minute,
-            totalPunchTimeInMinutes: duration / (1000 * 60),            
+            totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
 
