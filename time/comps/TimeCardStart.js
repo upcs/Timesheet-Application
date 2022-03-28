@@ -156,6 +156,7 @@ var endTime = 0;
         const minutes = d.getUTCMinutes();
         const seconds = d.getUTCSeconds();
         const timeString = [hours, minutes, seconds].map(value =>  ("0" + value).slice(-2)).join(':');
+        */
         const jobList = [
             <Picker.Item label="Java" value="java" />
         ];
