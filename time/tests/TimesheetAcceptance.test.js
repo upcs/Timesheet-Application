@@ -50,4 +50,48 @@ describe('An admin viewing employees times', () => {
         expect(wrapper.state('date2day')).toBe(null)
         expect(wrapper.state('date2year')).toBe(null)
     })
+
+    it('Can get the correct time per the correct date parameters', () => {
+        instance = wrapper.instance();
+        jest.spyOn(instance, 'getAllEmployeeTime');
+        jest.spyOn(instance, 'getEmployeesTo');
+        jest.spyOn(instance, 'getEmployeesFrom');
+        jest.spyOn(instance, 'getEmployeesFromAndTo')
+
+        wrapper.setState({date1: null});
+        wrapper.setState({date2: null});
+        instance.getTime();
+        expect(instance.getAllEmployeeTime).toHaveBeenCalledTimes(1);
+
+        wrapper.setState({date1: null});
+        wrapper.setState({date2: 'test'});
+        instance.getTime();
+        expect(instance.getEmployeesTo).toHaveBeenCalledTimes(1);
+
+        wrapper.setState({date1: 'test'});
+        wrapper.setState({date2: null});
+        instance.getTime();
+        expect(instance.getEmployeesFrom).toHaveBeenCalledTimes(1);
+
+        wrapper.setState({date1: 'test'});
+        wrapper.setState({date2: 'test'});
+        instance.getTime();
+        expect(instance.getEmployeesFromAndTo).toHaveBeenCalledTimes(1);
+    })
+
+    it('Can get all of an employees time', () => {
+        instance = wrapper.instance();
+        jest.spyOn(instance.data, 'getAllTime');
+        wrapper.setState({time: []})
+        instance.getAllEmployeeTime('25yc7J1yFzaT3OVt5H8J');
+        expect(wrapper.state('time')).not.toBe([]);
+        expect(instance.data.getAllTime).toHaveBeenCalledTimes(1);
+        instance.data.getAllTime('25yc7J1yFzaT3OVt5H8J');
+        expect(wrapper.state('time')).not.toBe([]);
+
+        data = new Database();
+        data.getAllTime('25yc7J1yFzaT3OVt5H8J').then((res, rej) => {
+            expect(res[0]).not.toBe(undefined);
+        })
+    })
 })

@@ -1,7 +1,7 @@
 import * as firebase from 'firebase'
 import 'firebase/firestore' 
 import User from './user'
-//import * as Crypto from 'expo-crypto';
+// import * as Crypto from 'expo-crypto';
 
 /**
  * Database class
