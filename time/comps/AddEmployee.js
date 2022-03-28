@@ -3,13 +3,11 @@
  * 
  * Author: Caden Deutscher
  ******************************************************************/
- import React, {useState} from 'react';
+ import React, {useState, useEffect} from 'react';
  import {Color, style} from './Palette.js';
  import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
  import Employees from "./EmployeeInfo";
- import Database from '../database-communication/database.js'
-
-
+ import Database from '../database-communication/database.js';
 
 /**
  * Allows the admin to add an employee
@@ -21,6 +19,7 @@ export default function AddEmployee(props) {
     //Sets for firstname, lastname, password, and if employee is an admin respectively
     const [empF, setEmpF] = useState(null);
     const [empL, setEmpL] = useState(null);
+    const [empE, setEmpE] = useState(null);
     const [pass, setPass] = useState(null);
     const[isAdmin, setAdmin] = useState(0); 
     
@@ -28,22 +27,21 @@ export default function AddEmployee(props) {
     const [modalVisible, setModalVisible] = useState(false);
 
     //Set employee data
-    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null,email: null, usertype: isAdmin});
+    const[dataOut, setDataOut] = useState( {firstname: null, lastname: null,email: null,password: null, usertype: isAdmin});
 
     //Send new employ to parent component
     const handleSubmit = () => {
       //add the account
       props.sendData(dataOut);
       //Create the new account
-      data.createUserAccount(dataOut.firstname,dataOut.lastname,dataOut.email,dataOut.usertype);
+
+      data.createUserAccount(dataOut.firstname,dataOut.lastname,dataOut.email,dataOut.password,dataOut.usertype);
       //Set data to original values
       setEmpF(null);
       setEmpL(null);
+      setEmpE(null);
       setPass(null);
-  };
-
-
-      
+    };
 
     //Render the component
 
@@ -74,7 +72,7 @@ export default function AddEmployee(props) {
                       'Are you sure you want to cancel?',
                       [
                         //On "Yes" exit the modal and set all the data to null
-                          {text: 'Yes', id:'yesAlert', onPress: () => {setEmpF(null), setEmpL(null), setPass(null), setModalVisible(!modalVisible)}, style: 'cancel'
+                          {text: 'Yes', id:'yesAlert', onPress: () => {setEmpF(null), setEmpL(null), setEmpE(null), setPass(null), setModalVisible(!modalVisible)}, style: 'cancel'
                             
                           },
                           //On "No" do nothing
@@ -97,7 +95,7 @@ export default function AddEmployee(props) {
                 <TextInput
                   id='fInput'
                   style={styles.textbox}
-                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, email: pass, usertype: isAdmin ? 1 : 0})}}
+                  onChangeText={text => {setEmpF(text), setDataOut({firstname: text, lastname: empL, email: empE, password: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empF}
                   placeholder=" Employee First Name"
                 ></TextInput>
@@ -110,7 +108,7 @@ export default function AddEmployee(props) {
                 <TextInput
                   id='lInput'
                   style={styles.textbox}
-                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, email: pass, usertype: isAdmin ? 1 : 0})}}
+                  onChangeText={text => {setEmpL(text),setDataOut({firstname: empF, lastname: text, email: empE, password: pass, usertype: isAdmin ? 1 : 0})}}
                   value={empL}
                   placeholder=" Employee Last Name"
                 ></TextInput>
@@ -121,11 +119,24 @@ export default function AddEmployee(props) {
                   </View>
 
                 <TextInput
+                    id='eInput'
+                    style={styles.textbox}
+                    onChangeText={text => {setEmpE(text),setDataOut({firstname: empF, lastname: empL, email: text, password: pass, usertype: isAdmin ? 1 : 0})}}
+                    value={empE}
+                    placeholder=" Employee Email"
+                ></TextInput>
+
+                    {/*Third text input*/}
+                    <View style = {styles.textView}>
+                      <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Password</Text>
+                    </View>
+
+                <TextInput
                     id='pInput'
                     style={styles.textbox}
-                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, email: text, usertype: isAdmin ? 1 : 0})}}
+                    onChangeText={text => {setPass(text),setDataOut({firstname: empF, lastname: empL, email: empE, password: text, usertype: isAdmin ? 1 : 0})}}
                     value={pass}
-                    placeholder=" Employee Email"
+                    placeholder=" Employee Password"
                 ></TextInput>
 
                 {/*Switch*/}
@@ -145,7 +156,7 @@ export default function AddEmployee(props) {
                        thumbColor={isAdmin ? "white" : "black"}
                        onValueChange={ () => {
                           setAdmin(!isAdmin);
-                          setDataOut({firstname: empF, lastname: empL, email: pass, usertype: isAdmin ? 0 : 1 });
+                          setDataOut({firstname: empF, lastname: empL, email: empE, password: pass, usertype: isAdmin ? 0 : 1 });
                        }}
                        value={isAdmin}
                         >
