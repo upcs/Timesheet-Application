@@ -40,6 +40,7 @@ class Jobsite extends React.Component {
                 console.log(res);
             });
         });
+        this.data.updateEmpJobs();
     }
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});

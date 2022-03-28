@@ -1,5 +1,6 @@
 import * as firebase from 'firebase'
 import 'firebase/firestore' 
+import { validateStyle } from 'react-native/Libraries/StyleSheet/StyleSheetValidation';
 import User from './user'
 
 /**
@@ -520,19 +521,28 @@ class Database {
             return postData;
         }
     }
-
-    async getJobsForEmp(id){
-        if(id == 0){
-            return;
-        }
-        var jobs = [];
-        await this.db.collectionGroup("employees").where("accountID", "==", id).get().then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-              console.log(doc.id);
-          });
-        })
-        return jobs;
+    /*
+    Caden
+    */
+    async updateEmpJobs(){
+        var jList = [];
+        await this.db.collection("jobs").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                this.getJobEmployeesID(doc.id).then((res, rej) => {
+                    res.forEach((r) => {
+                        if(r.accountID.toString().trim() === "GVnsURmvxJpclPh6ySqY"){
+                            console.log(r.accountID.toString().trim());
+                            jList.push({jid : doc.id});
+                            console.log("SIZE in" + jList.length);
+                        }
+                    })
+                
+              });
+            });
+            })
+            console.log("SIZE " + jList.length);
     }
+      
 
     /****** JOB GETTERS *******/
 
