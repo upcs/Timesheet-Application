@@ -7,13 +7,10 @@ import Database from '../database-communication/database.js'
 configure({ adapter: new Adapter() });
 
 let wrapper
-let appMain
 
 beforeEach(() => {
     wrapper = shallow(<Login></Login>);
-    //appMain = shallow(<App></App>)
     jest.useFakeTimers();
-     
 })
 
 
