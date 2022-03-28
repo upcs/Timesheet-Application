@@ -332,26 +332,32 @@ class Database {
     STATUS: done,
 
     */
-    async getDurationWorkedSinceTime(time) {
+    async getDurationWorkedSinceTime(id, time) {
 
-        let totalDuration;
-        await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time)
-            .get().then(querySnapshot => {
-                // Reduce to accumulate time over all elements of array
-                totalDuration = querySnapshot.reduce((sum, doc) => {
-                    // Get data
-                    const data = doc.data();
-                    // If our shift began before midnight,
-                    if (data.inTime < time) {
-                        // only include the part of it that occured in this day.
-                        return sum + data.outTime - time;
-                    } else {
-                        // otherwise, return the whole shift.
-                        return sum + data.outTime - data.inTime;
-                    }
-                }, 0);
+        return await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time).get().then((querySnapshot) => {
+            //return 10;
+            console.log("RESULT", querySnapshot);
+            // Reduce to accumulate time over all elements of array
+            let sum = 0;
+            querySnapshot.forEach((doc) => {
+            
+                // Get data
+                const data = doc.data();
+                // If our shift began before midnight,
+                if (data.timeIn < time) {
+                    // only include the part of it that occured in this day.
+                    sum += data.timeOut - time;
+                } else {
+                    // otherwise, return the whole shift.
+                    sum += data.timeOut - data.timeIn;
+                }
+            });
+            return sum;// / (1000 * 60 * 60);
+        }, () => {
+            console.log("FAILURE");
         });
-        return totalDuration;
+        
+                
     }
 
      /*
@@ -371,6 +377,8 @@ class Database {
      */
 
     async getDailyTime(id){
+
+        
         //get current date 
        /*
         let today = new Date();
@@ -387,14 +395,19 @@ class Database {
           })
          return hours; */
         
-        const midnight = new Date().setHours(0, 0, 0, 0); 
-    
-        return this.getDurationWorkedSinceTime(midnight) / (1000 * 60 * 60);
+        const midnight = new Date().setHours(0, 0, 0, 0);
+        console.log("MDNGHT\t", midnight); 
+        let valMs;
+        await this.getDurationWorkedSinceTime(id, midnight).then(value => {
+            valMs = value;
+        }); 
+          //console.log("Value: ", val);
+        return valMs;// valMs//; / (1000 * 60 * 60);
     }
 
     
     /*
-    @author Caden
+    @author Cadennpm
     @date 3/14/2022
     @param day, month, and year
     @return returns 0 - Sunday, 1 - Monday, 2 - Tuesday, 3 - Wednesday... 6 - Saturday
@@ -489,14 +502,29 @@ class Database {
       }
       */
         
-       const d = new Date();
-       // set d to be midnight...
-       d.setHours(0, 0, 0, 0);
-       // sunday is (current day of the week) ago from today
-       const sunday = new Date(t.getTime() - 1000*24*60*60*t.getDay());
 
-       return this.getDurationWorkedSinceTime(sunday) / (60 * 60 * 1000);
-      
+       // sunday is (current day of the week) ago from today
+      /* const t = new Date();
+       
+  
+       let valMs;
+       await this.getDurationWorkedSinceTime(id, sunday).then(value => {
+           valMs = value;
+       }); 
+       console.log("VALMS", valMs);
+         //console.log("Value: ", val);
+       return valMs;// valMs//; / (1000 * 60 * 60);
+      */
+       let offset = new Date().getTime() * 24 * 60 * 60 * 1000;
+       const midnight = (new Date().setHours(0, 0, 0, 0)) - offset;
+       
+       console.log("MDNGHT\t", midnight); 
+       let valMs;
+       await this.getDurationWorkedSinceTime(id, midnight).then(value => {
+           valMs = value;
+       }); 
+         //console.log("Value: ", val);
+       return valMs;// valMs//; / (1000 * 60 * 60);
     }
 
     /**

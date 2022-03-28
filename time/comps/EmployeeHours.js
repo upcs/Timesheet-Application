@@ -6,7 +6,7 @@ import React, {useEffect, useState} from 'react';
 import {Color} from './Palette.js';
 import {Text, Divider, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import Database from '../database-communication/database.js';
-
+import TimeUtil from './TimeUtil.js';
 class EmployeeHours extends React.Component {
     constructor(props){
         super(props);
@@ -46,24 +46,26 @@ class EmployeeHours extends React.Component {
     }
    
     render() {
+        const daily = TimeUtil.convertMsToReadable(this.state.daily);
+        const weekly = TimeUtil.convertMsToReadable(this.state.weekly);
         return (
             //Container for all text
             <View style={styles.container}>
                 {/**First hour label (Daily) */}
                 <View style={styles.divideText}>
-                    <Text adjustsFontSizeToFit={true} style={styles.text2}>Daily Hours:</Text>
+                    <Text adjustsFontSizeToFit={true} style={styles.text2}>Daily Time:</Text>
                 </View>
                 {/**Hours for the day */}
                 <View style={styles.divideResult}>
-                    <Text adjustsFontSizeToFit={true} style={styles.text}>{this.state.daily}</Text>
+                    <Text adjustsFontSizeToFit={true} style={styles.text}>{daily}</Text>
                 </View>
                 {/**First hour label (Week) */}
                 <View style={styles.divideText}>
-                    <Text adjustsFontSizeToFit={true} style={styles.text2}>Weekly Hours:</Text>
+                    <Text adjustsFontSizeToFit={true} style={styles.text2}>Weekly Time:</Text>
                 </View>
                 {/**Hours for the week */}
                 <View style={styles.divideResult}>
-                    <Text adjustsFontSizeToFit={true} style={styles.text}>{this.state.weekly}</Text>
+                    <Text adjustsFontSizeToFit={true} style={styles.text}>{weekly}</Text>
                 </View>
             </View>
         ) 
