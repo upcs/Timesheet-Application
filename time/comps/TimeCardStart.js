@@ -176,19 +176,26 @@ var endTime = 0;
                         >
                             <Text style={styles.text}>{text}</Text>
                         </TouchableOpacity> 
-                        <View style={styles.pickerRow}>
+                        <View style={[styles.pickerOuter, {
+                            flexDirection: "row",
+                        }]}>
                             <Text>
                             Current Job:
                             </Text>
-                            <Picker
+                            <View style={[styles.picker, {
+                                backgroundColor: "red",
+                            }]}>
+                                <Picker
                                 selectedValue={currentJob}
-                                style={styles.picker}
+                         
                                 onValueChange={
                                     (choice, index) => this.setChosenJob(choice)
                                 }    
-                            >
-                                {jobList}
-                            </Picker>
+                                >
+                                    {jobList}
+                                    </Picker>
+                            </View>
+                                
                         </View>
                         
                     </View>
@@ -229,10 +236,12 @@ var endTime = 0;
          height: 250,
          overflow: 'hidden',
      },
-     pickerRow: {
+     picker: {
         flexDirection: 'row',
         width: '100%',
-        height: 100,
+        height: '100%',
+        borderRadius: 3,
+        borderWidth: 1,
      },
      button: {
         width: '100%',
