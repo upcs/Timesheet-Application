@@ -68,11 +68,14 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       callbackFunction(childData) {
         this.setState({jobsDataChild : childData});
         this.setState({requesting : false});
+
       }
       
 
       getFilteredItems(query, items) {
+
         if (!query || query.length == 0) {
+
           return items;
         }
         return items.filter((jobs) => jobs.name.toString().toLowerCase().includes(query.toString().toLowerCase()));
@@ -82,14 +85,12 @@ import FakeJobsiteData from './FakeJobsiteData.js';
         //console.log(newValue);
         this.setState({query : newValue});
 
+
         this.setState({requesting : true});
         
 
         //adding from previous requestData function
        // this.child.current.sendData();
-
-        
-
 
         this.forceUpdate();
         
