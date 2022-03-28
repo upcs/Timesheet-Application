@@ -149,7 +149,7 @@ var endTime = 0;
      render() {
         const { currentDuration, isTimerOn, todayTime } = this.state;
         const style = isTimerOn ? styles.stop : styles.start
-        const text = isTimerOn ? "Stop" : "Start";
+        const text = isTimerOn ? "Clock-Out" : "Clock-In";
         
         /*const d = new Date(todayTime * 1000);
         const hours = d.getUTCHours();
