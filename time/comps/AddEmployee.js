@@ -3,7 +3,7 @@
  * 
  * Author: Caden Deutscher
  ******************************************************************/
- import React, {useState, useEffect} from 'react';
+ import React, {useState} from 'react';
  import {Color, style} from './Palette.js';
  import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
  import Employees from "./EmployeeInfo";
