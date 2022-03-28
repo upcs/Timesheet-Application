@@ -11,6 +11,8 @@ import User from './user'
  * To use, instantiate database object and call functions to read/write data
  * 
  * @author Jude Gabriel
+ * @author Tony Hayden
+ * @author Caden Deutscher 
  */
 class Database {
 
@@ -501,12 +503,189 @@ class Database {
     }
 
     /**
-     * Get time over a specific range
+     * Get time from a certain day until present
+     * 
+     * @author gabes
      */
-    getRangeTime(){
-        
+    async getTimeFrom(id, day, month, year){
+        month = this.getMonth(month);
+
+        //Error check params
+        if((id == 0) ||(day == null) || (month == null) || (year == null)){
+            return;
+        }
+
+        //Query punches and store in array
+        var postData = [];
+        var filteredData = []
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+            })
+
+            //Filter punches with invalid dates
+            for(var i = 0; i < postData.length; i++){
+                if(postData[i].year > year){
+                    filteredData.push(postData[i]);
+                }
+
+                if(postData[i].year == year){
+                    if(postData[i].month == month){
+                        if(postData[i].day >= day){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else if(postData[i].month > month){
+                        filteredData.push(postData[i]);
+                    }
+                }
+            }
+            return filteredData;
+        }
     }
 
+
+    /**
+     * Get time from first day until specified day
+     * 
+     * @author gabes
+     */
+    async getTimeTo(id, day, month, year){
+        month = this.getMonth(month);
+
+        //Error check params
+        if((id == 0) ||(day == null) || (month == null) || (year == null)){
+            return;
+        }
+
+        //Query punches and store in array
+        var postData = [];
+        var filteredData = []
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+            })
+
+            //Filter punches with invalid dates
+            for(var i = 0; i < postData.length; i++){
+                if(postData[i].year < year){
+                    filteredData.push(postData[i]);
+                }
+
+                if(postData[i].year == year){
+                    if(postData[i].month == month){
+                        if(postData[i].day <= day){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else if(postData[i].month < month){
+                        filteredData.push(postData[i]);
+                    }
+                }
+            }
+            return filteredData;
+        }
+    }
+
+
+    /**
+     * Get time over a specified time range
+     * 
+     * @author gabes
+     */
+    async getTimeRanged(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear){
+        //Turn month strings into numerical values
+        fromMonth = this.getMonth(fromMonth);
+        toMonth = this.getMonth(toMonth);
+
+
+        //Error check params
+        if((id == 0) ||(fromDay == null) || (fromMonth == null) || (fromYear == null) ||
+                (toDay == null) || (toMonth == null) || (toYear == null)){
+            return;
+        }
+
+        //Query punches and store in array
+        var postData = [];
+        var filteredData = []
+        if(id != null){
+            const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    postData.push({...doc.data(), id: doc.id})
+                });
+            })
+
+            //Filter punches with invalid dates
+            for(var i = 0; i < postData.length; i++){
+                
+                //Lies between the two years
+                if((postData[i].year < toYear) && (postData[i]) > fromYear){
+                    filteredData.push(postData[i]);
+                }
+
+                //In fromYear but not toYear
+                //Push anything with a fromYear and a higher month or a higher day within same month
+                if(postData[i].year == fromYear){
+                    if(postData[i].year < toYear){
+                        if(postData[i].month > fromMonth){
+                            filteredData.push(postData[i]);
+                        }
+                        if(postData[i].month == fromMonth){
+                            if(postData[i].day >= fromDay){
+                                filteredData.push(postData[i]);
+                            }
+                        }
+                    }
+                }
+
+                if(postData[i].year == toYear){
+                    if(postData[i].year > fromYear){
+                        if(postData[i].month < toMonth){
+                            filteredData.push(postData[i]);
+                        }
+                        if(postData[i].month == toMonth){
+                            if(postData[i].day <= toDay){
+                                filteredData.push(postData[i]);
+                            }
+                        }
+                    }
+                }
+
+                if((postData[i].year == fromYear) && (postData[i].year == toYear)){
+                    if((postData[i].month == fromMonth) && (postData[i].month == toMonth)){
+                        if((postData[i].day >= fromDay) && (postData[i].day <= toDay)){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else if((postData[i].month > fromMonth) && (postData[i].month < toMonth)){
+                        filteredData.push(postData[i]);
+                    }
+                    else if((postData[i].month == fromMonth) && (postData[i] != toMonth)){
+                        if(postData[i].day >= fromDay){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                    else{
+                        if(postData[i].day <= toDay){
+                            filteredData.push(postData[i]);
+                        }
+                    }
+                }
+            }
+            return filteredData;
+        }
+    }
+
+
+    /**
+     * Get all of an employees time
+     * 
+     * @author gabes
+     */
     async getAllTime(id){
         if(id == 0){
             return;
@@ -517,7 +696,7 @@ class Database {
                 querySnapshot.forEach((doc) => {
                     postData.push({...doc.data(), id: doc.id})
                 });
-                })
+            })
             return postData;
         }
     }
@@ -769,8 +948,47 @@ class Database {
     /**
      * Deletes a job
      */
-    deleteJob(){
+    async deleteJob(id){
+        if(id != null){
+            await this.db.collection("jobs").doc(id).delete();
+        }
+    }
 
+
+    /**
+     * Turns month string into numerical month value
+     * 
+     * @author gabes
+     */
+    getMonth(month){
+        switch(month){
+            case 'Jan': 
+                return 1;
+            case 'Feb':
+                return 2
+            case 'Mar':
+                return 3;
+            case 'Apr':
+                return 4;
+            case 'May':
+                return 5;
+            case 'Jun':
+                return 6;
+            case 'Jul':
+                return 7;
+            case 'Aug':
+                return 8;
+            case 'Sep':
+                return 9;
+            case 'Oct':
+                return 10;
+            case 'Nov':
+                return 11;
+            case 'Dec':
+                return 12;
+            default:
+                return null;
+        }
     }
 
 

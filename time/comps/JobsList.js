@@ -16,30 +16,66 @@
  import {Color} from './Palette';
  import eData from './FakeEmployeeData';
  import SearchBar from './search_bar';
+
+import AdminJobsite from './AdminJobsite';
+
  import Database from '../database-communication/database.js'
+
  
  
  /**
   * Creates a Scrollable List that can be selected
-  * 
+  *
   * Data predefined currently (Sprint 1)
   */
 class JobsList extends React.Component {
     constructor(props) {
         super(props);
+
+        
+        //Changing
+       // this.initFakeData = [];
+       // console.log(props.data);
+        this.initEData = eData;
         this.state = {
             FakeData: [],
             eData: [],
+            stInitialFake: [],
+            //Changing
+            //FakeData: this.initFakeData,
+            // FakeData: props.data,
+            // eData: this.initEData,
+
             isModalVisible: false,
+            
             modalTwo: false,
             address: '',
             jobName: '',
             jobEdited: '',
             employeeEdited: '',
-            eList: null
+            eList: null,
+
+            doOnce: true,
+            
         };
 
         this.data = new Database()
+        
+        
+    }
+
+    //iData = this.initFakeData;
+
+    /**
+     * 
+     * Send Job Data to AdminJobsite for Search feature
+     * Harrison
+     */
+
+    sendData = () => {
+        //console.log(this.state.eList);
+        // this.props.parentCallback(this.state.FakeData);
+        this.props.parentCallback(this.state.stInitialFake); 
     }
 
     /**
@@ -49,6 +85,13 @@ class JobsList extends React.Component {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
+
+            //added
+            //this.setState({initFakeData : res})
+            //this.stInitialFake = res;
+            //console.log("Console Did Mount");
+            this.setState({stInitialFake : res});
+            this.sendData(this.state.stInitialFake);
         });
     }
 
@@ -59,12 +102,46 @@ class JobsList extends React.Component {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
+
+            
+            // this.setState({initFakeData : res})((
+            // this.stInitialFake = res;
+            this.setState({stInitialFake : res});
+            
         });
     }
+
+
+    static getDerivedStateFromProps(props, state) {
+
+        if (!props.query) {
+            return {
+                FakeData : state.stInitialFake,
+            };
+            
+        }
+
+        if (props.data !== state.stInitialFake) {
+          return {
+            FakeData : props.data 
+           
+          };
+        }
+
+        
+        return  null;
+        
+      }
+
+
+      
+    
+
 
     /**
      * Set job modal visible
      */
+
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
     }
@@ -122,8 +199,8 @@ class JobsList extends React.Component {
      * Delete the job
      */
     deleteJob = () => {
-        const newJobList = this.state.FakeData.filter(item => item.id !== this.state.jobEdited)
-        this.setState({FakeData: newJobList});
+        this.data.deleteJob(this.state.jobEdited);
+        this.updateState();
     }
 
     /**
@@ -259,9 +336,27 @@ class JobsList extends React.Component {
      * Render the component
      */
     render() {
+        
+        //Send data when prop "request" is true
+        if (this.state.doOnce == true) {
+            this.data.getAllJobs().then((res, rej) => {
+                this.setState({stInitialFake : res});
+                this.sendData(this.state.stInitialFake);
+            });
+
+            this.setState({doOnce : false});
+        }
+
+
+        if (this.props.request ) {                 
+            this.sendData();
+        }
+
+
         const { isModalVisible } = this.state;
         const { modalTwo } = this.state;
         return (
+            
             <View>
                 <FlatList 
                     id='jobsList'

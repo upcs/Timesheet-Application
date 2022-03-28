@@ -89,7 +89,6 @@ import Database from '../database-communication/database.js'
 
 
     updateEmployee = (edited) => {
-
         this.data.setUserFirst(this.state.userEdited, this.state.userFirst);
         this.data.setuserLast(this.state.userEdited, this.state.userLast);
         this.data.setUserType(this.state.userEdited, this.state.isAdmin);

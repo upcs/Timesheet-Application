@@ -7,14 +7,42 @@
  * Button that loads calendar on press
  */
  class CalendarButton extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+        date1: "",
+        date2: "", 
+      }
+      this.onDate = this.onDate.bind(this);
+    }
+
+    //Get the change in dates
+    onDate = (date, cal) => {
+      //console.log("date", date);
+      //console.log(cal);
+      this.props.updateDates(date, cal);
+    }
+
+
+
+
+
      render() {
          return (
              <View style={styles.container}>
                <View style ={styles.container2}>
-                  <CalendarS id="From" name="From"></CalendarS>
+                  <CalendarS 
+                     id="From" name="From"
+                     onDate = {this.onDate}
+                     >   
+                    </CalendarS>
                </View>
                <View style ={styles.container2}>
-                  <CalendarS id="To" name="   To   "></CalendarS>
+                  <CalendarS 
+                    id="To" name="   To   "
+                    onDate = {this.onDate}
+                  >
+                  </CalendarS>
                </View>
              </View>
          ) 

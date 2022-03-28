@@ -1,8 +1,10 @@
+
+
 /************************************************
  * Admin Jobsite Page
  * 
  * Author: Harrison Winters
- * Date: February 5, 2022
+ * Date: February 9, 2022
  ************************************************/
 
  import React from 'react';
@@ -11,51 +13,142 @@
  import { useState } from 'react';
  import TimeSheetList from './TimeSheetList.js';
  import SearchBar from './search_bar.js';
- import AddJobsite from './AddJobsite.js'
+ import AddEmployee from './AddEmployee.js'
  import JobsList from './JobsList.js';
+import FakeEmployeeData from './FakeEmployeeData.js';
+import { FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import { Button } from 'react-native';
+import AddJobsite from './AddJobsite.js'
+import FakeJobsiteData from './FakeJobsiteData.js';
+
 
 
  //Jobsite Selection with a search bar and "add jobsite" button
  class AdminJobsite extends React.Component {
-    constructor(props){
-        super(props);
+
+
+    constructor(props) {
+      super(props);
+        this.currValue = this.currValue.bind(this);
+        this.callbackFunction = this.callbackFunction.bind(this);
         //Create reference of JobsList updateState
-       this.myref = React.createRef();
-    }
-     render() {
-        let jobData = {};
-       
-        const addData = (params) => {
-            jobData = params;
-            console.log(jobData);
-            //Call updateState in JobsList
-            this.myref.current.updateState();
+        this.myref = React.createRef();
+        this.state = {
+          query: [],
+          jobsDataChild: [],
+          requesting: false,
+        };
+
+        const {jobs} = FakeJobsiteData;
+
+
+
+       function Item({ title }) {
+          return (
+            <View style={styles.item}>
+              <Text style={styles.title}>{title}</Text>
+            </View>
+          );
         }
+
+          this.renderItem = ({ item }) => (
+            <Item title={item.jobName} />
+          );
         
+      }
+
+      setQuery(newQuery) {
+        return newQuery;
+
+      }
+
+      //Added
+      //Callback Function from JobsList
+      callbackFunction(childData) {
+        this.setState({jobsDataChild : childData});
+        this.setState({requesting : false});
+      }
+      
+
+      getFilteredItems(query, items) {
+        if (!query || query.length == 0) {
+          return items;
+        }
+        return items.filter((jobs) => jobs.name.toString().toLowerCase().includes(query.toString().toLowerCase()));
+      }
+
+      currValue(newValue) {
+        //console.log(newValue);
+        this.setState({query : newValue});
+
+        this.setState({requesting : true});
+        
+
+        //adding from previous requestData function
+       // this.child.current.sendData();
+
+        
+
+
+        this.forceUpdate();
+        
+      }
+
+     
+
+
+     render() {
+
+      //this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
+      this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
+      //this.callbackFunction = this.callbackFunction();
+
+
+      //Added 
+      let jobData = {};
+       
+    const addData = (params) => {
+        jobData = params;
+
+        //Call updateState in JobsList
+        this.myref.current.updateState();
+    }
+
+
          return (
-             <View style={styles.container}>
+       
+            <View style={styles.container}>
                  <View style={styles.upperbar}>
-                    <SearchBar style={styles.search}></SearchBar>
-                    <View style={styles.buttonContainer}>
-                        <AddJobsite  sendData={addData}></AddJobsite>
-                    </View>
+                     <SearchBar style={styles.search} currValue = {this.currValue}></SearchBar>
+                     <View style={styles.buttonContainer}>
+                       {/* <AddEmployee></AddEmployee> */}
+                       <AddJobsite  sendData={addData}></AddJobsite>
+                      </View>
                     
+
+                 </View>
+                 
+                 <SafeAreaView style={styles.container}>
+                    {/* <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList> */}
+                    <JobsList ref={this.myref} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></JobsList> 
+                     {/* <JobsList ref={this.myref}></JobsList> */}
+                 </SafeAreaView>
+         
+
+
                     
                 </View>
-                <JobsList ref={this.myref}></JobsList>
-             </View>
-         ) 
+               
+                  
+         )
+         
      }
  }
  
  /*  Styles used for login screen */
  const styles = StyleSheet.create({
-     container: {
-        //  alignItems: 'center', 
-        //  justifyContent: 'center',
-        //  flex: 0.8
-        
-     },
+     
 
      upperbar: {
         
@@ -64,10 +157,7 @@
         
      },
 
-    //  logo: { 
-    //      aspectRatio: 0.9, 
-    //      resizeMode: 'contain'
-    //  },
+  
      add: {
        backgroundColor: Color.MAROON, 
        padding: 20, 
@@ -76,17 +166,16 @@
        width: 100, 
        height: 10,
        alignItems: 'center',
-        position: 'absolute',
-        justifyContent: 'center',
+       position: 'absolute',
+       justifyContent: 'center',
        marginHorizontal: 50,
        
     
      },
      text: {
-         color: 'white',
+        
          fontSize: 14,    
         position: 'absolute',
-        // margin: 'auto',
         textAlign: 'center',
     },
 

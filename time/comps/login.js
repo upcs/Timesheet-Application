@@ -33,7 +33,6 @@ class Login extends React.Component {
     }
 
     loginUser = () => {
-        console.log("Hit login");
         this.data.getSignIn(this.state.email, this.state.password).then((res, rej) => {
             if(res[0] == ""){
               this.setState({
@@ -71,7 +70,7 @@ class Login extends React.Component {
                    // defaultValue='joey@gmail.com'
                     placeholder='Email'
                     keyboardType='email-address'
-                    secureTextEntry={true}
+                    secureTextEntry={false}
                     onChangeText={(text) => {
                         this.setState({email: text.toLowerCase()})
                         }

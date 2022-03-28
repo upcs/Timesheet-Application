@@ -21,12 +21,14 @@ export default function CalendarS(props) {
     const [show, setShow] = useState(false);
     //Set button text state
     const [buttonText, setButtonText] = useState(props.name);
+    //const [aDate, setADate] = useState(props.initialParams.onDate); 
 
  //what to do when the user submits the calendar
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
+    props.onDate(selectedDate, props.id);
     try{
     changeText(selectedDate.toString().substring(0,11));
     }
