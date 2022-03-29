@@ -225,13 +225,9 @@ class Database {
      async createUserAccount(first, last, email, pass, admin){
         email = email.toLowerCase();
 
-        //Error check null parameters
-        first.trim();
-        last.trim();
-        email.trim();
-        pass.trim();
+        
 
-        if((!first) || (!last) || (!email)){
+        if((!first) || (!last) || (!email) || (!pass)){
             console.log("null parameter");
             return;
         }
@@ -243,6 +239,10 @@ class Database {
             console.log("null parameter");
             return;
         }
+        first.trim();
+        last.trim();
+        email.trim();
+        pass.trim();
 
         //Error check for gmail account
         if(!email.includes("@gmail.com")){
@@ -1009,25 +1009,15 @@ class Database {
      */
     createJob(add, jname, jnotes){
           //Trim values
-          if(add != null | add != undefined){
-          add.trim();
-          }
-          else{
-              console.log("No address");
-              return;
-          }
-          if(jname != null | jname != undefined){
-          jname.trim();
-          }
-          else{
-                console.log("No job name");
-                return;
-          }
-          if(jnotes != null | jnotes != undefined){
-          jnotes.trim();
-          }
-          else{
+        
+        
+         
+          if(!(jnotes) || (jnotes != " ") || (jnotes == "")){
             jnotes = "No notes";
+          }
+          else{
+            jnotes.trim();
+           
           }
           //Phase will be 1 to start
           let phs = 1;
@@ -1045,6 +1035,8 @@ class Database {
               console.log("null parameter (name or address)");
               return;
           }
+          add.trim();
+          jname.trim();
   
           //Submit to database
           this.db.collection("jobs").add({
