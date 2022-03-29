@@ -59,6 +59,8 @@ class App extends React.Component {
 
     this.data = new Database();
 
+    this.signOut = this.signOut.bind(this);
+
   }
   login(signin, uid, uType) {
     this.setState({
@@ -73,6 +75,14 @@ class App extends React.Component {
         signedIn: 1,
         user: User.ADMIN,
       })
+  }
+
+  signOut(){
+    this.setState({
+      signedIn: 0,
+      id: '',
+      user: ''
+    })
   }
 
   render() {
@@ -90,7 +100,8 @@ class App extends React.Component {
               <>
 
 
-                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
+                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart initialParams={{
+                   signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
                 <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
 
 
@@ -103,7 +114,8 @@ class App extends React.Component {
               // Logged in as default user
               <>
 
-                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart dataParentToChild={this.state.id}/>}/>
+                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart initialParams={{
+                   signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
                 <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
                 <Tab.Screen name="home" children={()=><EmployeeHours dataParentToChild={this.state.id}/>}/>
 
