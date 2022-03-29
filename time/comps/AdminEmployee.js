@@ -43,6 +43,7 @@ import AddEmployee from './AddEmployee.js';
     //Callback Function from JobsList
     callbackFunction(childData) {
 
+
       this.setState({jobsDataChild : childData});
       this.setState({requesting : false});
 
@@ -62,9 +63,8 @@ import AddEmployee from './AddEmployee.js';
       this.setState({query : newValue});
 
       this.setState({requesting : true});
+      this.forceUpdate(); 
 
-      this.forceUpdate();
-      
     }
      
      render() {
