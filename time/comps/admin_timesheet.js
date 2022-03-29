@@ -22,6 +22,8 @@ import Database from '../database-communication/database.js'
 class AdminTimesheet extends React.Component {
     constructor(props){
         super(props);
+        this.currValue = this.currValue.bind(this);
+        this.callbackFunction = this.callbackFunction.bind(this);
         this.state = {
             currEmployee: '',
             time: [], 
@@ -33,6 +35,9 @@ class AdminTimesheet extends React.Component {
             date2month: null,
             date2day: null,
             date2year: null, 
+            query: [],
+            jobsDataChild: [],
+            requesting: false,
         };
         this.data = new Database();
     }
@@ -40,6 +45,48 @@ class AdminTimesheet extends React.Component {
     componentDidMount = () => {
         this.setState({currEmployee: 0})
     }
+
+    setQuery(newQuery) {
+        return newQuery;
+      }
+
+    callbackFunction(childData) {
+        console.log(childData);
+        this.setState({jobsDataChild : childData});
+        this.setState({requesting : false});
+        console.log('callback recieved');
+    }  
+
+    getFilteredItems(query, items) {
+        console.log("query: %s", query);
+        if (!query || query.length == 0) {
+          console.log("returning all items");
+          console.log(items);
+          return items;
+        }
+        console.log("filtering data based on query, query was: " + query);
+        console.log(items);
+        return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
+    }
+
+    currValue(newValue) {
+        //console.log(newValue);
+        this.setState({query : newValue});
+        console.log(newValue);
+        console.log("Here's the query in currValue");
+        
+        console.log(this.state.query);
+  
+        this.setState({requesting : true});
+        console.log("Just set requesting to true in AdminEmployee");
+        
+        console.log(this.state.requesting);
+        this.forceUpdate();
+        
+    }
+
+    
+  
 
     //When the list is pressed set the id of the employee pressed and get their time
     onListPress = (id) => {
@@ -197,6 +244,9 @@ class AdminTimesheet extends React.Component {
 
 
     render() {
+
+        this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
+
         return (
             // Vertical  layout 
             <View style={styles.vertical_layout}>
@@ -204,7 +254,7 @@ class AdminTimesheet extends React.Component {
 
                  {/* Horizontal Layout for serch and date selection */}
                 <View style={styles.horizontal_layout_top}>
-                    <View style={styles.search}><SearchBar></SearchBar></View>
+                    <View style={styles.search}><SearchBar currValue={this.currValue}></SearchBar></View>
                      <CalendarButton updateDates={this.updateDates}></CalendarButton> 
                 </View>
 
@@ -212,7 +262,7 @@ class AdminTimesheet extends React.Component {
                 <View style={styles.horizontal_layout_bottom}>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
                         <Text style={[styles.employees_hours, styles.text_employee]}>Employees:</Text>
-                        <TimeSheetList onChange={this.onListPress} style={styles.employees}> </TimeSheetList>
+                        <TimeSheetList onChange={this.onListPress} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems} style={styles.employees}> </TimeSheetList>
                     </View>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
                         <Text style={[styles.employees_hours, styles.text_employee]}>Hours:

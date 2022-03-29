@@ -25,6 +25,8 @@ class TimeSheetList extends React.Component {
         this.state = {
             //Prepopulate with fake data
            data: [],
+           stInitialFake: [],
+           doOnce: true,
         };
         this.data = new Database();
     }
@@ -33,7 +35,15 @@ class TimeSheetList extends React.Component {
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({data: res}, () => {
             });
+
+            this.setState({stInitialFake : res});
+            this.sendData(this.state.stInitialFake);
         });
+    }
+
+    sendData = () => {
+        
+        this.props.parentCallback(this.state.stInitialFake); 
     }
 
     setEmployee = (id) => {
@@ -56,8 +66,49 @@ class TimeSheetList extends React.Component {
         );
     };
 
+    static getDerivedStateFromProps(props, state) {
+
+        if (!props.query) {
+            console.log('no query');
+            console.log(state.stInitialFake)
+            return {
+                data : state.stInitialFake,
+            };
+            
+        }
+
+        if (props.data !== state.stInitialFake) {
+          console.log("changed");
+          return {
+            data : props.data 
+           
+          };
+        }     
+        return  null;
+        
+    }
+
     //Create the flatlist
     render() {
+
+        //Send data when prop "request" is true
+        if (this.state.doOnce == true) {
+            this.data.getAllAccounts().then((res, rej) => {
+                this.setState({stInitialFake : res});
+                this.sendData(this.state.stInitialFake);
+            });
+
+            this.setState({doOnce : false});
+        }
+
+
+        if (this.props.request) {
+                      
+            this.sendData();
+            console.log('request recieved')
+        }
+
+
         return (
             <View>
                 <FlatList 
