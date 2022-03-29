@@ -42,40 +42,22 @@ import AddEmployee from './AddEmployee.js';
     //Added
     //Callback Function from JobsList
     callbackFunction(childData) {
-
-      console.log(childData);
       this.setState({jobsDataChild : childData});
       this.setState({requesting : false});
-      console.log('callback recieved');
     }
     
 
     getFilteredItems(query, items) {
-      console.log("query: %s", query);
       if (!query || query.length == 0) {
-        console.log("returning all items");
-        console.log(items);
         return items;
       }
-      console.log("filtering data based on query, query was: " + query);
-      console.log(items);
       return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
     }
 
     currValue(newValue) {
-      //console.log(newValue);
       this.setState({query : newValue});
-      console.log(newValue);
-      console.log("Here's the query in currValue");
-      
-      console.log(this.state.query);
-
       this.setState({requesting : true});
-      console.log("Just set requesting to true in AdminEmployee");
-      
-      console.log(this.state.requesting);
-      this.forceUpdate();
-      
+      this.forceUpdate(); 
     }
      
      render() {
