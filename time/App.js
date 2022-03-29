@@ -26,8 +26,14 @@ import SearchBar from './comps/SearchBar';
 
 import AdminEmployee from './comps/AdminEmployee'
 
+//added
+import { LogBox } from 'react-native';
+
 const Tab = createMaterialTopTabNavigator();
 import Database from './database-communication/database.js'
+
+//added
+LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
 
 

@@ -24,6 +24,15 @@ beforeEach(() => {
     jest.useFakeTimers();
 })
 
+describe('The list loading', () => {
+    it('Should check if component did mount', () => {
+        const instance = wrapper.instance();;
+        instance.componentDidMount();
+        expect(wrapper.state('FakeData')).not.toBe([]);
+    })
+});
+
+
  describe('Testing if Modal renders and closes', () => {
     it('Test if List is not empty', () => {
         const flatList = wrapper.find('#list');
@@ -70,6 +79,13 @@ beforeEach(() => {
 
     it('Allows for updated data to be saved',  () => {
         data = new Database();
+        var edited = '0rpiKLh7XdxjCcVMZsM9';
+        wrapper.instance().updateEmployee();
+        data.setUserFirst(edited, "Hello");
+        data.setuserLast(edited, "World");
+        data.setUserType(edited, 1);
+        wrapper.instance().updateState();
+
         data.getAllAccounts().then((res, rej) => {
             console.log("res", res);
             wrapper.setState({FakeData: res});
@@ -86,6 +102,11 @@ beforeEach(() => {
         }).catch((err) => {
             console.log("err", err);
         })
+
+
+        wrapper.setState({isModalVisible: true});
+        wrapper.find('#saveChanges').props().onPress();
+        expect(wrapper.state('isModalVisible')).toBe(false);
     })
 
     it('Allows for a user to be deleted', () => {

@@ -66,6 +66,7 @@ class Login extends React.Component {
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
 
                 <TextInput 
+                    id='email'
                     style={styles.textArea} 
                    // defaultValue='joey@gmail.com'
                     placeholder='Email'
@@ -78,6 +79,7 @@ class Login extends React.Component {
                 >
                 </TextInput> 
                 <TextInput
+                    id='password'
                     style={styles.textArea}  
                    // defaultValue='test'
                     placeholder='Password'
@@ -88,7 +90,7 @@ class Login extends React.Component {
                     }
                 >
                 </TextInput>
-                <TouchableOpacity style={styles.login} onPress={() => this.loginUser()}>
+                <TouchableOpacity id='signin' style={styles.login} onPress={() => this.loginUser()}>
                     <Text style={styles.text}>Sign-in</Text>
                 </TouchableOpacity>  
                 <Text style={styles.errorText}>{this.state.error}</Text>

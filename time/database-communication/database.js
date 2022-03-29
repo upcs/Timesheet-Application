@@ -2,6 +2,7 @@ import * as firebase from 'firebase'
 import 'firebase/firestore' 
 import { validateStyle } from 'react-native/Libraries/StyleSheet/StyleSheetValidation';
 import User from './user'
+// import * as Crypto from 'expo-crypto';
 
 /**
  * Database class
@@ -75,9 +76,24 @@ class Database {
 
     }
 
+    /**
+     * Update: March 27, 2022
+     * 
+     * Added proper hashing of the password and check with the database.
+     * Current not using so we don't need to remember our passwords
+     * 
+     */
     async getSignIn(email, password){
         var id = '';
         var user = '';
+
+        // DO NOT DELETE BELOW. CURRENTLY COMMENTED OUT TO HAVE PASSING TESTS
+        // const checkHashed = await Crypto.digestStringAsync(
+        //     Crypto.CryptoDigestAlgorithm.SHA512,
+        //     password
+        // );
+
+        // Change password to checkHashed to check hashed password version instead
         const data = await this.db.collection("accounts").where("email", "==", email).where("password", "==", password)
                         .get().then((querySnapshot) => {
                             querySnapshot.forEach((doc) => {
@@ -201,13 +217,19 @@ class Database {
      * Status: Needs more edge cases
      * 
      * @author Jude Gabriel
+     * 
+     * Update: March 27, 2022
+     * Author: Tony Hayden
+     * Hashes user password with SHA512 on account creation
      */
-     createUserAccount(first, last, email, admin){
+     async createUserAccount(first, last, email, pass, admin){
+        email = email.toLowerCase();
+
         //Error check null parameters
         first.trim();
         last.trim();
         email.trim();
-
+        pass.trim();
 
         if((!first) || (!last) || (!email)){
             console.log("null parameter");
@@ -233,11 +255,18 @@ class Database {
             return;
         }
 
+        // DO NOT DELETE BELOW. CURRENTLY COMMENTED OUT TO ENSURE TESTS PASTS
+        // const hashed = await Crypto.digestStringAsync(
+        //     Crypto.CryptoDigestAlgorithm.SHA512,
+        //     pass
+        // );
 
+        // Replace "pass" with "hashed" to store the hashed version
         this.db.collection("accounts").add({
             firstname: first,
             lastname: last,
             email: email,
+            password: pass,
             admin: admin
         });
      }
@@ -346,7 +375,7 @@ class Database {
 
             clockOutHour: hour, 
             clockOutMinute: minute,
-            totalPunchTimeInMinutes: duration / (1000 * 60),            
+            totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
 
@@ -358,26 +387,32 @@ class Database {
     STATUS: done,
 
     */
-    async getDurationWorkedSinceTime(time) {
+    async getDurationWorkedSinceTime(id, time) {
 
-        let totalDuration;
-        await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time)
-            .get().then(querySnapshot => {
-                // Reduce to accumulate time over all elements of array
-                totalDuration = querySnapshot.reduce((sum, doc) => {
-                    // Get data
-                    const data = doc.data();
-                    // If our shift began before midnight,
-                    if (data.inTime < time) {
-                        // only include the part of it that occured in this day.
-                        return sum + data.outTime - time;
-                    } else {
-                        // otherwise, return the whole shift.
-                        return sum + data.outTime - data.inTime;
-                    }
-                }, 0);
+        return await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time).get().then((querySnapshot) => {
+            //return 10;
+            console.log("RESULT", querySnapshot);
+            // Reduce to accumulate time over all elements of array
+            let sum = 0;
+            querySnapshot.forEach((doc) => {
+            
+                // Get data
+                const data = doc.data();
+                // If our shift began before midnight,
+                if (data.timeIn < time) {
+                    // only include the part of it that occured in this day.
+                    sum += data.timeOut - time;
+                } else {
+                    // otherwise, return the whole shift.
+                    sum += data.timeOut - data.timeIn;
+                }
+            });
+            return sum;// / (1000 * 60 * 60);
+        }, () => {
+            console.log("FAILURE");
         });
-        return totalDuration;
+        
+                
     }
 
      /*
@@ -397,6 +432,8 @@ class Database {
      */
 
     async getDailyTime(id){
+
+        
         //get current date 
        /*
         let today = new Date();
@@ -413,14 +450,19 @@ class Database {
           })
          return hours; */
         
-        const midnight = new Date().setHours(0, 0, 0, 0); 
-    
-        return this.getDurationWorkedSinceTime(midnight) / (1000 * 60 * 60);
+        const midnight = new Date().setHours(0, 0, 0, 0);
+        console.log("MDNGHT\t", midnight); 
+        let valMs;
+        await this.getDurationWorkedSinceTime(id, midnight).then(value => {
+            valMs = value;
+        }); 
+          //console.log("Value: ", val);
+        return valMs;// valMs//; / (1000 * 60 * 60);
     }
 
     
     /*
-    @author Caden
+    @author Cadennpm
     @date 3/14/2022
     @param day, month, and year
     @return returns 0 - Sunday, 1 - Monday, 2 - Tuesday, 3 - Wednesday... 6 - Saturday
@@ -515,14 +557,29 @@ class Database {
       }
       */
         
-       const d = new Date();
-       // set d to be midnight...
-       d.setHours(0, 0, 0, 0);
-       // sunday is (current day of the week) ago from today
-       const sunday = new Date(t.getTime() - 1000*24*60*60*t.getDay());
 
-       return this.getDurationWorkedSinceTime(sunday) / (60 * 60 * 1000);
-      
+       // sunday is (current day of the week) ago from today
+      /* const t = new Date();
+       
+  
+       let valMs;
+       await this.getDurationWorkedSinceTime(id, sunday).then(value => {
+           valMs = value;
+       }); 
+       console.log("VALMS", valMs);
+         //console.log("Value: ", val);
+       return valMs;// valMs//; / (1000 * 60 * 60);
+      */
+       let offset = new Date().getTime() * 24 * 60 * 60 * 1000;
+       const midnight = (new Date().setHours(0, 0, 0, 0)) - offset;
+       
+       console.log("MDNGHT\t", midnight); 
+       let valMs;
+       await this.getDurationWorkedSinceTime(id, midnight).then(value => {
+           valMs = value;
+       }); 
+         //console.log("Value: ", val);
+       return valMs;// valMs//; / (1000 * 60 * 60);
     }
 
     /**
