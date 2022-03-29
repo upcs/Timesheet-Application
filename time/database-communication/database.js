@@ -772,10 +772,25 @@ class Database {
     }
 
     /**
-     * Get a specific job
+     * @author Caden
+     * @params A list of job ids
+     * @retunr Gets all data for a list of job ids
+     * Get a specific jobs
      */
-    getSpecificJob(){
-
+    async getSpecificJobs(jobIds){
+        console.log("THIS HAPPEND" + jobIds.length);
+        var postData = [];
+        const data = await this.db.collection("jobs").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                for(let i = 0; i < jobIds.length; i++){
+                    if(doc.id == jobIds[i]){
+                        console.log("THIS HAPPEND");
+                    postData.push({...doc.data(), id: doc.id})
+                    }
+                }
+            });
+          })
+        return postData;
     }
 
     /**

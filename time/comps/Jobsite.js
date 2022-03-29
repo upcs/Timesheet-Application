@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Color } from './Palette.js';
-import { Text, View, StyleSheet, ScrollView,TouchableOpacity, Modal, Alert} from 'react-native'
+import { Text, View, StyleSheet, ScrollView,TouchableOpacity, Modal, Alert, FlatList} from 'react-native'
 import Menu from './Menu'
 import Database from '../database-communication/database.js';
 
@@ -15,7 +15,8 @@ class Jobsite extends React.Component {
             notes: "I want candy",
             name: "Job Name",
             cJID: "Job ID",
-            jList: []
+            jList: [],
+            TheData: []
         }
         this.data = new Database();
     }
@@ -24,33 +25,16 @@ class Jobsite extends React.Component {
         this.data.updateEmpJobs(this.state.id).then((res,rej) =>
         {
             this.setState({jList: res}, () => {
-                console.log("jlist" + res);
+                this.data.getSpecificJobs(res).then((fin,fail) => {
+                    this.setState({TheData: fin}, () => {
+                        console.log("THE DATA" + fin);
+                        this.updateState(fin);
+                    });
+                })
             });
         }
         )
         
-        
-        this.data.getJobAddress("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
-            this.setState({address: res}, () => {
-                console.log(res);
-            });
-        });
-        this.data.getJobNotes("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
-            this.setState({notes: res}, () => {
-                console.log(res);
-            });
-        });
-        this.data.getJobName("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
-            this.setState({name: res}, () => {
-                console.log(res);
-            });
-        });
-        this.data.getJobPhase("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
-            this.setState({phase: res}, () => {
-                console.log(res);
-            });
-        });
-        ;
     }
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
@@ -71,6 +55,15 @@ class Jobsite extends React.Component {
     setJobID = (ji) => {
         this.setState({cJID: ji});
     }
+    updateState = (list) => {
+        if(list.length > 0){
+        this.setJobNotes(list[0].notes);
+        this.setJobPhase(list[0].phase);
+        this.setJobAddress(list[0].address);
+        this.setJobName(list[0].name);
+        this.setJobID(list[0].id);
+        }
+    }
 
 
     renderItem = ({item}) => {
@@ -79,16 +72,16 @@ class Jobsite extends React.Component {
              <View 
                 id='employeeButtonView'
                 style={styles.items}>
-                 <TouchableOpacity id='employeeButton' onPress={() =>
+                 <TouchableOpacity style={styles.listButton} id='employeeButton' onPress={() =>
                  {
                     this.setModalVisible(!isModalVisible);
                     this.setJobNotes(item.notes);
                     this.setJobPhase(item.phase);
-                    this.setJobAddress(item.admin);
+                    this.setJobAddress(item.address);
                     this.setJobName(item.name);
                     this.setJobID(item.id);
                  }}>
-                     <Text>{item.name}</Text>
+                     <Text adjustsFontSizeToFit={true}  style={styles.listText}>{item.name}</Text>
                  </TouchableOpacity> 
              </View>
          );
@@ -119,20 +112,16 @@ class Jobsite extends React.Component {
                                     >
                                  <Text style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
-                                <ScrollView style={styles.modalScrolV}>
                                     <View style = {styles.modalHeader}>
                                         <Text style ={styles.modalHeaderText}>Current Jobs</Text>
                                     </View>
-                                    {/*
+                               
                                     <FlatList 
-                                     id='list'
-                                     data={this.state.FakeData} 
-                                     keyExtractor={item => item.id.toString()}
-                                     renderItem={this.renderItem} 
-                                        />
-                                        */
-                                    }
-                                </ScrollView>
+                                    id='jobsList'
+                                    data={this.state.TheData} 
+                                    keyExtractor={item => item.id.toString()}
+                                    renderItem={this.renderItem} 
+                                    />
 
                             </View>
                         </View>
@@ -272,16 +261,33 @@ const styles = StyleSheet.create({
         color: 'white'
     },
     modalHeader: {
-        flex: 1,
+        flex: 0.1,
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
         alignSelf: 'center',
         backgroundColor: Color.MAROON
     },
+    items: {
+        padding: 20,
+        borderTopWidth: 1,
+    },
     modalScrolV: {
         width: '100%',
         height: '100%'
+    },
+    listText: {
+        fontSize: 15,
+        alignSelf: 'center',
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    listButton: {
+        backgroundColor: Color.MAROON, 
+        borderRadius: 30,
+        width: '100%',
+        backgroundColor: Color.MAROON
+        
     }
 
 });
