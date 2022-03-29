@@ -781,7 +781,7 @@ class Database {
         }
     }
     /*
-    Caden
+    Cadenss
     */
     async updateEmpJobs(id){
         var jobids = [];
@@ -1009,9 +1009,26 @@ class Database {
      */
     createJob(add, jname, jnotes){
           //Trim values
+          if(add != null | add != undefined){
           add.trim();
+          }
+          else{
+              console.log("No address");
+              return;
+          }
+          if(jname != null | jname != undefined){
           jname.trim();
+          }
+          else{
+                console.log("No job name");
+                return;
+          }
+          if(jnotes != null | jnotes != undefined){
           jnotes.trim();
+          }
+          else{
+            jnotes = "No notes";
+          }
           //Phase will be 1 to start
           let phs = 1;
   
