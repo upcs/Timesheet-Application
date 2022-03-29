@@ -69,8 +69,7 @@ import Database from '../database-communication/database.js'
     static getDerivedStateFromProps(props, state) {
 
         if (!props.query) {
-            console.log('no query');
-            console.log(state.stInitialFake)
+            
             return {
                 FakeData : state.stInitialFake,
             };
@@ -78,7 +77,7 @@ import Database from '../database-communication/database.js'
         }
 
         if (props.data !== state.stInitialFake) {
-          console.log("changed");
+          
           return {
             FakeData : props.data 
            
@@ -86,7 +85,7 @@ import Database from '../database-communication/database.js'
         }     
         return  null;
         
-      }
+    }
 
     
 
@@ -173,10 +172,9 @@ import Database from '../database-communication/database.js'
         if (this.props.request) {
                       
             this.sendData();
-            console.log('request recieved')
         }
 
-
+        
 
 
 
