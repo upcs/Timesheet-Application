@@ -27,7 +27,6 @@ class Jobsite extends React.Component {
             this.setState({jList: res}, () => {
                 this.data.getSpecificJobs(res).then((fin,fail) => {
                     this.setState({TheData: fin}, () => {
-                        console.log("THE DATA" + fin);
                         this.updateState(fin);
                     });
                 })
@@ -62,6 +61,13 @@ class Jobsite extends React.Component {
         this.setJobAddress(list[0].address);
         this.setJobName(list[0].name);
         this.setJobID(list[0].id);
+        }
+        else {
+            this.setJobNotes("You need to be assigned a job!");
+            this.setJobPhase("N/A");
+            this.setJobAddress("N/A");
+            this.setJobName("None");
+            this.setJobID("");
         }
     }
 

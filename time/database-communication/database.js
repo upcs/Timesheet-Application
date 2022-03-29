@@ -732,9 +732,6 @@ class Database {
        const querySnapshot =  await this.db.collection("jobs").get();
 
        for (const documentSnapshot of querySnapshot.docs) {
-    
-
-        console.log(documentSnapshot.id);
         jobids.push(documentSnapshot.id);
        
     }
@@ -778,13 +775,11 @@ class Database {
      * Get a specific jobs
      */
     async getSpecificJobs(jobIds){
-        console.log("THIS HAPPEND" + jobIds.length);
         var postData = [];
         const data = await this.db.collection("jobs").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 for(let i = 0; i < jobIds.length; i++){
                     if(doc.id == jobIds[i]){
-                        console.log("THIS HAPPEND");
                     postData.push({...doc.data(), id: doc.id})
                     }
                 }
