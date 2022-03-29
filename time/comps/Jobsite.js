@@ -14,12 +14,22 @@ class Jobsite extends React.Component {
             address: "123 abc lane",
             notes: "I want candy",
             name: "Job Name",
-            cJID: "Job ID"
+            cJID: "Job ID",
+            jList: []
         }
         this.data = new Database();
     }
 
     componentDidMount = () => {
+        this.data.updateEmpJobs(this.state.id).then((res,rej) =>
+        {
+            this.setState({jList: res}, () => {
+                console.log("jlist" + res);
+            });
+        }
+        )
+        
+        
         this.data.getJobAddress("Cik0XoSFJLHTcA06sxmS").then((res, rej) => {
             this.setState({address: res}, () => {
                 console.log(res);
@@ -40,7 +50,7 @@ class Jobsite extends React.Component {
                 console.log(res);
             });
         });
-        this.data.updateEmpJobs();
+        ;
     }
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});

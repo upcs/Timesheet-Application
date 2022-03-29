@@ -141,6 +141,29 @@ class Database {
 
     }
 
+    async addUserJobs(id, jid){
+        var document = await this.db.collection("accounts").doc(id).get();
+        try{
+        if(document.myJobs.includes(jid)){
+
+        }
+        else{
+            await this.db.collection("accounts").doc(id).add({
+                myJobs: jid
+            });
+        }
+    }
+    catch{
+       
+        await this.db.collection("accounts").doc(id).add({
+            myJobs: jid
+        });
+    }
+        
+    }
+
+    
+
     /**
      * Sets users firstname
      * 
@@ -703,23 +726,28 @@ class Database {
     /*
     Caden
     */
-    async updateEmpJobs(){
-        var jList = [];
-        await this.db.collection("jobs").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                this.getJobEmployeesID(doc.id).then((res, rej) => {
-                    res.forEach((r) => {
-                        if(r.accountID.toString().trim() === "GVnsURmvxJpclPh6ySqY"){
-                            console.log(r.accountID.toString().trim());
-                            jList.push({jid : doc.id});
-                            console.log("SIZE in" + jList.length);
-                        }
-                    })
-                
-              });
-            });
-            })
-            console.log("SIZE " + jList.length);
+    async updateEmpJobs(id){
+        var jobids = [];
+        var matches = [];
+       const querySnapshot =  await this.db.collection("jobs").get();
+
+       for (const documentSnapshot of querySnapshot.docs) {
+    
+
+        console.log(documentSnapshot.id);
+        jobids.push(documentSnapshot.id);
+       
+    }
+    for(const jobs of jobids){
+       const emp =  await this.getJobEmployeesID(jobs);
+            for(let i = 0; i < emp.length; i++){
+                if( id == emp[i].accountID){
+                   matches.push(jobs);
+                }
+            }
+    }
+    
+    return matches;
     }
       
 
