@@ -104,7 +104,7 @@ class App extends React.Component {
               <>
 
                 <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart dataParentToChild={this.state.id}/>}/>
-                <Tab.Screen name="Jobsite" component={Jobsite}></Tab.Screen>
+                <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
                 <Tab.Screen name="home" children={()=><EmployeeHours dataParentToChild={this.state.id}/>}/>
 
               </>

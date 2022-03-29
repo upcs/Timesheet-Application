@@ -42,22 +42,29 @@ import AddEmployee from './AddEmployee.js';
     //Added
     //Callback Function from JobsList
     callbackFunction(childData) {
+
+
       this.setState({jobsDataChild : childData});
       this.setState({requesting : false});
+
     }
     
 
     getFilteredItems(query, items) {
+
       if (!query || query.length == 0) {
         return items;
       }
+
       return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
     }
 
     currValue(newValue) {
       this.setState({query : newValue});
+
       this.setState({requesting : true});
       this.forceUpdate(); 
+
     }
      
      render() {
@@ -75,7 +82,7 @@ import AddEmployee from './AddEmployee.js';
          return (
              <View style={styles.container}>
                  <View style={styles.upperbar}>
-                    <SearchBar style={styles.search} currValue = {this.currValue}></SearchBar>
+                    <SearchBar style={styles.search} currValue={this.currValue}></SearchBar>
                     
                     <View style={styles.buttonContainer}>
                         <AddEmployee sendData={addData} ></AddEmployee>
