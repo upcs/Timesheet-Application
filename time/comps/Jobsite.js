@@ -95,7 +95,7 @@ class Jobsite extends React.Component {
 
     render() {
         return (
-            <View style={styles.containerMaster}>
+            <View id='mainView' style={styles.containerMaster}>
                 <Modal
                     id='employeeModal'
                     animationType='slide'
@@ -134,8 +134,8 @@ class Jobsite extends React.Component {
                     </View>
                 </Modal>
                 
-                <View style={styles.headerContainer}>
-                    <TouchableOpacity style={styles.switchJob} onPress={() => {
+                <View id='openJobsView' style={styles.headerContainer}>
+                    <TouchableOpacity id='openJobs' style={styles.switchJob} onPress={() => {
                          this.setModalVisible(!this.state.isModalVisible);
                     }}>  
                              <Text adjustsFontSizeToFit={true} style={styles.headerText}>{this.state.name}</Text> 
