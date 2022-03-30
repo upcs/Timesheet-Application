@@ -58,8 +58,16 @@ class App extends React.Component {
     this.login = this.login.bind(this);
 
     this.data = new Database();
-
+    
+    //Performance testing
+    this.start = new Date().getTime();
   }
+  
+  componentDidMount(){
+    var end = new Date().getTime() - this.start;
+    console.log('Performance App', end, 'ms');
+  }
+
   login(signin, uid, uType) {
     this.setState({
       signedIn: signin,
