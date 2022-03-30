@@ -1,5 +1,6 @@
 import * as firebase from 'firebase'
 import 'firebase/firestore' 
+import { validateStyle } from 'react-native/Libraries/StyleSheet/StyleSheetValidation';
 import User from './user'
 // import * as Crypto from 'expo-crypto';
 
@@ -155,6 +156,29 @@ class Database {
     setUserEmail(){
 
     }
+
+    async addUserJobs(id, jid){
+        var document = await this.db.collection("accounts").doc(id).get();
+        try{
+        if(document.myJobs.includes(jid)){
+
+        }
+        else{
+            await this.db.collection("accounts").doc(id).add({
+                myJobs: jid
+            });
+        }
+    }
+    catch{
+       
+        await this.db.collection("accounts").doc(id).add({
+            myJobs: jid
+        });
+    }
+        
+    }
+
+    
 
     /**
      * Sets users firstname
@@ -756,7 +780,30 @@ class Database {
             return postData;
         }
     }
+    /*
+    Caden
+    */
+    async updateEmpJobs(id){
+        var jobids = [];
+        var matches = [];
+       const querySnapshot =  await this.db.collection("jobs").get();
 
+       for (const documentSnapshot of querySnapshot.docs) {
+        jobids.push(documentSnapshot.id);
+       
+    }
+    for(const jobs of jobids){
+       const emp =  await this.getJobEmployeesID(jobs);
+            for(let i = 0; i < emp.length; i++){
+                if( id == emp[i].accountID){
+                   matches.push(jobs);
+                }
+            }
+    }
+    
+    return matches;
+    }
+      
 
     /****** JOB GETTERS *******/
 
@@ -779,33 +826,68 @@ class Database {
     }
 
     /**
-     * Get a specific job
+     * @author Caden
+     * @params A list of job ids
+     * @retunr Gets all data for a list of job ids
+     * Get a specific jobs
      */
-    getSpecificJob(){
-
+    async getSpecificJobs(jobIds){
+        var postData = [];
+        const data = await this.db.collection("jobs").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                for(let i = 0; i < jobIds.length; i++){
+                    if(doc.id == jobIds[i]){
+                    postData.push({...doc.data(), id: doc.id})
+                    }
+                }
+            });
+          })
+        return postData;
     }
 
     /**
+     * @author Caden Deutscher
+     * @params id(jobsite id)
+     * @return jobsite address
      * Get job address
      */
-    getJobAddress(){
-
+    async getJobAddress(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().address;
     }
 
     /**
+     * @author Caden Deutscher
+     * @params id(jobsite id)
+     * @return jobsite name
      * Get job name
      */
-    getJobName(){
-
+    async getJobName(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().name;
     }
 
     /**
+     * @author Caden Deutshcer
+     * @params id(jobsite id)
+     * @return jobsite phase
      * Get job phase
      */
-    getJobPhase(){
-
+    async getJobPhase(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().phase;
     }
 
+    /**
+     * @author Caden Deutscher
+     * @params id(jobsite id)
+     * @return jobsite notes
+     * Get job noes
+     */
+    async getJobNotes(id){
+        var document = await this.db.collection("jobs").doc(id).get();
+        return document.data().notes;
+    }
     /**
      * Get a list of all employees not on the job
      * 
