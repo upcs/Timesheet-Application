@@ -6,8 +6,11 @@ import Jobsite from './Jobsite';
 import React from 'react';
 import EmployeeHours from './EmployeeHours.js';
 import TimeCardStart from './TimeCardStart';
+import AdminTimesheet from './admin_timesheet';
+import AdminEmployee from './AdminEmployee';
+import AdminJobsite from './AdminJobsite';
 const Tab = createMaterialTopTabNavigator();
-class BasicEmployeee extends React.Component {  
+class AdminSide extends React.Component {  
     constructor(props) {
         super(props);
     
@@ -25,15 +28,17 @@ render(){
 return (
       <Tab.Navigator>
         {
-            // Logged in as default user
+            // Logged in as admin
             <>
-              <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart  sendData={addData} dataParentToChild={this.state.id}/>}/>
-              <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
-              <Tab.Screen name="home"   children={()=><EmployeeHours ref={this.myref} dataParentToChild={this.state.id}/>}/>
-            </>
+            <Tab.Screen name="TimeCardStart"   children={()=><TimeCardStart sendData={addData} />}></Tab.Screen>
+            <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
+            <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
+            <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
+
+          </>
       }          
       </Tab.Navigator>
       )
       }
     }
-    export default BasicEmployeee;
+    export default AdminSide;

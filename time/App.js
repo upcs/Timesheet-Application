@@ -24,8 +24,7 @@ import AdminJobsite from './comps/AdminJobsite';
 import SearchBar from './comps/SearchBar';
 import BasicEmployee from './comps/BasicEmployee';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AdminEmployee from './comps/AdminEmployee'
-
+import AdminSide from './comps/AdminSide'
 //added
 import { LogBox } from 'react-native';
 
@@ -87,18 +86,8 @@ class App extends React.Component {
           this.state.signedIn ? (
             this.state.user ? (
               // Logged in as admin
-              <>
-
-
-                <Stack.Screen name="TimeCardStart"   children={()=><TimeCardStart/>}></Stack.Screen>
-                <Stack.Screen name="Timesheet" component={AdminTimesheet}></Stack.Screen>
-
-
-                <Stack.Screen name="Employees" component={AdminEmployee}></Stack.Screen>
-
-                <Stack.Screen name="Jobsite" component={AdminJobsite }></Stack.Screen>
-
-              </>
+              <Stack.Screen   name= 'Admin' children={()=><AdminSide dataParentToChild={this.state.id}/>} options={{headerShown: false}}></Stack.Screen>
+        
             ) : (
               // Logged in as default user
               
