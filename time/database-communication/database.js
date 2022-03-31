@@ -2,7 +2,7 @@ import * as firebase from 'firebase'
 import 'firebase/firestore' 
 import { validateStyle } from 'react-native/Libraries/StyleSheet/StyleSheetValidation';
 import User from './user'
-// import * as Crypto from 'expo-crypto';
+import * as Crypto from 'expo-crypto';
 
 /**
  * Database class
@@ -77,6 +77,27 @@ class Database {
     }
 
     /**
+     * Gets clocked in status
+     * 
+     * Author: Tony Hayden
+     * Date: March 30, 2022
+     */
+    async getClockInStatus(id) {
+        var status = false;
+
+        await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                if(data.clockedIn == true ){
+                    status = true;
+                    return status;
+                }
+            });
+        });
+        return status;
+    }
+
+    /**
      * Update: March 27, 2022
      * 
      * Added proper hashing of the password and check with the database.
@@ -88,13 +109,13 @@ class Database {
         var user = '';
 
         // DO NOT DELETE BELOW. CURRENTLY COMMENTED OUT TO HAVE PASSING TESTS
-        // const checkHashed = await Crypto.digestStringAsync(
-        //     Crypto.CryptoDigestAlgorithm.SHA512,
-        //     password
-        // );
+        const checkHashed = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            password
+        );
 
         // Change password to checkHashed to check hashed password version instead
-        const data = await this.db.collection("accounts").where("email", "==", email).where("password", "==", password)
+        const data = await this.db.collection("accounts").where("email", "==", email).where("password", "==", checkHashed   )
                         .get().then((querySnapshot) => {
                             querySnapshot.forEach((doc) => {
                                 id = doc.id
@@ -256,17 +277,17 @@ class Database {
         }
 
         // DO NOT DELETE BELOW. CURRENTLY COMMENTED OUT TO ENSURE TESTS PASTS
-        // const hashed = await Crypto.digestStringAsync(
-        //     Crypto.CryptoDigestAlgorithm.SHA512,
-        //     pass
-        // );
+        const hashed = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            pass
+        );
 
         // Replace "pass" with "hashed" to store the hashed version
         this.db.collection("accounts").add({
             firstname: first,
             lastname: last,
             email: email,
-            password: pass,
+            password: hashed,
             admin: admin
         });
      }
@@ -334,7 +355,7 @@ class Database {
      * Clock out
      * Updates the hours tab for the employee as well as the punches
      * 
-     * Status: Not properly updating clock out hour/minute
+     * Status: Working
      * 
      * @author Tony Hayden
      * 
