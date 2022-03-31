@@ -30,7 +30,8 @@ return (
         {
             // Logged in as admin
             <>
-            <Tab.Screen name="TimeCardStart"   children={()=><TimeCardStart sendData={addData} />}></Tab.Screen>
+            <Tab.Screen name="TimeCardStart"   children={()=><TimeCardStart initialParams={{
+                   signOutParent: this.signOut}} sendData={addData} />}></Tab.Screen>
             <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
             <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
             <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>

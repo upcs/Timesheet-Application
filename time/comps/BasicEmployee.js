@@ -27,7 +27,8 @@ return (
         {
             // Logged in as default user
             <>
-              <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart  sendData={addData} dataParentToChild={this.state.id}/>}/>
+              <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart  sendData={addData} initialParams={{
+                   signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
               <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
               <Tab.Screen name="home"   children={()=><EmployeeHours ref={this.myref} dataParentToChild={this.state.id}/>}/>
             </>
