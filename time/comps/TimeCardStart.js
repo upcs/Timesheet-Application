@@ -62,9 +62,12 @@ var endTime = 0;
         this.timerOff = this.timerOff.bind(this);
         this.signOut = this.signOut.bind(this); 
         this.data = new Database();
+
     };
 
-
+    handleClockOut= () => {
+      this.props.sendData();
+    }
     /**
      * Updates the users daily time when the stop button is pressed
      * 
@@ -79,7 +82,7 @@ var endTime = 0;
      * Called when user pressed 'Stop' 
      * Calls totalTime() to total the new time added
      */
-    timerOff(){
+   async timerOff(){
         let { todayTime, currentDuration, lastTimerIn, timerUpdater,  } = this.state;
 
       //  todayTime += currentDuration;
@@ -94,18 +97,15 @@ var endTime = 0;
             timerUpdater: null,
         });
 
-        this.data.punchOut(User.getId());
+       await this.data.punchOut(User.getId());
+       this.handleClockOut();
     }   
-
 
     /**
      * Starts the timer 
      * 
      * Called when the user presses 'Start" 
      */
-
-    
-    
 
     timerOn(){
 
@@ -135,9 +135,10 @@ var endTime = 0;
       * 
       * Starts or stopes a timer and updates the state
       */
-    onPress = () => { 
+     onPress = () => { 
         if (this.state.isTimerOn) {
-            this.timerOff();
+          this.timerOff();
+            
         } else {
             this.timerOn();
         }

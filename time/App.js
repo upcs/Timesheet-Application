@@ -22,10 +22,8 @@ import Card from './comps/Card';
 import TimeCardStart from './comps/TimeCardStart';
 import AdminJobsite from './comps/AdminJobsite';
 import SearchBar from './comps/SearchBar';
-
-
-import AdminEmployee from './comps/AdminEmployee'
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AdminEmployee from './comps/AdminEmployee';
 //added
 import { LogBox } from 'react-native';
 
@@ -56,12 +54,11 @@ class App extends React.Component {
       user: ''
     }
     this.login = this.login.bind(this);
-
     this.data = new Database();
     
     //Performance testing
     this.start = new Date().getTime();
-
+    this.myref = React.createRef();
     this.signOut = this.signOut.bind(this);
 
   }
@@ -95,7 +92,10 @@ class App extends React.Component {
   }
 
   render() {
-    
+    //This function is called whenever you clockout
+    const addData = () => {
+      this.myref.current.updateState();
+   }
     //const signedIn = this.state.signedIn;
     //const isAdmin = this.state.user == User.ADMIN;
     return (
@@ -106,29 +106,25 @@ class App extends React.Component {
           this.state.signedIn ? (
             this.state.user ? (
               // Logged in as admin
-              <>
-
-
-                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart initialParams={{
-                   signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
-                <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
-
-
-                <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
-
-                <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
-
-              </>
+                  <>
+                  <Tab.Screen name="TimeCardStart"   children={()=><TimeCardStart initialParams={{
+                         signOutParent: this.signOut}} sendData={addData} />}></Tab.Screen>
+                  <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
+                  <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
+                  <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
+      
+                </>
+                     
+           
             ) : (
               // Logged in as default user
-              <>
-
-                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart initialParams={{
-                   signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
-                <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
-                <Tab.Screen name="home" children={()=><EmployeeHours dataParentToChild={this.state.id}/>}/>
-
-              </>
+                  <>
+                    <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart  sendData={addData} initialParams={{
+                         signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
+                    <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
+                    <Tab.Screen name="home"   children={()=><EmployeeHours ref={this.myref} dataParentToChild={this.state.id}/>}/>
+                  </>
+              
             )
           ) : (
             // Not logged in
