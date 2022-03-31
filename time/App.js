@@ -56,8 +56,19 @@ class App extends React.Component {
     }
     this.login = this.login.bind(this);
     this.data = new Database();
+    
+    //Performance testing
+    this.start = new Date().getTime();
+
+    this.signOut = this.signOut.bind(this);
 
   }
+  
+  componentDidMount(){
+    var end = new Date().getTime() - this.start;
+    console.log('Performance App', end, 'ms');
+  }
+
   login(signin, uid, uType) {
     this.setState({
       signedIn: signin,
@@ -73,6 +84,14 @@ class App extends React.Component {
       })
   }
 
+  signOut(){
+    this.setState({
+      signedIn: 0,
+      id: '',
+      user: ''
+    })
+  }
+
   render() {
     //This function is called whenever you clockout
     
@@ -86,13 +105,27 @@ class App extends React.Component {
           this.state.signedIn ? (
             this.state.user ? (
               // Logged in as admin
-              <Stack.Screen   name= 'Admin' children={()=><AdminSide dataParentToChild={this.state.id}/>} options={{headerShown: false}}></Stack.Screen>
-        
+              <>
+
+
+                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart initialParams={{
+                   signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
+                <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
+
+
+                <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
+
+                <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
+
+              </>
             ) : (
               // Logged in as default user
-              
-                
-                <Stack.Screen   name= 'Basic' children={()=><BasicEmployee dataParentToChild={this.state.id}/>} options={{headerShown: false}}></Stack.Screen>
+              <>
+
+                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart initialParams={{
+                   signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
+                <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
+                <Tab.Screen name="home" children={()=><EmployeeHours dataParentToChild={this.state.id}/>}/>
 
               
             )

@@ -60,6 +60,7 @@ var endTime = 0;
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
+        this.signOut = this.signOut.bind(this); 
         this.data = new Database();
 
     };
@@ -145,6 +146,17 @@ var endTime = 0;
 
 
     /**
+     * Signs user out of App
+     * 
+     * @author gabes
+     */
+    signOut = () => {
+        console.log(this.props)
+        this.props.initialParams.signOutParent();
+    }
+
+
+    /**
      * Renders the start/stop button as well as company logo
      * Also renders a note showing daily time
      * 
@@ -169,6 +181,14 @@ var endTime = 0;
         return (
             <View style={styles.container}>
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+                <View style={styles.logoutView}>
+                    <TouchableOpacity 
+                        style={styles.signOutButton}
+                        onPress={this.signOut}
+                    >
+                            <Text style={styles.signOutText}>Sign Out</Text>
+                        </TouchableOpacity>
+                </View>
                 <View>
                     <Text style={styles.current_time}>{currentDuration}</Text>
                     <View style={styles.timerButtonOuter}>
@@ -230,6 +250,10 @@ var endTime = 0;
          marginTop: 100,
      },
 
+     logoutView: {
+         flex: 0
+     },
+
      //Styles for start button
      timerButtonOuter: {
          borderRadius: 40,
@@ -256,6 +280,24 @@ var endTime = 0;
         borderWidth: 5,
         alignItems: 'center',
      },
+
+     signOutButton: {
+        width: '100%',
+        overflow: 'hidden',
+        borderRadius: 35,
+        height: 90,
+        borderWidth: 5,
+        alignItems: 'center',
+        backgroundColor: 'black'
+     },
+
+     signOutText: {
+        alignItems: 'center',
+        fontSize: 30,
+        color: 'white',
+        padding: 10,
+     },
+
      start: {
        borderColor: '#138564',
        backgroundColor: 'green',
