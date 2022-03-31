@@ -22,14 +22,14 @@ import Card from './comps/Card';
 import TimeCardStart from './comps/TimeCardStart';
 import AdminJobsite from './comps/AdminJobsite';
 import SearchBar from './comps/SearchBar';
-
-
+import BasicEmployee from './comps/BasicEmployee';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AdminEmployee from './comps/AdminEmployee'
 
 //added
 import { LogBox } from 'react-native';
 
-const Tab = createMaterialTopTabNavigator();
+const Stack = createNativeStackNavigator();
 import Database from './database-communication/database.js'
 
 //added
@@ -56,7 +56,6 @@ class App extends React.Component {
       user: ''
     }
     this.login = this.login.bind(this);
-
     this.data = new Database();
 
   }
@@ -76,13 +75,14 @@ class App extends React.Component {
   }
 
   render() {
+    //This function is called whenever you clockout
     
     //const signedIn = this.state.signedIn;
     //const isAdmin = this.state.user == User.ADMIN;
     return (
       <SafeAreaView style={safeAreaAndroid.SafeArea}>
       <NavigationContainer>
-        <Tab.Navigator>
+        <Stack.Navigator>
           {
           this.state.signedIn ? (
             this.state.user ? (
@@ -90,38 +90,36 @@ class App extends React.Component {
               <>
 
 
-                <Tab.Screen name="TimeCardStart" component={TimeCardStart}></Tab.Screen>
-                <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
+                <Stack.Screen name="TimeCardStart"   children={()=><TimeCardStart/>}></Stack.Screen>
+                <Stack.Screen name="Timesheet" component={AdminTimesheet}></Stack.Screen>
 
 
-                <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
+                <Stack.Screen name="Employees" component={AdminEmployee}></Stack.Screen>
 
-                <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
+                <Stack.Screen name="Jobsite" component={AdminJobsite }></Stack.Screen>
 
               </>
             ) : (
               // Logged in as default user
-              <>
+              
+                
+                <Stack.Screen   name= 'Basic' children={()=><BasicEmployee dataParentToChild={this.state.id}/>} options={{headerShown: false}}></Stack.Screen>
 
-                <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart dataParentToChild={this.state.id}/>}/>
-                <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
-                <Tab.Screen name="home" children={()=><EmployeeHours dataParentToChild={this.state.id}/>}/>
-
-              </>
+              
             )
           ) : (
             // Not logged in
-            <Tab.Screen 
+            <Stack.Screen 
               name="Login"
               component={Login}
               initialParams={{
                 login: this.login,
                 loginAdmin: this.loginAdmin,
               }}
-              ></Tab.Screen>
+              ></Stack.Screen>
           )
         }          
-        </Tab.Navigator>
+        </Stack.Navigator>
       </NavigationContainer>   
       </SafeAreaView>
     );

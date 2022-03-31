@@ -391,7 +391,7 @@ class Database {
 
         return await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time).get().then((querySnapshot) => {
             //return 10;
-            console.log("RESULT", querySnapshot);
+           // console.log("RESULT", querySnapshot);
             // Reduce to accumulate time over all elements of array
             let sum = 0;
             querySnapshot.forEach((doc) => {
@@ -451,7 +451,7 @@ class Database {
          return hours; */
         
         const midnight = new Date().setHours(0, 0, 0, 0);
-        console.log("MDNGHT\t", midnight); 
+        //console.log("MDNGHT\t", midnight); 
         let valMs;
         await this.getDurationWorkedSinceTime(id, midnight).then(value => {
             valMs = value;
@@ -573,7 +573,7 @@ class Database {
        let offset = new Date().getTime() * 24 * 60 * 60 * 1000;
        const midnight = (new Date().setHours(0, 0, 0, 0)) - offset;
        
-       console.log("MDNGHT\t", midnight); 
+      // console.log("MDNGHT\t", midnight); 
        let valMs;
        await this.getDurationWorkedSinceTime(id, midnight).then(value => {
            valMs = value;
