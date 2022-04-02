@@ -60,22 +60,23 @@ describe('An admin viewing employees times', () => {
 
         wrapper.setState({date1: null});
         wrapper.setState({date2: null});
-        instance.getTime();
+        wrapper.setState({currEmployee: '25yc7J1yFzaT3OVt5H8J'})
+        instance.getTime('25yc7J1yFzaT3OVt5H8J');
         expect(instance.getAllEmployeeTime).toHaveBeenCalledTimes(1);
 
         wrapper.setState({date1: null});
         wrapper.setState({date2: 'test'});
-        instance.getTime();
+        instance.getTime('25yc7J1yFzaT3OVt5H8J');
         expect(instance.getEmployeesTo).toHaveBeenCalledTimes(1);
 
         wrapper.setState({date1: 'test'});
         wrapper.setState({date2: null});
-        instance.getTime();
+        instance.getTime('25yc7J1yFzaT3OVt5H8J');
         expect(instance.getEmployeesFrom).toHaveBeenCalledTimes(1);
 
         wrapper.setState({date1: 'test'});
         wrapper.setState({date2: 'test'});
-        instance.getTime();
+        instance.getTime('25yc7J1yFzaT3OVt5H8J');
         expect(instance.getEmployeesFromAndTo).toHaveBeenCalledTimes(1);
     })
 
