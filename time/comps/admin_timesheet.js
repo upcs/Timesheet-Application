@@ -51,36 +51,20 @@ class AdminTimesheet extends React.Component {
       }
 
     callbackFunction(childData) {
-        console.log(childData);
         this.setState({jobsDataChild : childData});
         this.setState({requesting : false});
-        console.log('callback recieved');
     }  
 
     getFilteredItems(query, items) {
-        console.log("query: %s", query);
         if (!query || query.length == 0) {
-          console.log("returning all items");
-          console.log(items);
           return items;
         }
-        console.log("filtering data based on query, query was: " + query);
-        console.log(items);
         return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
     }
 
     currValue(newValue) {
-        //console.log(newValue);
         this.setState({query : newValue});
-        console.log(newValue);
-        console.log("Here's the query in currValue");
-        
-        console.log(this.state.query);
-  
         this.setState({requesting : true});
-        console.log("Just set requesting to true in AdminEmployee");
-        
-        console.log(this.state.requesting);
         this.forceUpdate();
         
     }
@@ -88,13 +72,21 @@ class AdminTimesheet extends React.Component {
     
   
 
-    //When the list is pressed set the id of the employee pressed and get their time
+    /** 
+     * When the list is pressed set the id of the employee pressed and get their time
+     * 
+     * @author gabes 
+     */
     onListPress = (id) => {
         this.setState({currEmployee: id}); 
         this.getTime(id);
     }
 
-    //Passed into the child, called when date gets updated, updates each date in the state
+    /** 
+     * Passed into the child, called when date gets updated, updates each date in the state
+     * 
+     * @author gabes
+     */
     updateDates = (date, cal) => {
         if(cal == "From"){
             this.setState(
@@ -103,8 +95,9 @@ class AdminTimesheet extends React.Component {
                     date1month: date.toString().substring(4, 7),
                     date1day: date.toString().substring(8, 10),
                     date1year:date.toString().substring(11, 15)
+                }, () => {
+                    this.getTime(this.state.currEmployee);
                 });
-            
         }
         else if(cal == "To"){
             this.setState(
@@ -113,6 +106,8 @@ class AdminTimesheet extends React.Component {
                     date2month: date.toString().substring(4, 7),
                     date2day: date.toString().substring(8, 10),
                     date2year:date.toString().substring(11, 15)
+                }, () => {
+                    this.getTime(this.state.currEmployee);
                 });
         }
         else{
@@ -132,8 +127,14 @@ class AdminTimesheet extends React.Component {
 
     /**
      * Set the list of employee punches
+     * 
+     * @author gabes
      */
     getTime = (id) => {
+        if(id == '' || id == null){
+            return;
+        }
+
         //If both dates are null get all punches
         if((this.state.date1 == null) && (this.state.date2 == null)){
             this.getAllEmployeeTime(id);
@@ -158,6 +159,8 @@ class AdminTimesheet extends React.Component {
 
     /**
      * Get all employee punches
+     * 
+     * @author gabes
      */
     getAllEmployeeTime = (id) => {
         var somedata = [];

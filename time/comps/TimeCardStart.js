@@ -150,7 +150,6 @@ var endTime = 0;
      * @author gabes
      */
     signOut = () => {
-        console.log(this.props)
         this.props.initialParams.signOutParent();
     }
 

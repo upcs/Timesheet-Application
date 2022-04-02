@@ -18,8 +18,12 @@
 
     //Get the change in dates
     onDate = (date, cal) => {
-      //console.log("date", date);
-      //console.log(cal);
+      if(cal == "From"){
+        this.setState({date1: date});
+      }
+      else{
+        this.setState({date2: date});
+      }
       this.props.updateDates(date, cal);
     }
 
