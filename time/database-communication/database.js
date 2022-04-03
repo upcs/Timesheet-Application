@@ -252,13 +252,9 @@ class Database {
      async createUserAccount(first, last, email, pass, admin){
         email = email.toLowerCase();
 
-        //Error check null parameters
-        first.trim();
-        last.trim();
-        email.trim();
-        pass.trim();
+        
 
-        if((!first) || (!last) || (!email)){
+        if((!first) || (!last) || (!email) || (!pass)){
             console.log("null parameter");
             return;
         }
@@ -270,6 +266,10 @@ class Database {
             console.log("null parameter");
             return;
         }
+        first.trim();
+        last.trim();
+        email.trim();
+        pass.trim();
 
         //Error check for gmail account
         if(!email.includes("@gmail.com")){
@@ -418,7 +418,7 @@ class Database {
 
         return await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time).get().then((querySnapshot) => {
             //return 10;
-            console.log("RESULT", querySnapshot);
+           // console.log("RESULT", querySnapshot);
             // Reduce to accumulate time over all elements of array
             let sum = 0;
             querySnapshot.forEach((doc) => {
@@ -478,7 +478,7 @@ class Database {
          return hours; */
         
         const midnight = new Date().setHours(0, 0, 0, 0);
-        console.log("MDNGHT\t", midnight); 
+        //console.log("MDNGHT\t", midnight); 
         let valMs;
         await this.getDurationWorkedSinceTime(id, midnight).then(value => {
             valMs = value;
@@ -600,7 +600,7 @@ class Database {
        let offset = new Date().getTime() * 24 * 60 * 60 * 1000;
        const midnight = (new Date().setHours(0, 0, 0, 0)) - offset;
        
-       console.log("MDNGHT\t", midnight); 
+      // console.log("MDNGHT\t", midnight); 
        let valMs;
        await this.getDurationWorkedSinceTime(id, midnight).then(value => {
            valMs = value;
@@ -808,7 +808,7 @@ class Database {
         }
     }
     /*
-    Caden
+    Cadenss
     */
     async updateEmpJobs(id){
         var jobids = [];
@@ -1036,9 +1036,16 @@ class Database {
      */
     createJob(add, jname, jnotes){
           //Trim values
-          add.trim();
-          jname.trim();
-          jnotes.trim();
+        
+        
+         
+          if(!(jnotes) || (jnotes != " ") || (jnotes == "")){
+            jnotes = "No notes";
+          }
+          else{
+            jnotes.trim();
+           
+          }
           //Phase will be 1 to start
           let phs = 1;
   
@@ -1055,6 +1062,8 @@ class Database {
               console.log("null parameter (name or address)");
               return;
           }
+          add.trim();
+          jname.trim();
   
           //Submit to database
           this.db.collection("jobs").add({

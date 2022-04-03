@@ -68,14 +68,14 @@ import Database from '../database-communication/database.js'
 
     static getDerivedStateFromProps(props, state) {
 
-        if (!props.query) {
+       /* if (!props.query) {
 
             return {
                 FakeData : state.stInitialFake,
             };
             
         }
-
+*/
         if (props.data !== state.stInitialFake) {
 
           return {

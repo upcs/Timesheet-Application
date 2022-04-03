@@ -107,18 +107,18 @@ class JobsList extends React.Component {
         });
 
         //added 
-        this.forceUpdate();
+        //this.forceUpdate();
     }
 
 
     static getDerivedStateFromProps(props, state) {
 
-        if (!props.query) {
+        /*if (!props.query) {
             return {
                 FakeData : state.stInitialFake,
             };
             
-        }
+        }*/
 
         if (props.data !== state.stInitialFake) {
           return {
