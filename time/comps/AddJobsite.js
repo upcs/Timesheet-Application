@@ -79,7 +79,7 @@ export default function AddEmployee(props) {
                   )
               }}
                 >
-                  <Text style={styles.textStyle}>X</Text>
+                  <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
                 </TouchableOpacity>
                 {/*Contain everything within a scroll view so it reacts well to the key board*/}
                 <ScrollView style={style.container}>

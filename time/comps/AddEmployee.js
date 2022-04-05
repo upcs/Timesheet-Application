@@ -177,7 +177,7 @@ export default function AddEmployee(props) {
           </View>
         </Modal>
         <Pressable id='addButton' style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-          <Text  style={styles.textStyle}>Add Employee</Text>
+          <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Add Employee</Text>
         </Pressable>
       </View>
     

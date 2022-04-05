@@ -116,7 +116,7 @@ class Jobsite extends React.Component {
                                     onPress={ () => {
                                         this.setModalVisible(!this.state.isModalVisible)}}
                                     >
-                                 <Text style={styles.textStyle}>X</Text>
+                                 <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
                                     <View style = {styles.modalHeader}>
                                         <Text adjustsFontSizeToFit={true} style ={styles.modalHeaderText}>Current Jobs</Text>
