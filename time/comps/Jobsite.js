@@ -119,7 +119,7 @@ class Jobsite extends React.Component {
                                  <Text style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
                                     <View style = {styles.modalHeader}>
-                                        <Text style ={styles.modalHeaderText}>Current Jobs</Text>
+                                        <Text adjustsFontSizeToFit={true} style ={styles.modalHeaderText}>Current Jobs</Text>
                                     </View>
                                
                                     <FlatList 
