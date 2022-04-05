@@ -173,6 +173,9 @@ class AdminTimesheet extends React.Component {
                     res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
                     res[i].totalPunchTimeInMinutes + "\n\n");
             }
+            if(somedata.length <= 0){
+                somedata.push("No time recorded for employee");
+            }
             this.setState({time: somedata});
         });
     }
@@ -195,6 +198,9 @@ class AdminTimesheet extends React.Component {
                 somedata.push(
                     res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
                     res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            if(somedata.length <= 0){
+                somedata.push("No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")");
             }
             this.setState({time: somedata});
         });
@@ -219,6 +225,9 @@ class AdminTimesheet extends React.Component {
                     res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
                     res[i].totalPunchTimeInMinutes + "\n\n");
             }
+            if(somedata.length <= 0){
+                somedata.push("No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")");
+            }
             this.setState({time: somedata});
         });
     }
@@ -236,6 +245,9 @@ class AdminTimesheet extends React.Component {
                 somedata.push(
                     res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
                     res[i].totalPunchTimeInMinutes + "\n\n");
+            }
+            if(somedata.length <= 0){
+                somedata.push("No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")");
             }
             this.setState({time: somedata});
         });
