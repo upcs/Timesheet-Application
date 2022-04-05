@@ -7,6 +7,38 @@ QUALITY ATTRIBUTES
 4. Efficiency
 5. Useability
 6. Safety
+SPRINT 4 FEATURES
+----------------------------------------
+KNOWN BUGS:<br>
+1. Cannot Scroll Down To view bottom of flatlists<br>
+2. Job Drop Down List not finished<br>
+3. Not all data updates when clocking out<br>
+4. Clock in button not always correct color<br>
+5. Testing fails with hashed passwords<br>
+6. Long Employee names not visible from admin side, names cut off<br>
+7. Employees added to job does not always update correctly given the users OS<br>
+8. Some search bars cause crashing<br>
+
+PERFROMANCE TESTING:<br>
+App takes 24ms to go from App.js constructor to App.js componentDidMount<br>
+
+FEATURES:<br>
+1. Sign out button - users can now sign out<br>
+2. Distribution - App under review for App Store and Google Play Store<br>
+3. Hashed Passwords - can now store hashed passwords<br>
+4. Search Bars - Most search bars functional<br>
+5. Admin Viewing employee time - Admin can view all employee time or filter by dates <br>
+6. Delete Job - Deleting Job now works correctly<br>
+7. Acceptance Tests - Acceptance tests for time sheet viewing, logging in, and for more features as well<br>
+8. Basic Employee Jobsite - now communicates with data base<br>
+9. Upgraded UI for Basic Employee Pages - Employees can filter jobs to see time per job <br>
+10. Drop Down List for employees to select job to charge to IN PROGRESS <br>
+11. Testing now works with firebase <br>
+12. Crashing when entering in null info for jobs and users now fixed <br>
+
+
+
+
 
 ------------------------------------------
 SPRINT 3 FEATURES

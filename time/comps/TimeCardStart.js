@@ -16,7 +16,7 @@
 import React from 'react';
 import {Color} from './Palette.js';
 
-import { Picker, Text, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
+import { Picker, Modal, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
 import TimeUtil from './TimeUtil.js';
 
 
@@ -57,21 +57,49 @@ var endTime = 0;
             currentDuration: 0,
             isTimerOn: false,
             timerUpdater: null,
+            isModalVisible: false,
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
         this.signOut = this.signOut.bind(this); 
+        this.getUserInfo = this.getUserInfo.bind(this);
+        this.updatePassword = this.updatePassword.bind(this);
         this.data = new Database();
+
     };
 
+    handleClockOut= () => {
+      this.props.sendData();
+    }
+    /**
+     * Get user's first and last name
+     * 
+     * @author gabes
+     */
+    getUserInfo(){
+        console.log("hit");
+        this.data.getUsersInfo(User.getId()).then((res, rej) => {
+            console.log('name', res);
+            this.setState({
+                firstName: res[0],
+                lastName: res[1],
+                email: res[2],
+            })
+        })
+    }
 
     /**
-     * Updates the users daily time when the stop button is pressed
+     * Get the users password
      * 
-     * Takes their current running time and adds it to the daily banked time
+     * @author gabes
      */
-    
-
+    updatePassword(){
+        this.data.setPassword(this.state.password, User.getId());
+    }
 
     /**
      * Turns the timer off
@@ -79,7 +107,7 @@ var endTime = 0;
      * Called when user pressed 'Stop' 
      * Calls totalTime() to total the new time added
      */
-    timerOff(){
+   async timerOff(){
         let { todayTime, currentDuration, lastTimerIn, timerUpdater,  } = this.state;
 
       //  todayTime += currentDuration;
@@ -94,21 +122,16 @@ var endTime = 0;
             timerUpdater: null,
         });
 
-        this.data.punchOut(User.getId());
+       await this.data.punchOut(User.getId());
+       this.handleClockOut();
     }   
-
 
     /**
      * Starts the timer 
      * 
      * Called when the user presses 'Start" 
      */
-
-    
-    
-
     timerOn(){
-
         this.setState({
             isTimerOn: true,
             lastTimerIn: Date.now(),
@@ -135,9 +158,10 @@ var endTime = 0;
       * 
       * Starts or stopes a timer and updates the state
       */
-    onPress = () => { 
+     onPress = () => { 
         if (this.state.isTimerOn) {
-            this.timerOff();
+          this.timerOff();
+            
         } else {
             this.timerOn();
         }
@@ -150,8 +174,17 @@ var endTime = 0;
      * @author gabes
      */
     signOut = () => {
-        console.log(this.props)
         this.props.initialParams.signOutParent();
+    }
+
+    /**
+     * Change modal visibility
+     * 
+     * 
+     * @author gabes 
+     */
+    setModalVisible = (visible) => {
+        this.setState({isModalVisible: visible});
     }
 
 
@@ -177,17 +210,10 @@ var endTime = 0;
         ];
         const timeString = TimeUtil.convertMsToReadable(todayTime * 1000);
         let currentJob = "java";
+        const { isModalVisible } = this.state;
         return (
             <View style={styles.container}>
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-                <View style={styles.logoutView}>
-                    <TouchableOpacity 
-                        style={styles.signOutButton}
-                        onPress={this.signOut}
-                    >
-                            <Text style={styles.signOutText}>Sign Out</Text>
-                        </TouchableOpacity>
-                </View>
                 <View>
                     <Text style={styles.current_time}>{currentDuration}</Text>
                     <View style={styles.timerButtonOuter}>
@@ -223,9 +249,103 @@ var endTime = 0;
                         
                     </View>
                 </View>
-                
                  <Text>Today's Time: {timeString}</Text> 
-             </View>
+                 <View style={styles.bottomContainer}>
+
+                 <View style={styles.logoutView}>
+                       <TouchableOpacity 
+                           style={styles.signOutButton}
+                           onPress={this.signOut}
+                       >
+                               <Text style={styles.signOutText}>Sign Out</Text>
+                           </TouchableOpacity>
+                   </View>  
+
+                    {/* ACCOUNT BUTTON */}
+                   <View style={styles.logoutView}>
+                       <TouchableOpacity 
+                           style={styles.signOutButton}
+                           onPress={ () => {
+                               this.setModalVisible(!isModalVisible);
+                               this.getUserInfo();
+                           }}
+                       >
+                               <Text style={styles.signOutText}>Account</Text>
+                           </TouchableOpacity>
+                   </View> 
+                   <Modal
+                        animationType='slide'
+                        transparent={true}
+                        visible = {isModalVisible}
+                        onRequestClose = { () => {
+                            this.setModalVisible(!isModalVisible);
+                        }}
+                    >
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                
+                                    {/* THE EXIT BUTTON */}
+                                    <View style={styles.leftView}>
+                                        <TouchableOpacity 
+                                        id='exitButton' 
+                                        style={[styles.mbutton, styles.buttonClose]} 
+                                        onPress={ () =>
+                                        {
+                                            this.setModalVisible(!isModalVisible);
+                                        }}>
+                                            <Text style={styles.textStyle}>X</Text>
+                                        </TouchableOpacity>
+                                    </View>
+
+                                     {/* USER'S NAME */}
+                                    <Text style={styles.modalText}> 
+                                        {this.state.firstName + " " + this.state.lastName}
+                                    </Text>
+
+                                    {/* CHANGE EMAIL */}
+                                    <View style={styles.textAndTitle}>
+                                        <Text style={styles.titles}>Email:</Text>
+                                        <TextInput 
+                                            id='email'
+                                            style={styles.textArea} 
+                                            defaultValue={this.state.email}
+                                            onChangeText={ (text) =>{
+                                                this.setState({userLast: text})
+                                            }}>
+                                        </TextInput>
+                                    </View>
+
+                                    {/* CHANGE PASSWORD */}
+                                    <View style={styles.textAndTitle}>
+                                        <Text style={styles.titles}>New Password:</Text>
+                                        <TextInput 
+                                            id='password'
+                                            style={styles.textArea} 
+                                            defaultValue={''}
+                                            secureTextEntry={true}
+                                            onChangeText={ (text) =>{
+                                                this.setState({password: text})
+                                            }}>
+                                        </TextInput>
+                                    </View>
+
+                                    {/* SAVE CHANGES */}
+                                    <TouchableOpacity
+                                        id='saveChanges'
+                                        style={[styles.mbutton, styles.buttonClose]}
+                                        onPress={ () => {
+                                                this.setModalVisible(!isModalVisible);
+                                                this.updatePassword()
+                                            }}>
+                                            <Text style={styles.textStyle}>Save Changes</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                   </Modal>
+
+
+                 </View> 
+             </View>     
             ) 
         }
     }
@@ -249,8 +369,35 @@ var endTime = 0;
          marginTop: 100,
      },
 
-     logoutView: {
-         flex: 0
+     bottomContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        padding: '5%'
+     },
+
+     leftView: {
+        paddingLeft: 0,
+        paddingRight: 200,
+        paddingBottom: 25,
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
+      },
+
+      button: {
+        borderRadius: 20,
+        padding: 15,
+        elevation: 2,
+        marginTop: 25
+        },
+        buttonOpen: {
+        backgroundColor: Color.MAROON,
+    },
+    buttonClose: {
+        backgroundColor: Color.MAROON,
+    },
+
+     logoutView: { 
      },
 
      //Styles for start button
@@ -284,7 +431,7 @@ var endTime = 0;
         width: '100%',
         overflow: 'hidden',
         borderRadius: 35,
-        height: 90,
+        height: 70,
         borderWidth: 5,
         alignItems: 'center',
         backgroundColor: 'black'
@@ -292,7 +439,7 @@ var endTime = 0;
 
      signOutText: {
         alignItems: 'center',
-        fontSize: 30,
+        fontSize: 20,
         color: 'white',
         padding: 10,
      },
@@ -306,6 +453,68 @@ var endTime = 0;
      stop: {
         borderColor: '#882244',
         backgroundColor: Color.MAROON, 
+    },
+
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+
+    modalView: {
+        margin: 10,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 55,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center", 
+        fontWeight: 'bold',
+        fontSize: 25
+    },
+
+    textAndTitle: {
+        flexDirection: 'row'
+    },
+
+    textArea: {
+        padding: 15,
+        marginBottom: 15,
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 15
+    },
+
+    titles: {
+        padding: 15
+    },
+
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+
+    mbutton: {
+        borderRadius: 20,
+        padding: 15,
+        elevation: 2,
+        marginTop: 25
+        },
+        buttonOpen: {
+        backgroundColor: Color.MAROON,
     },
 
     //Styles for text in the button
