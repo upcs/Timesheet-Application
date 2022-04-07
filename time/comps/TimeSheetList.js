@@ -69,8 +69,6 @@ class TimeSheetList extends React.Component {
     static getDerivedStateFromProps(props, state) {
 
         if (!props.query) {
-            console.log('no query');
-            console.log(state.stInitialFake)
             return {
                 data : state.stInitialFake,
             };
@@ -78,7 +76,6 @@ class TimeSheetList extends React.Component {
         }
 
         if (props.data !== state.stInitialFake) {
-          console.log("changed");
           return {
             data : props.data 
            
@@ -105,7 +102,6 @@ class TimeSheetList extends React.Component {
         if (this.props.request) {
                       
             this.sendData();
-            console.log('request recieved')
         }
 
 

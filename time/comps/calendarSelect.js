@@ -25,10 +25,10 @@ export default function CalendarS(props) {
 
  //what to do when the user submits the calendar
   const onChange = (event, selectedDate) => {
+    props.onDate(selectedDate, props.id);
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
-    props.onDate(selectedDate, props.id);
     try{
     changeText(selectedDate.toString().substring(0,11));
     }

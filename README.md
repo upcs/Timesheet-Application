@@ -1,4 +1,12 @@
 -----------------------------------------
+QUALITY ATTRIBUTES
+-----------------------------------------
+1. Correctness
+2. Accessability 
+3. Manageability 
+4. Efficiency
+5. Useability
+6. Safety
 SPRINT 4 FEATURES
 ----------------------------------------
 KNOWN BUGS:<br>

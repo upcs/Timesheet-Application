@@ -126,6 +126,21 @@ class Database {
     }
 
     /**
+     * 
+     * Get the users name
+     * 
+     * @author gabes 
+     */
+    async getUsersInfo(id){
+        if(id == '' || id == null){
+            console.log("Couldn't fetch user's name");
+            return;
+        }
+        var document = await this.db.collection("accounts").doc(id).get();
+        return [document.data().firstname, document.data().lastname, document.data().email];
+    }
+
+    /**
      * Gets users admin privelleges
      */
     getUserType(){
@@ -203,6 +218,18 @@ class Database {
     async setuserLast(id, last){
         if(id != null){
             await this.db.collection("accounts").doc(id).update({lastname: last});
+        }
+    }
+
+
+    /**
+     * Set a new password for the user
+     * 
+     * @author gabes
+     */
+    async setPassword(pass, id){
+        if(id != null){
+            await this.db.collection('accounts').doc(id).update({password: pass});
         }
     }
 

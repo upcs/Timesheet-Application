@@ -82,7 +82,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       }
 
       currValue(newValue) {
-        //console.log(newValue);
         this.setState({query : newValue});
 
 
