@@ -289,7 +289,7 @@ class AdminTimesheet extends React.Component {
                         <Text style={[styles.employees_hours, styles.text_employee]}>Punchs:
                         </Text>
                         
-                        <TimeList ref={this.myref} emp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
+                        <TimeList ref={this.myref} theEmp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
                     </View>
                 </View>
             </View>

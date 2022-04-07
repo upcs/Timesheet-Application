@@ -413,9 +413,8 @@ class Database {
     @Result: Updates Punch - totalTimeInMinutes
     */
    async setPunchMinutes(EmpID, PunchID, newMin){
-     await this.dp.collection("accounts").doc(EmpID).collection("punch").doc(PunchID).update({
-        totalPunchTimeInMinutes: parseInt(newMin)
-    });
+       console.log(EmpID + " di " + PunchID + " min " + newMin);
+     await this.db.collection("accounts").doc(EmpID).collection("punch").doc(PunchID).update({totalPunchTimeInMinutes: newMin});
    }
     /*
     @author Justin

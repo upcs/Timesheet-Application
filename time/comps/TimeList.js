@@ -11,7 +11,7 @@
  
 
 import React, {useEffect, useState} from 'react';
-import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity, Modal, TextInput, Pressable} from 'react-native'
+import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity, Modal, TextInput, Pressable, Alert} from 'react-native'
 import { Color } from './Palette.js';
 import Database from '../database-communication/database.js'
 
@@ -30,7 +30,8 @@ class TimeList extends React.Component {
            data: this.props.hoursData,
            currentTime: 0,
            currentDate: 0,
-           empID: this.props.emp
+           currentDocID: 0,
+           empID: this.props.theEmp
          
         };
         this.data = new Database();
@@ -45,14 +46,39 @@ class TimeList extends React.Component {
 setCurrentTime = (time) => {
     this.setState({currentTime: time});
 }
+setCurrentDocID = (id) => {
+  this.setState({currentDocID: id});
+}
 
+handleSubmit = (time) => {
+   
+      if(!isNaN(time)){
+        this.data.setPunchMinutes(this.props.theEmp,this.state.currentDocID,time);
+        this.setModalVisible(!this.state.isModalVisible);
+      }
+      else{
+        Alert.alert(
+          'Error',
+          'Punch must be a number.',
+          [
+              //On "No" do nothing
+              {text: 'Understand', id:'noAlert', onPress: () => console.log("Cancel"), style: 'cancel'}
+          ],
+          {cancelable: false}
+      )
+      }
+  
+}
     //Render each item as a button
     renderItem = ({item}) => {
         return (
             <View style={styles.item}>
                 <TouchableOpacity onPress={() => {
-                  this.setModalVisible(true);
                   this.setCurrentTime(item.hours);
+                  this.setCurrentDocID(item.id);
+                  if(item.id != 0){
+                    this.setModalVisible(true);
+                  }
                 }}>
                     <Text >{item.date + '\n' + item.hours}</Text>
                 </TouchableOpacity>
@@ -102,7 +128,7 @@ setCurrentTime = (time) => {
                                      <Pressable
                                     id='submitButton'
                                     style={[styles.button, styles.buttonClose]}
-                                    onPress={() => {this.setModalVisible(!this.state.isModalVisible)}}>
+                                    onPress={() => {this.handleSubmit(this.state.currentTime)}}>
                                     <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                                     </Pressable>
                             </View>
