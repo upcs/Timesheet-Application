@@ -416,14 +416,16 @@ class JobsList extends React.Component {
                                 <SearchBar></SearchBar>
                             </View>
 
+                            <View styles={styles.listView}>
                             {/* EMPLOYEE LIST */}
-                            <FlatList 
-                                id='employeeJobList'
-                                style={styles.list}
-                                data={this.state.eList}  
-                                keyExtractor={item => item.id.toString()}
-                                renderItem={this.renderList} 
-                            />
+                                <FlatList 
+                                    id='employeeJobList'
+                                    style={styles.list}
+                                    data={this.state.eList}  
+                                    keyExtractor={item => item.id.toString()}
+                                    renderItem={this.renderList} 
+                                />
+                            </View>
 
                             {/* SAVE CHANGES */}
                             <TouchableOpacity
@@ -573,7 +575,8 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: "center", 
         fontWeight: 'bold',
-        fontSize: 25
+        fontSize: 20
+
     },
     titles: {
         padding: 15
@@ -590,7 +593,7 @@ const styles = StyleSheet.create({
     },
     list: {
         flexGrow: 0,
-        height: 200,
+        //height: 200,
         marginTop: 20
     },
     textStyle: {
