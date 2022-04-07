@@ -100,9 +100,8 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
      render() {
 
-      //this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
       this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
-      //this.callbackFunction = this.callbackFunction();
+
 
 
       //Added 
