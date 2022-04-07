@@ -24,6 +24,7 @@ class Jobsite extends React.Component {
     componentDidMount = () => {
         this.data.updateEmpJobs(this.state.id).then((res,rej) =>
         {
+            //PRIORITY WILL COME FROM RES
             this.setState({jList: res}, () => {
                 this.data.getSpecificJobs(res).then((fin,fail) => {
                     this.setState({TheData: fin}, () => {
@@ -33,6 +34,8 @@ class Jobsite extends React.Component {
             });
         }
         )
+
+        //MAYBE SORT JOBS HERE AS WELL? 
         
     }
     setModalVisible = (visible) => {
