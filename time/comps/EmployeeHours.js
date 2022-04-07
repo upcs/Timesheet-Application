@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center', 
         justifyContent: 'center',
+        backgroundColor: 'white',
         flex: 1
     },
     //Hours Text

@@ -185,7 +185,8 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
     containerMaster: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'white'
     },
     notesContainer: {
         flex: 0.6 
