@@ -14,7 +14,7 @@ import TimeSheetList from './TimeSheetList';
 import Menu from './Menu';
 import CalendarButton from './calendar_button';
 import Database from '../database-communication/database.js'
-
+import TimeList from './TimeList'
 
 /**
  * Admin page to view timesheets of all employees
@@ -40,6 +40,7 @@ class AdminTimesheet extends React.Component {
             requesting: false,
         };
         this.data = new Database();
+        this.myref = React.createRef();
     }
 
     componentDidMount = () => {
@@ -172,14 +173,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
             }
             if(somedata.length <= 0){
-                somedata.push("No time recorded for employee");
+                somedata.push({id: "0", date: "No time recorded for employee", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -198,14 +200,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
             }
             if(somedata.length <= 0){
-                somedata.push("No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")");
+                somedata.push({id: "0",date: "No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -224,14 +227,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
             }
             if(somedata.length <= 0){
-                somedata.push("No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")");
+                somedata.push({id: "0",date: "No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -245,21 +249,23 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes });
             }
             if(somedata.length <= 0){
-                somedata.push("No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")");
+                somedata.push({id: "0",date: "No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")", hours: ""});
             }
+            
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
 
 
     render() {
-
+        
         this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
 
         return (
@@ -280,11 +286,10 @@ class AdminTimesheet extends React.Component {
                         <TimeSheetList onChange={this.onListPress} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems} style={styles.employees}> </TimeSheetList>
                     </View>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
-                        <Text style={[styles.employees_hours, styles.text_employee]}>Hours:
+                        <Text style={[styles.employees_hours, styles.text_employee]}>Punchs:
                         </Text>
-                        <ScrollView>
-                        <Text style={styles.hours}>{this.state.time}</Text>
-                        </ScrollView>
+                        
+                        <TimeList ref={this.myref} emp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
                     </View>
                 </View>
             </View>

@@ -405,6 +405,9 @@ class Database {
             totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
+    /*
+    
+    */
 
     /*
     @author Justin
