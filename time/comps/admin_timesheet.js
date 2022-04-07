@@ -15,6 +15,8 @@ import Menu from './Menu';
 import CalendarButton from './calendar_button';
 import Database from '../database-communication/database.js'
 import TimeList from './TimeList'
+import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { Color } from './Palette';
 
 /**
  * Admin page to view timesheets of all employees
@@ -301,6 +303,7 @@ class AdminTimesheet extends React.Component {
 const styles = StyleSheet.create({
     vertical_layout: {
         flex: 1,
+        backgroundColor: 'white'
     },
     horizontal_layout_top: {
         flex: 0.1,
@@ -309,13 +312,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
         alignItems: 'center', 
         justifyContent: 'center',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        backgroundColor: 'white'
+        
     },
     horizontal_layout_bottom: {
         flex: 1,
         flexDirection: "row", 
         marginBottom: 0,
-        marginTop: 20
+        marginTop: 20,
+        backgroundColor: 'white'
     },
     employees_hours: {
         marginLeft: 0,
@@ -326,13 +332,14 @@ const styles = StyleSheet.create({
     },
     text_date: {
         fontSize: 10,
-        marginLeft: 10
+        marginLeft: 10,
     },
     text_employee: {
         textDecorationLine: 'underline'
     },
     search: {
-        marginLeft: 10
+        marginLeft: 10,
+        backgroundColor: 'white'
     },
     hours: {
         textDecorationLine: 'none'

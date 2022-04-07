@@ -212,6 +212,7 @@ var endTime = 0;
         let currentJob = "java";
         const { isModalVisible } = this.state;
         return (
+            <View style={styles.justColor}>
             <View style={styles.container}>
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
                 <View>
@@ -248,7 +249,7 @@ var endTime = 0;
                         </View>
                         
                     </View>
-                </View>
+                </View >
                  <Text>Today's Time: {timeString}</Text> 
                  <View style={styles.bottomContainer}>
 
@@ -345,7 +346,8 @@ var endTime = 0;
 
 
                  </View> 
-             </View>     
+             </View>  
+             </View>   
             ) 
         }
     }
@@ -355,11 +357,15 @@ var endTime = 0;
   * Styles used for creating the timecard component 
   */
  const styles = StyleSheet.create({
+     justColor: {
+        backgroundColor: 'white',
+        flex: 1
+     },
      //Timecard container
      container: {
          alignItems: 'center', 
          justifyContent: 'center',
-         flex: 0.6,
+         flex: 0.7
      },
 
      //Styles for the logo
@@ -373,7 +379,8 @@ var endTime = 0;
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        padding: '5%'
+        padding: '5%',
+        backgroundColor: 'white'
      },
 
      leftView: {
@@ -398,6 +405,7 @@ var endTime = 0;
     },
 
      logoutView: { 
+         backgroundColor: 'white'
      },
 
      //Styles for start button
@@ -409,6 +417,7 @@ var endTime = 0;
         
          height: 250,
          overflow: 'hidden',
+         backgroundColor: 'white'
      },
 
      picker: {
