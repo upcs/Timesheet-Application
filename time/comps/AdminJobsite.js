@@ -184,6 +184,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
     buttonContainer: {
        justifyContent: 'center', 
        position: 'relative',
+       flex: 1
     }
  });
  

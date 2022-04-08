@@ -142,6 +142,7 @@ import AddEmployee from './AddEmployee.js';
     buttonContainer: {
        justifyContent: 'center', 
        position: 'relative',
+       flex: 1
     }
  });
  
