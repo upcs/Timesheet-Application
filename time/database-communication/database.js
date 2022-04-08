@@ -834,6 +834,8 @@ class Database {
             for(let i = 0; i < emp.length; i++){
                 if( id == emp[i].accountID){
                    matches.push(jobs);
+                   //TODO: NEED TO GET THE JOBPRIORITY HERE
+                   //SHOULD JUST REQUIRE PUSHING INTO THE ARRAY
                 }
             }
     }
@@ -1019,6 +1021,12 @@ class Database {
      * @author Jude Gabriel
      */
     async addEmployeeToJob(jobId, employeeToAdd){
+        //TODO:
+        //1. Find all jobs the employee is on, get their job num
+        //2. Find the highest jobPriority
+        //3. Add 1 to job num and set as jobPriority 
+
+
         await this.db.collection("jobs").doc(jobId).collection("employees").add({
             accountID: employeeToAdd.id
         });
