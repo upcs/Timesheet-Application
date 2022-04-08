@@ -110,7 +110,9 @@ class TimeSheetList extends React.Component {
                 <FlatList 
                     data={this.state.data} 
                     renderItem={this.renderItem} 
-                    keyExtractor={item => item.name}/>
+                    keyExtractor={item => item.name}
+                    contentContainerStyle={styles.contentContainer}
+                />
             </View>
         );
     }
@@ -122,7 +124,10 @@ const styles = StyleSheet.create({
     item: {
         padding: 20,
         borderTopWidth: 1,
-    }
+    }, 
+    contentContainer: {
+        paddingBottom: 100
+      },
 });
 
 
