@@ -32,27 +32,22 @@ class JobsList extends React.Component {
     constructor(props) {
         super(props);
 
-        
-        //Changing
-       // this.initFakeData = [];
-       // console.log(props.data);
+        this.currValueMod = this.currValueMod.bind(this);
         this.initEData = eData;
         this.state = {
             FakeData: [],
             eData: [],
             stInitialFake: [],
-
-
             isModalVisible: false,
-            
             modalTwo: false,
             address: '',
             jobName: '',
             jobEdited: '',
             employeeEdited: '',
             eList: null,
-
             doOnce: true,
+            query: '',
+            refresh: false,
             
         };
 
@@ -128,6 +123,43 @@ class JobsList extends React.Component {
         }  
         return  null;
         
+    }
+
+    /**
+     * Updates state on SearchBar change
+     * @param {*} newValue 
+     */
+    currValueMod(newValue) {
+        this.setState({query : newValue});
+        //this.setState({requesting : true});
+        //
+        //Filter Data
+        this.filteredItemsMod = this.getFilteredItems(this.state.query, this.state.eList);
+        console.log("Should have Filtered");
+
+        if ( this.filteredItemsMod != this.state.eList) {
+            this.setState({eList: this.filteredItemsMod});
+        
+        console.log(this.state.eList)};
+        this.setState({ 
+            refresh: !this.state.refresh
+            
+        })
+        console.log("Refreshed");
+        this.forceUpdate();
+    }
+
+
+    getFilteredItems(query, items) {
+
+        if (!query || query.length == 0) {
+
+          return items;
+        }
+        this.forceUpdate();
+        return items.filter((employ) => employ.lastname.toString().toLowerCase().includes(query.toString().toLowerCase()));
+
+      
     }
 
 
@@ -299,6 +331,9 @@ class JobsList extends React.Component {
     /**
      * Render list of active employees 
      */
+
+
+
     renderList = ({item}) => {
         return(
             <View 
@@ -330,7 +365,12 @@ class JobsList extends React.Component {
      * Render the component
      */
     render() {
+
+
         
+
+        
+            
         //Send data when prop "request" is true
         if (this.state.doOnce == true) {
             this.data.getAllJobs().then((res, rej) => {
@@ -413,12 +453,13 @@ class JobsList extends React.Component {
 
                             {/* SEARCH BAR */}
                             <View styles={styles.search}>
-                                <SearchBar></SearchBar>
+                                <SearchBar currValue = {this.currValueMod}></SearchBar>
                             </View>
 
                             <View styles={styles.listView}>
                             {/* EMPLOYEE LIST */}
                                 <FlatList 
+                                    extraData={this.state}
                                     id='employeeJobList'
                                     style={styles.list}
                                     data={this.state.eList}  
@@ -618,7 +659,7 @@ const styles = StyleSheet.create({
 
     save:{
         marginRight: 30,
-    }
+    },
 
     
 });
