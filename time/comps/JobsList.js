@@ -427,27 +427,32 @@ class JobsList extends React.Component {
                                 />
                             </View>
 
-                            {/* SAVE CHANGES */}
-                            <TouchableOpacity
-                                id='saveJobChanges'
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={ () => {
-                                        this.setModalVisible(!isModalVisible);
-                                        this.saveJob(this.state.jobEdited);
-                                    }}>
-                                    <Text style={styles.textStyle}>Save Changes</Text>
-                            </TouchableOpacity>
+                            <View style={styles.saveadd}>
 
-                            {/* ADD EMPLOYEE */}
-                            <TouchableOpacity
-                                id='addEmployeeButton'
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={ () => {
-                                        this.setModalVisible(!isModalVisible);
-                                        this.setModalTwo(!modalTwo);
-                                    }}>
-                                    <Text style={styles.textStyle}>Add Employee</Text>
-                            </TouchableOpacity>
+                            {/* SAVE CHANGES */}
+                                <View style={styles.save}>
+                                    <TouchableOpacity
+                                        id='saveJobChanges'
+                                        style={[styles.button, styles.buttonClose]}
+                                        onPress={ () => {
+                                                this.setModalVisible(!isModalVisible);
+                                                this.saveJob(this.state.jobEdited);
+                                            }}>
+                                            <Text style={styles.textStyle}>Save Changes</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                {/* ADD EMPLOYEE */}
+                                <TouchableOpacity
+                                    id='addEmployeeButton'
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={ () => {
+                                            this.setModalVisible(!isModalVisible);
+                                            this.setModalTwo(!modalTwo);
+                                        }}>
+                                        <Text style={styles.textStyle}>Add Employee</Text>
+                                </TouchableOpacity>
+                            </View>
 
                             {/* REMOVE JOB */}
                             <TouchableOpacity
@@ -593,7 +598,7 @@ const styles = StyleSheet.create({
     },
     list: {
         flexGrow: 0,
-        //height: 200,
+        height: 100,
         marginTop: 20
     },
     textStyle: {
@@ -604,7 +609,18 @@ const styles = StyleSheet.create({
     search: {
         paddingBottom: 50,
         marginBottom: 15,
+    },
+
+    saveadd: {
+        flexDirection: 'row',
+       
+    },
+
+    save:{
+        marginRight: 30,
     }
+
+    
 });
  
  
