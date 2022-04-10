@@ -119,10 +119,10 @@ class Jobsite extends React.Component {
                                     onPress={ () => {
                                         this.setModalVisible(!this.state.isModalVisible)}}
                                     >
-                                 <Text style={styles.textStyle}>X</Text>
+                                 <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
                                     <View style = {styles.modalHeader}>
-                                        <Text style ={styles.modalHeaderText}>Current Jobs</Text>
+                                        <Text adjustsFontSizeToFit={true} style ={styles.modalHeaderText}>Current Jobs</Text>
                                     </View>
                                
                                     <FlatList 
@@ -188,7 +188,8 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
     containerMaster: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'white'
     },
     notesContainer: {
         flex: 0.6 

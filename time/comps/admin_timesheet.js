@@ -14,7 +14,9 @@ import TimeSheetList from './TimeSheetList';
 import Menu from './Menu';
 import CalendarButton from './calendar_button';
 import Database from '../database-communication/database.js'
-
+import TimeList from './TimeList'
+import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { Color } from './Palette';
 
 /**
  * Admin page to view timesheets of all employees
@@ -40,6 +42,7 @@ class AdminTimesheet extends React.Component {
             requesting: false,
         };
         this.data = new Database();
+        this.myref = React.createRef();
     }
 
     componentDidMount = () => {
@@ -172,11 +175,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
+            }
+            if(somedata.length <= 0){
+                somedata.push({id: "0", date: "No time recorded for employee", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -195,11 +202,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
+            }
+            if(somedata.length <= 0){
+                somedata.push({id: "0",date: "No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -218,11 +229,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
+            }
+            if(somedata.length <= 0){
+                somedata.push({id: "0",date: "No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -236,18 +251,23 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes });
             }
+            if(somedata.length <= 0){
+                somedata.push({id: "0",date: "No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")", hours: ""});
+            }
+            
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
 
 
     render() {
-
+        
         this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
 
         return (
@@ -268,11 +288,10 @@ class AdminTimesheet extends React.Component {
                         <TimeSheetList onChange={this.onListPress} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems} style={styles.employees}> </TimeSheetList>
                     </View>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
-                        <Text style={[styles.employees_hours, styles.text_employee]}>Hours:
+                        <Text style={[styles.employees_hours, styles.text_employee]}>Punchs:
                         </Text>
-                        <ScrollView>
-                        <Text style={styles.hours}>{this.state.time}</Text>
-                        </ScrollView>
+                        
+                        <TimeList ref={this.myref} theEmp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
                     </View>
                 </View>
             </View>
@@ -284,6 +303,7 @@ class AdminTimesheet extends React.Component {
 const styles = StyleSheet.create({
     vertical_layout: {
         flex: 1,
+        backgroundColor: 'white'
     },
     horizontal_layout_top: {
         flex: 0.1,
@@ -292,13 +312,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
         alignItems: 'center', 
         justifyContent: 'center',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        backgroundColor: 'white'
+        
     },
     horizontal_layout_bottom: {
         flex: 1,
         flexDirection: "row", 
         marginBottom: 0,
-        marginTop: 20
+        marginTop: 20,
+        backgroundColor: 'white'
     },
     employees_hours: {
         marginLeft: 0,
@@ -309,13 +332,14 @@ const styles = StyleSheet.create({
     },
     text_date: {
         fontSize: 10,
-        marginLeft: 10
+        marginLeft: 10,
     },
     text_employee: {
         textDecorationLine: 'underline'
     },
     search: {
-        marginLeft: 10
+        marginLeft: 10,
+        backgroundColor: 'white'
     },
     hours: {
         textDecorationLine: 'none'

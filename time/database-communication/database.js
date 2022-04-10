@@ -405,7 +405,17 @@ class Database {
             totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
-
+    /*
+    @author Caden Deutscher
+    @date: 4/7/2022
+    @params: EmpID, PunchID, newMinutes
+    @Return: N/A
+    @Result: Updates Punch - totalTimeInMinutes
+    */
+   async setPunchMinutes(EmpID, PunchID, newMin){
+       console.log(EmpID + " di " + PunchID + " min " + newMin);
+     await this.db.collection("accounts").doc(EmpID).collection("punch").doc(PunchID).update({totalPunchTimeInMinutes: newMin});
+   }
     /*
     @author Justin
     @date 3/19/22
