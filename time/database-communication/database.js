@@ -133,7 +133,6 @@ class Database {
      */
     async getUsersInfo(id){
         if(id == '' || id == null){
-            console.log("Couldn't fetch user's name");
             return;
         }
         var document = await this.db.collection("accounts").doc(id).get();
@@ -1028,7 +1027,6 @@ class Database {
         for(const jobs of jobids){
            const emp =  await this.getJobEmployeesID(jobs);
                 for(let i = 0; i < emp.length; i++){
-                    console.log("id", id);
                     if( id == emp[i].accountID){
                         matches.push(emp[i].jobPriority);
                     }
@@ -1102,7 +1100,6 @@ class Database {
 
         //Pass just the job if to jobs array
         for(var i = 0; i < priorityArray.length; i++){
-            console.log(priorityArray[i].job, priorityArray[i].priority);
             jobsArray.push(priorityArray[i].job);
         }
 
