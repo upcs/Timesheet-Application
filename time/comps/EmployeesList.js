@@ -177,6 +177,7 @@ import Database from '../database-communication/database.js'
                     data={this.state.FakeData} 
                     keyExtractor={item => item.id.toString()}
                     renderItem={this.renderItem} 
+                    contentContainerStyle={styles.contentContainer}
                     />
                 <Modal
                     id='employeeModal'
@@ -368,6 +369,9 @@ import Database from '../database-communication/database.js'
         marginTop: 10,
         marginBottom: 30
     },
+    contentContainer: {
+        paddingBottom: 100
+      },
  });
  
  

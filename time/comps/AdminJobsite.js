@@ -156,7 +156,9 @@ import FakeJobsiteData from './FakeJobsiteData.js';
  
  /*  Styles used for login screen */
  const styles = StyleSheet.create({
-     
+     container: {
+      backgroundColor: 'white'
+     },
 
      upperbar: {
         
@@ -190,6 +192,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
     buttonContainer: {
        justifyContent: 'center', 
        position: 'relative',
+       flex: 1
     }
  });
  
