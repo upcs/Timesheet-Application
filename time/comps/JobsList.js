@@ -45,6 +45,7 @@ class JobsList extends React.Component {
             jobEdited: '',
             employeeEdited: '',
             eList: null,
+            eListInitital: null,
             doOnce: true,
             query: '',
             refresh: false,
@@ -131,21 +132,19 @@ class JobsList extends React.Component {
      */
     currValueMod(newValue) {
         this.setState({query : newValue});
-        //this.setState({requesting : true});
-        //
+ 
         //Filter Data
-        this.filteredItemsMod = this.getFilteredItems(this.state.query, this.state.eList);
-        console.log("Should have Filtered");
+        this.filteredItemsMod = this.getFilteredItems(this.state.query, this.state.eListInitital);
+       
 
-        if ( this.filteredItemsMod != this.state.eList) {
+        if (this.filteredItemsMod != this.state.eList) {
             this.setState({eList: this.filteredItemsMod});
         
-        console.log(this.state.eList)};
-        this.setState({ 
-            refresh: !this.state.refresh
+          
             
-        })
-        console.log("Refreshed");
+            
+        }
+        
         this.forceUpdate();
     }
 
@@ -157,7 +156,7 @@ class JobsList extends React.Component {
           return items;
         }
         this.forceUpdate();
-        return items.filter((employ) => employ.lastname.toString().toLowerCase().includes(query.toString().toLowerCase()));
+        return items.filter((employ) =>(employ.firstname.toString().toLowerCase() + " " + employ.lastname.toString().toLowerCase()).includes(query.toString().toLowerCase()));
 
       
     }
@@ -217,6 +216,9 @@ class JobsList extends React.Component {
             })
             this.data.getJobEmployeeData(res).then((respo, rejo) => {
                 this.setState({eList: respo});
+
+                //Added by Harrison for Search Bar
+                this.setState({eListInitital: respo});
             })
         });
     }
