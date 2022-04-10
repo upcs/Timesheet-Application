@@ -654,6 +654,10 @@ const styles = StyleSheet.create({
         marginRight: 30,
     },
 
+    contentContainer: {
+        paddingBottom: 100,
+    },
+
     
 });
  
