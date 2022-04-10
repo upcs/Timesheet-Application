@@ -399,6 +399,7 @@ class JobsList extends React.Component {
                     data={this.state.FakeData} 
                     keyExtractor={item => item.id.toString()}
                     renderItem={this.renderItem} 
+                    contentContainerStyle={styles.contentContainer}
                     />
                 <Modal
                     animationType='slide'
@@ -647,11 +648,12 @@ const styles = StyleSheet.create({
     textStyle: {
         color: "white",
         fontWeight: "bold",
-        textAlign: "center"
+        textAlign: "center", 
     },
     search: {
         paddingBottom: 50,
         marginBottom: 15,
+
     },
 
     saveadd: {
@@ -664,6 +666,12 @@ const styles = StyleSheet.create({
     },
 
     
+
+    }, 
+    contentContainer: {
+        paddingBottom: 100
+      },
+
 });
  
  
