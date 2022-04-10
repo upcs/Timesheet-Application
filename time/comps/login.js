@@ -59,6 +59,12 @@ class Login extends React.Component {
         });
     }
 
+    resetPass = () => {
+        this.data.resetPassword(this.state.email).then((res, rej) => {
+            console.log("Reset password to 'password'");
+          });
+    }
+
  
     render() {
         return (
@@ -94,8 +100,10 @@ class Login extends React.Component {
                     <TouchableOpacity id='signin' style={styles.login} onPress={() => this.loginUser()}>
                         <Text style={styles.text}>Sign-in</Text>
                     </TouchableOpacity>  
+                    <TouchableOpacity id='reset' style={styles.login} onPress={() => this.resetPass()}>
+                        <Text style={styles.text}>Reset Password</Text>
+                    </TouchableOpacity> 
                     <Text style={styles.errorText}>{this.state.error}</Text>
-
                 </View>
             </View>
         ) 
@@ -123,7 +131,8 @@ const styles = StyleSheet.create({
       padding: 20, 
       borderRadius: 30,
       width: 200, 
-      alignItems: 'center'
+      alignItems: 'center',
+      marginBottom: 5
     },
     text: {
         color: 'white',

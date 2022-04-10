@@ -247,10 +247,44 @@ class Database {
      * Set a new password for the user
      * 
      * @author gabes
+     * 
+     * Update: April 10, 2020
+     * Author: Tony
+     * Added: Hashing
      */
     async setPassword(pass, id){
+        const checkHashed = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            pass
+        );
+
         if(id != null){
-            await this.db.collection('accounts').doc(id).update({password: pass});
+            await this.db.collection('accounts').doc(id).update({password: checkHashed});
+        }
+    }
+
+    /**
+     * Resets a user password
+     * 
+     * @author Tony Hayden 
+     */
+    async resetPassword(email) {
+        var id = '';
+
+        const data = await this.db.collection("accounts").where("email", "==", email)
+                        .get().then((querySnapshot) => {
+                            querySnapshot.forEach((doc) => {
+                                id = doc.id
+                            })
+                        })
+
+        const checkHashed = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA512,
+            "password"
+        );  
+                       
+        if(id != null){
+            await this.db.collection('accounts').doc(id).update({password: checkHashed});
         }
     }
 
