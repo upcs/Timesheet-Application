@@ -271,12 +271,6 @@ class Database {
         email.trim();
         pass.trim();
 
-        //Error check for gmail account
-        if(!email.includes("@gmail.com")){
-            console.log("Invalid email");
-            return;
-        }
-
         //Error check admin privalleges
         if((admin != 0) && (admin != 1)){
             return;
