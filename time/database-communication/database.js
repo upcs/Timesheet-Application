@@ -818,8 +818,6 @@ class Database {
             for(let i = 0; i < emp.length; i++){
                 if( id == emp[i].accountID){
                    matches.push(jobs);
-                   //TODO: NEED TO GET THE JOBPRIORITY HERE
-                   //SHOULD JUST REQUIRE PUSHING INTO THE ARRAY
                 }
             }
     }
@@ -996,6 +994,72 @@ class Database {
 
     }
 
+    addEmployeeToJobPriority(jobId, employee){
+        var employeeId = employee.id
+        this.getAllPriority(employeeId).then((res, ref) => {
+            console.log("res", res[0]);
+            var priority = this.getHighestPriority(res);
+            console.log("priority", priority);
+            this.addEmployeeToJob(jobId, employeeId, priority); 
+        })
+    }
+
+     /**
+     * Get the priorites of an employee on a job
+     * 
+     * @author Caden
+     * @author gabes
+     */
+      async getAllPriority(id){
+        var jobids = [];
+        var matches = [];
+        const querySnapshot =  await this.db.collection("jobs").get();
+    
+        for (const documentSnapshot of querySnapshot.docs) {
+            jobids.push(documentSnapshot.id); 
+        }
+    
+        console.log("Hit for loop");
+        for(const jobs of jobids){
+           const emp =  await this.getJobEmployeesID(jobs);
+                for(let i = 0; i < emp.length; i++){
+                    console.log("accounts", emp[i].accountID);
+                    console.log("id", id);
+                    if( id == emp[i].accountID){
+                        console.log("id", id);
+                        matches.push(emp[i].jobPriority);
+                       //console.log(emp[i].jobPriority)
+                    }
+                }
+        }
+        
+        return matches;
+    }
+
+    /**
+     * Get the highest priority
+     * 
+     * @author gabes
+     */
+     getHighestPriority(priorityList){
+        //Return 0 if employee has no priority 
+        if(priorityList == undefined){
+            return 0;
+        } 
+
+        //Find the highest priority and return one above it 
+        else{
+            var maxPriority = 0;
+            for(var i = 0; i < priorityList.length; i++){
+                if(priorityList[i] > maxPriority){
+                    maxPriority = priorityList[i];
+                }
+            }
+            return maxPriority + 1;
+        }
+    }
+
+
     /**
      * Add employee to job
      * 
@@ -1004,17 +1068,13 @@ class Database {
      * 
      * @author Jude Gabriel
      */
-    async addEmployeeToJob(jobId, employeeToAdd){
-        //TODO:
-        //1. Find all jobs the employee is on, get their job num
-        //2. Find the highest jobPriority
-        //3. Add 1 to job num and set as jobPriority 
-
-
+    async addEmployeeToJob(jobId, employeeToAdd, priority){
         await this.db.collection("jobs").doc(jobId).collection("employees").add({
-            accountID: employeeToAdd.id
+            accountID: employeeToAdd,
+            jobPriority: priority
         });
     }
+
 
     /**
      * Remove employee from job

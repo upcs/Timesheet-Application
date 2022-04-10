@@ -197,7 +197,7 @@ class JobsList extends React.Component {
      * Add user to the job 
      */
     addUser = (item) => {
-        this.data.addEmployeeToJob(this.state.jobEdited, item);
+        this.data.addEmployeeToJobPriority(this.state.jobEdited, item);
         this.setEList(this.state.jobEdited);
     }
 
