@@ -74,6 +74,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
       getFilteredItems(query, items) {
 
+
         if (!query || query.length == 0) {
 
           return items;
@@ -84,10 +85,16 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       currValue(newValue) {
         this.setState({query : newValue});
 
+
+        if(!newValue) {
+          console.log("Still Blank in currValue");
+        }
+
         
 
 
         this.setState({requesting : true});
+     
         
 
         //adding from previous requestData function

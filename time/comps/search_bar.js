@@ -37,12 +37,12 @@
          
 
          if (text) {
-            console.log(text);
+            
             await this.setState({value: text})
          }
 
          if (!text) {
-            console.log("blank");
+            
             await this.setState({value: null})
          }
          

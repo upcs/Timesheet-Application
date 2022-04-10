@@ -78,10 +78,7 @@ class JobsList extends React.Component {
             this.setState({FakeData: res}, () => {
             });
 
-            //added
-            //this.setState({initFakeData : res})
-            //this.stInitialFake = res;
-            //console.log("Console Did Mount");
+
             this.setState({stInitialFake : res});
             this.sendData(this.state.stInitialFake);
         });
@@ -109,20 +106,13 @@ class JobsList extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
 
-        /*if (!props.query) {
-            return {
-                FakeData : state.stInitialFake,
-            };
-            
-        }*/
 
-        if (props.data !== state.stInitialFake) {
-          return {
+        
+       
+        return {
             FakeData : props.data 
-           
-          };
-        }  
-        return  null;
+        };
+ 
         
     }
 
@@ -386,6 +376,7 @@ class JobsList extends React.Component {
 
         if (this.props.request ) {                 
             this.sendData();
+
         }
 
 
