@@ -32,6 +32,7 @@ class JobsList extends React.Component {
     constructor(props) {
         super(props);
 
+
         this.currValueMod = this.currValueMod.bind(this);
         this.initEData = eData;
         this.state = {
@@ -45,16 +46,14 @@ class JobsList extends React.Component {
             jobEdited: '',
             employeeEdited: '',
             eList: null,
+
             eListInitital: null,
             doOnce: true,
             query: '',
             refresh: false,
-            
+            doOnce: true,
         };
-
         this.data = new Database()
-        
-        
     }
 
 
@@ -63,10 +62,7 @@ class JobsList extends React.Component {
      * Send Job Data to AdminJobsite for Search feature
      * Harrison
      */
-
     sendData = () => {
-
-
         this.props.parentCallback(this.state.stInitialFake); 
     }
 
@@ -77,11 +73,6 @@ class JobsList extends React.Component {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
-
-            //added
-            //this.setState({initFakeData : res})
-            //this.stInitialFake = res;
-            //console.log("Console Did Mount");
             this.setState({stInitialFake : res});
             this.sendData(this.state.stInitialFake);
         });
@@ -94,36 +85,19 @@ class JobsList extends React.Component {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
             });
-
-            
-            // this.setState({initFakeData : res})((
-            // this.stInitialFake = res;
             this.setState({stInitialFake : res});
             
         });
-
-        //added 
-        //this.forceUpdate();
     }
 
 
     static getDerivedStateFromProps(props, state) {
-
-        /*if (!props.query) {
-            return {
-                FakeData : state.stInitialFake,
-            };
-            
-        }*/
-
         if (props.data !== state.stInitialFake) {
           return {
             FakeData : props.data 
-           
           };
         }  
         return  null;
-        
     }
 
     /**
@@ -162,7 +136,6 @@ class JobsList extends React.Component {
     }
 
 
-
     /**
      * Set job modal visible
      */
@@ -171,12 +144,14 @@ class JobsList extends React.Component {
         this.setState({isModalVisible: visible});
     }
 
+
     /**
      * Set employee modal visible 
      */
     setModalTwo = (visible) => {
         this.setState({modalTwo: visible});
     }
+
 
     /**
      * Update the job address 
@@ -185,12 +160,14 @@ class JobsList extends React.Component {
         this.setState({address: addy})
     }
 
+
     /**
      * Update the job name 
      */
     setJobName = (aName) => {
         this.setState({jobName: aName})
     }
+
 
     /**
      * Update which job is being edited 
@@ -199,12 +176,14 @@ class JobsList extends React.Component {
         this.setState({jobEdited: edited});
     }
 
+
     /**
      * Update which employee is being edited 
      */
     setEmployeeEdited = (edited) => {
         this.setState({employeeEdited: edited});
     }
+
 
     /**
      * Set active and non-active employee lists 
@@ -223,6 +202,7 @@ class JobsList extends React.Component {
         });
     }
 
+
     /**
      * Delete the job
      */
@@ -230,6 +210,7 @@ class JobsList extends React.Component {
         this.data.deleteJob(this.state.jobEdited);
         this.updateState();
     }
+
 
     /**
      * Save the job edits 
@@ -240,6 +221,7 @@ class JobsList extends React.Component {
         this.setEList(this.state.jobEdited);
         this.updateState();
     }
+
 
     /**
      * Remove an employee from the job
@@ -256,11 +238,12 @@ class JobsList extends React.Component {
         this.updateState();
     }
  
+
     /**
      * Add user to the job 
      */
     addUser = (item) => {
-        this.data.addEmployeeToJob(this.state.jobEdited, item);
+        this.data.addEmployeeToJobPriority(this.state.jobEdited, item);
         this.setEList(this.state.jobEdited);
     }
 
@@ -330,6 +313,7 @@ class JobsList extends React.Component {
         );
     };
 
+
     /**
      * Render list of active employees 
      */
@@ -363,6 +347,7 @@ class JobsList extends React.Component {
         )
     }
  
+
     /**
      * Render the component
      */
@@ -379,15 +364,12 @@ class JobsList extends React.Component {
                 this.setState({stInitialFake : res});
                 this.sendData(this.state.stInitialFake);
             });
-
             this.setState({doOnce : false});
         }
-
 
         if (this.props.request ) {                 
             this.sendData();
         }
-
 
         const { isModalVisible } = this.state;
         const { modalTwo } = this.state;
