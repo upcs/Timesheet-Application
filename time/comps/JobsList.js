@@ -32,27 +32,23 @@ class JobsList extends React.Component {
     constructor(props) {
         super(props);
 
-        
-        //Changing
-       // this.initFakeData = [];
-       // console.log(props.data);
+        this.currValueMod = this.currValueMod.bind(this);
         this.initEData = eData;
         this.state = {
             FakeData: [],
             eData: [],
             stInitialFake: [],
-
-
             isModalVisible: false,
-            
             modalTwo: false,
             address: '',
             jobName: '',
             jobEdited: '',
             employeeEdited: '',
             eList: null,
-
+            eListInitital: null,
             doOnce: true,
+            query: '',
+            refresh: false,
             
         };
 
@@ -130,6 +126,41 @@ class JobsList extends React.Component {
         
     }
 
+    /**
+     * Updates state on SearchBar change
+     * @param {*} newValue 
+     */
+    currValueMod(newValue) {
+        this.setState({query : newValue});
+ 
+        //Filter Data
+        this.filteredItemsMod = this.getFilteredItems(this.state.query, this.state.eListInitital);
+       
+
+        if (this.filteredItemsMod != this.state.eList) {
+            this.setState({eList: this.filteredItemsMod});
+        
+          
+            
+            
+        }
+        
+        this.forceUpdate();
+    }
+
+
+    getFilteredItems(query, items) {
+
+        if (!query || query.length == 0) {
+
+          return items;
+        }
+        this.forceUpdate();
+        return items.filter((employ) =>(employ.firstname.toString().toLowerCase() + " " + employ.lastname.toString().toLowerCase()).includes(query.toString().toLowerCase()));
+
+      
+    }
+
 
 
     /**
@@ -185,6 +216,9 @@ class JobsList extends React.Component {
             })
             this.data.getJobEmployeeData(res).then((respo, rejo) => {
                 this.setState({eList: respo});
+
+                //Added by Harrison for Search Bar
+                this.setState({eListInitital: respo});
             })
         });
     }
@@ -299,6 +333,9 @@ class JobsList extends React.Component {
     /**
      * Render list of active employees 
      */
+
+
+
     renderList = ({item}) => {
         return(
             <View 
@@ -330,7 +367,12 @@ class JobsList extends React.Component {
      * Render the component
      */
     render() {
+
+
         
+
+        
+            
         //Send data when prop "request" is true
         if (this.state.doOnce == true) {
             this.data.getAllJobs().then((res, rej) => {
@@ -414,39 +456,47 @@ class JobsList extends React.Component {
 
                             {/* SEARCH BAR */}
                             <View styles={styles.search}>
-                                <SearchBar></SearchBar>
+                                <SearchBar currValue = {this.currValueMod}></SearchBar>
                             </View>
 
+                            <View styles={styles.listView}>
                             {/* EMPLOYEE LIST */}
-                            <FlatList 
-                                id='employeeJobList'
-                                style={styles.list}
-                                data={this.state.eList}  
-                                keyExtractor={item => item.id.toString()}
-                                renderItem={this.renderList} 
-                            />
+                                <FlatList 
+                                    extraData={this.state}
+                                    id='employeeJobList'
+                                    style={styles.list}
+                                    data={this.state.eList}  
+                                    keyExtractor={item => item.id.toString()}
+                                    renderItem={this.renderList} 
+                                />
+                            </View>
+
+                            <View style={styles.saveadd}>
 
                             {/* SAVE CHANGES */}
-                            <TouchableOpacity
-                                id='saveJobChanges'
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={ () => {
-                                        this.setModalVisible(!isModalVisible);
-                                        this.saveJob(this.state.jobEdited);
-                                    }}>
-                                    <Text style={styles.textStyle}>Save Changes</Text>
-                            </TouchableOpacity>
+                                <View style={styles.save}>
+                                    <TouchableOpacity
+                                        id='saveJobChanges'
+                                        style={[styles.button, styles.buttonClose]}
+                                        onPress={ () => {
+                                                this.setModalVisible(!isModalVisible);
+                                                this.saveJob(this.state.jobEdited);
+                                            }}>
+                                            <Text style={styles.textStyle}>Save Changes</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                            {/* ADD EMPLOYEE */}
-                            <TouchableOpacity
-                                id='addEmployeeButton'
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={ () => {
-                                        this.setModalVisible(!isModalVisible);
-                                        this.setModalTwo(!modalTwo);
-                                    }}>
-                                    <Text style={styles.textStyle}>Add Employee</Text>
-                            </TouchableOpacity>
+                                {/* ADD EMPLOYEE */}
+                                <TouchableOpacity
+                                    id='addEmployeeButton'
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={ () => {
+                                            this.setModalVisible(!isModalVisible);
+                                            this.setModalTwo(!modalTwo);
+                                        }}>
+                                        <Text style={styles.textStyle}>Add Employee</Text>
+                                </TouchableOpacity>
+                            </View>
 
                             {/* REMOVE JOB */}
                             <TouchableOpacity
@@ -574,7 +624,8 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: "center", 
         fontWeight: 'bold',
-        fontSize: 25
+        fontSize: 20
+
     },
     titles: {
         padding: 15
@@ -591,7 +642,7 @@ const styles = StyleSheet.create({
     },
     list: {
         flexGrow: 0,
-        height: 200,
+        height: 100,
         marginTop: 20
     },
     textStyle: {
@@ -602,10 +653,20 @@ const styles = StyleSheet.create({
     search: {
         paddingBottom: 50,
         marginBottom: 15,
-    }, 
-    contentContainer: {
-        paddingBottom: 100
-      },
+
+    },
+
+    saveadd: {
+        flexDirection: 'row',
+       
+    },
+
+    save:{
+        marginRight: 30,
+    },
+
+
+
 });
  
  
