@@ -166,7 +166,7 @@ export default function AddEmployee(props) {
 
                 <Pressable
                   id='submitButton'
-                  style={[styles.button, styles.buttonClose]}
+                  style={[styles.button2, styles.buttonClose]}
                   onPress={() => { handleSubmit(),setModalVisible(!modalVisible)}}>
                   <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                 </Pressable>
@@ -177,7 +177,7 @@ export default function AddEmployee(props) {
           </View>
         </Modal>
         <Pressable id='addButton' style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-          <Text  style={styles.textStyle}>Add Employee</Text>
+          <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Add Employee</Text>
         </Pressable>
       </View>
     
@@ -215,7 +215,16 @@ const styles = StyleSheet.create({
     },
     button: {
       borderRadius: 20,
-      padding: '8%',
+      padding: '1%',
+      elevation: 2,
+      width: '80%',
+      height: '90%',
+      textAlignVertical: 'center',
+      justifyContent: 'center'
+    },
+    button2: {
+      borderRadius: 20,
+      padding: '1%',
       elevation: 2,
     },
     buttonOpen: {
@@ -230,7 +239,8 @@ const styles = StyleSheet.create({
     textStyle: {
       color: 'white',
       fontWeight: 'bold',
-      textAlign: 'center'
+      textAlign: 'center',
+      fontSize: 20
     },
     textbox: {
       flex: 1,

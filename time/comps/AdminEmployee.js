@@ -102,6 +102,7 @@ import AddEmployee from './AddEmployee.js';
         //  alignItems: 'center', 
         //  justifyContent: 'center',
         //  flex: 0.8
+        backgroundColor: 'white'
         
      },
 
@@ -141,6 +142,7 @@ import AddEmployee from './AddEmployee.js';
     buttonContainer: {
        justifyContent: 'center', 
        position: 'relative',
+       flex: 1
     }
  });
  

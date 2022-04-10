@@ -62,39 +62,41 @@ class Login extends React.Component {
  
     render() {
         return (
-            <View style={styles.container}>
-                <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+            <View style={styles.topView}>
+                <View style={styles.container}>
+                    <Image style={styles.logo} source={require('../assets/logo.jpg')} />
 
-                <TextInput 
-                    id='email'
-                    style={styles.textArea} 
-                   // defaultValue='joey@gmail.com'
-                    placeholder='Email'
-                    keyboardType='email-address'
-                    secureTextEntry={false}
-                    onChangeText={(text) => {
-                        this.setState({email: text.toLowerCase()})
+                    <TextInput 
+                        id='email'
+                        style={styles.textArea} 
+                    // defaultValue='joey@gmail.com'
+                        placeholder='Email'
+                        keyboardType='email-address'
+                        secureTextEntry={false}
+                        onChangeText={(text) => {
+                            this.setState({email: text.toLowerCase()})
+                            }
                         }
-                    }
-                >
-                </TextInput> 
-                <TextInput
-                    id='password'
-                    style={styles.textArea}  
-                   // defaultValue='test'
-                    placeholder='Password'
-                    secureTextEntry={true}
-                    onChangeText={(text) => {
-                        this.setState({password: text})
+                    >
+                    </TextInput> 
+                    <TextInput
+                        id='password'
+                        style={styles.textArea}  
+                    // defaultValue='test'
+                        placeholder='Password'
+                        secureTextEntry={true}
+                        onChangeText={(text) => {
+                            this.setState({password: text})
+                            }
                         }
-                    }
-                >
-                </TextInput>
-                <TouchableOpacity id='signin' style={styles.login} onPress={() => this.loginUser()}>
-                    <Text style={styles.text}>Sign-in</Text>
-                </TouchableOpacity>  
-                <Text style={styles.errorText}>{this.state.error}</Text>
+                    >
+                    </TextInput>
+                    <TouchableOpacity id='signin' style={styles.login} onPress={() => this.loginUser()}>
+                        <Text style={styles.text}>Sign-in</Text>
+                    </TouchableOpacity>  
+                    <Text style={styles.errorText}>{this.state.error}</Text>
 
+                </View>
             </View>
         ) 
     }
@@ -102,6 +104,10 @@ class Login extends React.Component {
 
 /*  Styles used for login screen */
 const styles = StyleSheet.create({
+    topView: {
+        backgroundColor: 'white',
+        flex: 1
+    },
     container: {
         alignItems: 'center', 
         justifyContent: 'center',
