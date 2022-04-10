@@ -14,7 +14,9 @@ import TimeSheetList from './TimeSheetList';
 import Menu from './Menu';
 import CalendarButton from './calendar_button';
 import Database from '../database-communication/database.js'
-
+import TimeList from './TimeList'
+import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
+import { Color } from './Palette';
 
 /**
  * Admin page to view timesheets of all employees
@@ -40,6 +42,7 @@ class AdminTimesheet extends React.Component {
             requesting: false,
         };
         this.data = new Database();
+        this.myref = React.createRef();
     }
 
     componentDidMount = () => {
@@ -51,36 +54,20 @@ class AdminTimesheet extends React.Component {
       }
 
     callbackFunction(childData) {
-        console.log(childData);
         this.setState({jobsDataChild : childData});
         this.setState({requesting : false});
-        console.log('callback recieved');
     }  
 
     getFilteredItems(query, items) {
-        console.log("query: %s", query);
         if (!query || query.length == 0) {
-          console.log("returning all items");
-          console.log(items);
           return items;
         }
-        console.log("filtering data based on query, query was: " + query);
-        console.log(items);
         return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
     }
 
     currValue(newValue) {
-        //console.log(newValue);
         this.setState({query : newValue});
-        console.log(newValue);
-        console.log("Here's the query in currValue");
-        
-        console.log(this.state.query);
-  
         this.setState({requesting : true});
-        console.log("Just set requesting to true in AdminEmployee");
-        
-        console.log(this.state.requesting);
         this.forceUpdate();
         
     }
@@ -88,13 +75,21 @@ class AdminTimesheet extends React.Component {
     
   
 
-    //When the list is pressed set the id of the employee pressed and get their time
+    /** 
+     * When the list is pressed set the id of the employee pressed and get their time
+     * 
+     * @author gabes 
+     */
     onListPress = (id) => {
         this.setState({currEmployee: id}); 
         this.getTime(id);
     }
 
-    //Passed into the child, called when date gets updated, updates each date in the state
+    /** 
+     * Passed into the child, called when date gets updated, updates each date in the state
+     * 
+     * @author gabes
+     */
     updateDates = (date, cal) => {
         if(cal == "From"){
             this.setState(
@@ -103,8 +98,9 @@ class AdminTimesheet extends React.Component {
                     date1month: date.toString().substring(4, 7),
                     date1day: date.toString().substring(8, 10),
                     date1year:date.toString().substring(11, 15)
+                }, () => {
+                    this.getTime(this.state.currEmployee);
                 });
-            
         }
         else if(cal == "To"){
             this.setState(
@@ -113,6 +109,8 @@ class AdminTimesheet extends React.Component {
                     date2month: date.toString().substring(4, 7),
                     date2day: date.toString().substring(8, 10),
                     date2year:date.toString().substring(11, 15)
+                }, () => {
+                    this.getTime(this.state.currEmployee);
                 });
         }
         else{
@@ -132,8 +130,14 @@ class AdminTimesheet extends React.Component {
 
     /**
      * Set the list of employee punches
+     * 
+     * @author gabes
      */
     getTime = (id) => {
+        if(id == '' || id == null){
+            return;
+        }
+
         //If both dates are null get all punches
         if((this.state.date1 == null) && (this.state.date2 == null)){
             this.getAllEmployeeTime(id);
@@ -158,6 +162,8 @@ class AdminTimesheet extends React.Component {
 
     /**
      * Get all employee punches
+     * 
+     * @author gabes
      */
     getAllEmployeeTime = (id) => {
         var somedata = [];
@@ -169,11 +175,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
+            }
+            if(somedata.length <= 0){
+                somedata.push({id: "0", date: "No time recorded for employee", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -192,11 +202,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
+            }
+            if(somedata.length <= 0){
+                somedata.push({id: "0",date: "No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -215,11 +229,15 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes});
+            }
+            if(somedata.length <= 0){
+                somedata.push({id: "0",date: "No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
@@ -233,18 +251,23 @@ class AdminTimesheet extends React.Component {
                 if(res[i] == undefined || res[i].totalPunchTimeInMinutes == undefined){
                     continue;
                 }
-                somedata.push(
-                    res[i].month + "/" + res[i].day + "/" + res[i].year + "\n" +
-                    res[i].totalPunchTimeInMinutes + "\n\n");
+                somedata.push({id: res[i].id, date:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].totalPunchTimeInMinutes });
             }
+            if(somedata.length <= 0){
+                somedata.push({id: "0",date: "No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")", hours: ""});
+            }
+            
             this.setState({time: somedata});
+            this.myref.current.dataChange();
         });
     }
 
 
 
     render() {
-
+        
         this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
 
         return (
@@ -265,11 +288,10 @@ class AdminTimesheet extends React.Component {
                         <TimeSheetList onChange={this.onListPress} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems} style={styles.employees}> </TimeSheetList>
                     </View>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
-                        <Text style={[styles.employees_hours, styles.text_employee]}>Hours:
+                        <Text style={[styles.employees_hours, styles.text_employee]}>Punchs:
                         </Text>
-                        <ScrollView>
-                        <Text style={styles.hours}>{this.state.time}</Text>
-                        </ScrollView>
+                        
+                        <TimeList ref={this.myref} theEmp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
                     </View>
                 </View>
             </View>
@@ -281,6 +303,7 @@ class AdminTimesheet extends React.Component {
 const styles = StyleSheet.create({
     vertical_layout: {
         flex: 1,
+        backgroundColor: 'white'
     },
     horizontal_layout_top: {
         flex: 0.1,
@@ -289,13 +312,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
         alignItems: 'center', 
         justifyContent: 'center',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        backgroundColor: 'white'
+        
     },
     horizontal_layout_bottom: {
         flex: 1,
         flexDirection: "row", 
         marginBottom: 0,
-        marginTop: 20
+        marginTop: 20,
+        backgroundColor: 'white'
     },
     employees_hours: {
         marginLeft: 0,
@@ -306,13 +332,14 @@ const styles = StyleSheet.create({
     },
     text_date: {
         fontSize: 10,
-        marginLeft: 10
+        marginLeft: 10,
     },
     text_employee: {
         textDecorationLine: 'underline'
     },
     search: {
-        marginLeft: 10
+        marginLeft: 10,
+        backgroundColor: 'white'
     },
     hours: {
         textDecorationLine: 'none'

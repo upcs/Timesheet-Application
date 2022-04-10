@@ -82,7 +82,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       }
 
       currValue(newValue) {
-        //console.log(newValue);
         this.setState({query : newValue});
 
 
@@ -101,9 +100,8 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
      render() {
 
-      //this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
       this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
-      //this.callbackFunction = this.callbackFunction();
+
 
 
       //Added 
@@ -149,7 +147,9 @@ import FakeJobsiteData from './FakeJobsiteData.js';
  
  /*  Styles used for login screen */
  const styles = StyleSheet.create({
-     
+     container: {
+      backgroundColor: 'white'
+     },
 
      upperbar: {
         
@@ -183,6 +183,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
     buttonContainer: {
        justifyContent: 'center', 
        position: 'relative',
+       flex: 1
     }
  });
  

@@ -24,6 +24,7 @@ class Jobsite extends React.Component {
     componentDidMount = () => {
         this.data.updateEmpJobs(this.state.id).then((res,rej) =>
         {
+            //PRIORITY WILL COME FROM RES
             this.setState({jList: res}, () => {
                 this.data.getSpecificJobs(res).then((fin,fail) => {
                     this.setState({TheData: fin}, () => {
@@ -33,6 +34,8 @@ class Jobsite extends React.Component {
             });
         }
         )
+
+        //MAYBE SORT JOBS HERE AS WELL? 
         
     }
     setModalVisible = (visible) => {
@@ -95,7 +98,7 @@ class Jobsite extends React.Component {
 
     render() {
         return (
-            <View style={styles.containerMaster}>
+            <View id='mainView' style={styles.containerMaster}>
                 <Modal
                     id='employeeModal'
                     animationType='slide'
@@ -116,10 +119,10 @@ class Jobsite extends React.Component {
                                     onPress={ () => {
                                         this.setModalVisible(!this.state.isModalVisible)}}
                                     >
-                                 <Text style={styles.textStyle}>X</Text>
+                                 <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
                                     <View style = {styles.modalHeader}>
-                                        <Text style ={styles.modalHeaderText}>Current Jobs</Text>
+                                        <Text adjustsFontSizeToFit={true} style ={styles.modalHeaderText}>Current Jobs</Text>
                                     </View>
                                
                                     <FlatList 
@@ -134,8 +137,8 @@ class Jobsite extends React.Component {
                     </View>
                 </Modal>
                 
-                <View style={styles.headerContainer}>
-                    <TouchableOpacity style={styles.switchJob} onPress={() => {
+                <View id='openJobsView' style={styles.headerContainer}>
+                    <TouchableOpacity id='openJobs' style={styles.switchJob} onPress={() => {
                          this.setModalVisible(!this.state.isModalVisible);
                     }}>  
                              <Text adjustsFontSizeToFit={true} style={styles.headerText}>{this.state.name}</Text> 
@@ -185,7 +188,8 @@ const styles = StyleSheet.create({
         elevation: 5,
       },
     containerMaster: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'white'
     },
     notesContainer: {
         flex: 0.6 

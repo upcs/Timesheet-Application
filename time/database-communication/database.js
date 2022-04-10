@@ -147,6 +147,21 @@ class Database {
     }
 
     /**
+     * 
+     * Get the users name
+     * 
+     * @author gabes 
+     */
+    async getUsersInfo(id){
+        if(id == '' || id == null){
+            console.log("Couldn't fetch user's name");
+            return;
+        }
+        var document = await this.db.collection("accounts").doc(id).get();
+        return [document.data().firstname, document.data().lastname, document.data().email];
+    }
+
+    /**
      * Gets users admin privelleges
      */
     getUserType(){
@@ -224,6 +239,18 @@ class Database {
     async setuserLast(id, last){
         if(id != null){
             await this.db.collection("accounts").doc(id).update({lastname: last});
+        }
+    }
+
+
+    /**
+     * Set a new password for the user
+     * 
+     * @author gabes
+     */
+    async setPassword(pass, id){
+        if(id != null){
+            await this.db.collection('accounts').doc(id).update({password: pass});
         }
     }
 
@@ -399,7 +426,17 @@ class Database {
             totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
-
+    /*
+    @author Caden Deutscher
+    @date: 4/7/2022
+    @params: EmpID, PunchID, newMinutes
+    @Return: N/A
+    @Result: Updates Punch - totalTimeInMinutes
+    */
+   async setPunchMinutes(EmpID, PunchID, newMin){
+       console.log(EmpID + " di " + PunchID + " min " + newMin);
+     await this.db.collection("accounts").doc(EmpID).collection("punch").doc(PunchID).update({totalPunchTimeInMinutes: newMin});
+   }
     /*
     @author Justin
     @date 3/19/22
@@ -412,7 +449,7 @@ class Database {
 
         return await this.db.collection("accounts").doc(id).collection("punch").where("timeOut", ">", time).get().then((querySnapshot) => {
             //return 10;
-            console.log("RESULT", querySnapshot);
+           // console.log("RESULT", querySnapshot);
             // Reduce to accumulate time over all elements of array
             let sum = 0;
             querySnapshot.forEach((doc) => {
@@ -472,7 +509,7 @@ class Database {
          return hours; */
         
         const midnight = new Date().setHours(0, 0, 0, 0);
-        console.log("MDNGHT\t", midnight); 
+        //console.log("MDNGHT\t", midnight); 
         let valMs;
         await this.getDurationWorkedSinceTime(id, midnight).then(value => {
             valMs = value;
@@ -594,7 +631,7 @@ class Database {
        let offset = new Date().getTime() * 24 * 60 * 60 * 1000;
        const midnight = (new Date().setHours(0, 0, 0, 0)) - offset;
        
-       console.log("MDNGHT\t", midnight); 
+      // console.log("MDNGHT\t", midnight); 
        let valMs;
        await this.getDurationWorkedSinceTime(id, midnight).then(value => {
            valMs = value;
@@ -818,6 +855,8 @@ class Database {
             for(let i = 0; i < emp.length; i++){
                 if( id == emp[i].accountID){
                    matches.push(jobs);
+                   //TODO: NEED TO GET THE JOBPRIORITY HERE
+                   //SHOULD JUST REQUIRE PUSHING INTO THE ARRAY
                 }
             }
     }
@@ -1003,6 +1042,12 @@ class Database {
      * @author Jude Gabriel
      */
     async addEmployeeToJob(jobId, employeeToAdd){
+        //TODO:
+        //1. Find all jobs the employee is on, get their job num
+        //2. Find the highest jobPriority
+        //3. Add 1 to job num and set as jobPriority 
+
+
         await this.db.collection("jobs").doc(jobId).collection("employees").add({
             accountID: employeeToAdd.id
         });
