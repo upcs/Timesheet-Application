@@ -994,15 +994,19 @@ class Database {
 
     }
 
+    /**
+     * Adds an employee to a job (now accounts for priority)
+     * 
+     * @author gabes
+     */
     addEmployeeToJobPriority(jobId, employee){
         var employeeId = employee.id
         this.getAllPriority(employeeId).then((res, ref) => {
-            console.log("res", res[0]);
             var priority = this.getHighestPriority(res);
-            console.log("priority", priority);
             this.addEmployeeToJob(jobId, employeeId, priority); 
-        })
+        })   
     }
+
 
      /**
      * Get the priorites of an employee on a job
@@ -1013,29 +1017,27 @@ class Database {
       async getAllPriority(id){
         var jobids = [];
         var matches = [];
+
+        //Get a list of all jobs
         const querySnapshot =  await this.db.collection("jobs").get();
-    
         for (const documentSnapshot of querySnapshot.docs) {
             jobids.push(documentSnapshot.id); 
         }
     
-        console.log("Hit for loop");
+        //For each job find if an employee matches the id, push the priority
         for(const jobs of jobids){
            const emp =  await this.getJobEmployeesID(jobs);
                 for(let i = 0; i < emp.length; i++){
-                    console.log("accounts", emp[i].accountID);
                     console.log("id", id);
                     if( id == emp[i].accountID){
-                        console.log("id", id);
                         matches.push(emp[i].jobPriority);
-                       //console.log(emp[i].jobPriority)
                     }
                 }
         }
-        
         return matches;
     }
 
+    
     /**
      * Get the highest priority
      * 
