@@ -84,6 +84,8 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       currValue(newValue) {
         this.setState({query : newValue});
 
+        
+
 
         this.setState({requesting : true});
         
