@@ -1037,7 +1037,7 @@ class Database {
         return matches;
     }
 
-    
+
     /**
      * Get the highest priority
      * 
@@ -1076,6 +1076,58 @@ class Database {
             jobPriority: priority
         });
     }
+
+    /**
+     * Sorts a list of jobs by priority
+     * 
+     * @author gabes 
+     */
+   async sortJobsByPriority(jobsList, employeeID){
+        var priorityArray = [];
+        var jobsArray = [];
+
+        //Get the priority of each job
+        for(var i = 0; i < jobsList.length; i++){
+            const data = await this.db.collection("jobs").doc(jobsList[i]).collection("employees").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    if(employeeID == doc.data().accountID){
+                        priorityArray.push({job: jobsList[i], priority: doc.data().jobPriority});
+                    }
+                })
+            })
+        }
+
+        //Sort the jobs by priority
+        priorityArray.sort(this.sortByProperty("priority"));
+
+        //Pass just the job if to jobs array
+        for(var i = 0; i < priorityArray.length; i++){
+            console.log(priorityArray[i].job, priorityArray[i].priority);
+            jobsArray.push(priorityArray[i].job);
+        }
+
+        //Return the sorted jobs array
+        return jobsArray;
+    }
+
+
+    /**
+     * Helper function to sort jobs by priority
+     * 
+     * Source: https://medium.com/@asadise/sorting-a-json-array-according-one-property-in-javascript-18b1d22cd9e9
+     * 
+     * @author gabes
+     */
+    sortByProperty(property){  
+        return function(a,b){  
+           if(a[property] > b[property])  
+              return 1;  
+           else if(a[property] < b[property])  
+              return -1;  
+       
+           return 0;  
+        }  
+     }
 
 
     /**

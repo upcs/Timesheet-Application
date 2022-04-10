@@ -24,16 +24,31 @@ class Jobsite extends React.Component {
     componentDidMount = () => {
         this.data.updateEmpJobs(this.state.id).then((res,rej) =>
         {
+            console.log("first res", res);
+            this.data.sortJobsByPriority(res, this.state.id).then((respo, rejo) => {
+                console.log("respo", respo);
+                this.setState({jList: respo}, () => {
+                    this.data.getSpecificJobs(respo).then((fin,fail) => {
+                        console.log("second", fin);
+    
+                        this.setState({TheData: fin}, () => {
+                            this.updateState(fin);
+                        });
+                    })
+                });
+            })
+
             //PRIORITY WILL COME FROM RES
-            this.setState({jList: res}, () => {
-                this.data.getSpecificJobs(res).then((fin,fail) => {
-                    this.setState({TheData: fin}, () => {
-                        this.updateState(fin);
-                    });
-                })
-            });
-        }
-        )
+            // this.setState({jList: res}, () => {
+            //     this.data.getSpecificJobs(res).then((fin,fail) => {
+            //         console.log("second", fin);
+
+            //         this.setState({TheData: fin}, () => {
+            //             this.updateState(fin);
+            //         });
+            //     })
+            // });
+        })
 
         //MAYBE SORT JOBS HERE AS WELL? 
         
