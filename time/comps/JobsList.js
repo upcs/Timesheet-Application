@@ -20,6 +20,7 @@
 import AdminJobsite from './AdminJobsite';
 
  import Database from '../database-communication/database.js'
+import { ScrollView } from 'react-native-web';
 
  
  
@@ -610,7 +611,7 @@ class JobsList extends React.Component {
                 >
                     <View style={styles.centeredView}>
                         <View  style={styles.blur}>
-                            <View style={styles.modalView}>
+                            <View style={styles.modalViewNotes} >
                                 
                                 {/* EXIT BUTTON */}
                                 <View style={styles.leftView}>
@@ -626,8 +627,22 @@ class JobsList extends React.Component {
                                         <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
                                     </TouchableOpacity>
                                 </View>
-
-                                <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Update Notes</Text>
+                      
+                                    <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Update Notes</Text>
+                                    <View>
+                                    <TextInput
+                                    id='nInput'
+                                    style={styles.textbox}
+                                    multiline
+                                    numberOfLines={6}
+                                    onChangeText={text => this.setNotes(text)}
+                                    value={this.state.jobNotes}
+                                    placeholder=" Notes for the jobsite"
+                                    >
+                            
+                                    </TextInput>
+                                    </View>
+                               
                             </View>
                         </View>
                     </View>
@@ -640,6 +655,28 @@ class JobsList extends React.Component {
  
 //Styles used for Scrollable list
 const styles = StyleSheet.create({
+    modalViewNotes: {
+        width: '90%',
+        height: '80%',
+        backgroundColor: 'white',
+        padding: '10%',
+        shadowColor: '#000',
+  
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+    textbox: {
+        
+        borderColor: 'black',
+        borderWidth: 2,
+        width:'100%',
+        height: '90%'
+      },
     horizontalView:{
         flexDirection: 'row',
         alignItems: 'center'
