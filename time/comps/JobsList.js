@@ -472,30 +472,41 @@ class JobsList extends React.Component {
                             </View>
 
                             <View style={styles.saveadd}>
-
-                            {/* SAVE CHANGES */}
-                                <View style={styles.save}>
+                                <View style={styles.horizontalView}>
+                                {/* SAVE CHANGES */}
+                                    <View style={styles.save}>
+                                        <TouchableOpacity
+                                            id='saveJobChanges'
+                                            style={[styles.button, styles.buttonClose]}
+                                            onPress={ () => {
+                                                    this.setModalVisible(!isModalVisible);
+                                                    this.saveJob(this.state.jobEdited);
+                                                }}>
+                                                <Text  adjustsFontSizeToFit={true}  style={styles.textStyle}>Save</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                     {/* ADD EMPLOYEE */}
+                                     <View style={styles.save}>
+                                        <TouchableOpacity
+                                            id='updateNotes'
+                                            style={[styles.button, styles.buttonClose]}
+                                            onPress={ () => {
+                                                
+                                                }}>
+                                                <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Notes</Text>
+                                        </TouchableOpacity>
+                                   </View>
+                                    {/* ADD EMPLOYEE */}
                                     <TouchableOpacity
-                                        id='saveJobChanges'
+                                        id='addEmployeeButton'
                                         style={[styles.button, styles.buttonClose]}
                                         onPress={ () => {
                                                 this.setModalVisible(!isModalVisible);
-                                                this.saveJob(this.state.jobEdited);
+                                                this.setModalTwo(!modalTwo);
                                             }}>
-                                            <Text  adjustsFontSizeToFit={true}  style={styles.textStyle}>Save Changes</Text>
+                                            <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Add Emp</Text>
                                     </TouchableOpacity>
                                 </View>
-
-                                {/* ADD EMPLOYEE */}
-                                <TouchableOpacity
-                                    id='addEmployeeButton'
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={ () => {
-                                            this.setModalVisible(!isModalVisible);
-                                            this.setModalTwo(!modalTwo);
-                                        }}>
-                                        <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Add Employee</Text>
-                                </TouchableOpacity>
                             </View>
 
                             {/* REMOVE JOB */}
@@ -551,7 +562,7 @@ class JobsList extends React.Component {
                             </View>
 
                             {/* Search Employees */}
-                            <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Add Employees</Text>
+                            <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Add Employee</Text>
 
                             {/* SEARCH BAR */}
                             <View styles={styles.search}>
@@ -576,6 +587,11 @@ class JobsList extends React.Component {
  
 //Styles used for Scrollable list
 const styles = StyleSheet.create({
+    horizontalView:{
+        flexDirection: 'row',
+        alignItems: 'center'
+
+    },
     items: {
         padding: 20,
         borderTopWidth: 1,
@@ -612,7 +628,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         padding: 15,
         elevation: 2,
-        marginTop: 25
+        marginTop: 5
         },
         buttonOpen: {
         backgroundColor: Color.MAROON,
@@ -662,7 +678,7 @@ const styles = StyleSheet.create({
     },
 
     save:{
-        marginRight: 30,
+        marginRight: 5,
     },
 
 
