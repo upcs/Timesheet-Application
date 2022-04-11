@@ -285,7 +285,7 @@ class JobsList extends React.Component {
                         this.updateState();
                     }
                 }>
-                    <Text >{item.name}</Text>
+                    <Text adjustsFontSizeToFit={true}  >{item.name}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -324,7 +324,7 @@ class JobsList extends React.Component {
                         {cancelable: false}
                     )
                 }}>
-                    <Text >{item.lastname + ", " + item.firstname}</Text>
+                    <Text adjustsFontSizeToFit={true}  >{item.lastname + ", " + item.firstname}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -357,7 +357,7 @@ class JobsList extends React.Component {
                         ]
                     )
                 }}>
-                    <Text>{item.lastname + ", " + item.firstname}</Text>   
+                    <Text adjustsFontSizeToFit={true} >{item.lastname + ", " + item.firstname}</Text>   
                 </TouchableOpacity>
             </View>
         )
@@ -420,17 +420,17 @@ class JobsList extends React.Component {
                                 {
                                     this.setModalVisible(!isModalVisible);
                                 }}>
-                                    <Text style={styles.textStyle}>X</Text>
+                                    <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
                             </View>
                              
                             {/* JOB NAME AND ADDRESS*/}
-                            <Text style={styles.modalText}>{this.state.jobName}</Text>
-                            <Text style={styles.modalText}>{this.state.address}</Text>
+                            <Text adjustsFontSizeToFit={true}  style={styles.modalText}>{this.state.jobName}</Text>
+                            <Text  adjustsFontSizeToFit={true} style={styles.modalText}>{this.state.address}</Text>
 
                             {/* CHANGE JOB NAME */}
                             <View style={styles.textAndTitle}>
-                                <Text style={styles.titles}>Job Name:</Text>
+                                <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Name:</Text>
                                 <TextInput 
                                     id='jobName'
                                     style={styles.textArea} 
@@ -443,7 +443,7 @@ class JobsList extends React.Component {
 
                             {/* CHANGE ADDRESS */}
                             <View style={styles.textAndTitle}>
-                                <Text style={styles.titles}>Job Address:</Text>
+                                <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Address:</Text>
                                 <TextInput 
                                     id='jobAddress'
                                     style={styles.textArea} 
@@ -482,7 +482,7 @@ class JobsList extends React.Component {
                                                 this.setModalVisible(!isModalVisible);
                                                 this.saveJob(this.state.jobEdited);
                                             }}>
-                                            <Text style={styles.textStyle}>Save Changes</Text>
+                                            <Text  adjustsFontSizeToFit={true}  style={styles.textStyle}>Save Changes</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -494,7 +494,7 @@ class JobsList extends React.Component {
                                             this.setModalVisible(!isModalVisible);
                                             this.setModalTwo(!modalTwo);
                                         }}>
-                                        <Text style={styles.textStyle}>Add Employee</Text>
+                                        <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Add Employee</Text>
                                 </TouchableOpacity>
                             </View>
 
@@ -517,7 +517,7 @@ class JobsList extends React.Component {
                                             {cancelable: false}
                                         )
                                     }}>
-                                    <Text style={styles.textStyle}>DELETE</Text>
+                                    <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>DELETE</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -546,12 +546,12 @@ class JobsList extends React.Component {
                                         this.setModalVisible(!isModalVisible);
                                     }
                                 }>
-                                    <Text style={styles.textStyle}>X</Text>
+                                    <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
                                 </TouchableOpacity>
                             </View>
 
                             {/* Search Employees */}
-                            <Text style={styles.modalText}>Add Employees</Text>
+                            <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Add Employees</Text>
 
                             {/* SEARCH BAR */}
                             <View styles={styles.search}>
