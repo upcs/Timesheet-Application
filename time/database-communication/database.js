@@ -817,6 +817,30 @@ class Database {
             return postData;
         }
     }
+
+    /*
+    @author Caden Deutscher
+    @return - returns obvious overtime punches for a single employee
+    @params: id - employee id, condition - number for overtime to check for
+    */
+   async getOverTime(id,condition){
+       var postData = [];
+       const data = await this.db.collection("accounts").doc(id).collection("punch").where("totalPunchTimeInMinutes",">", condition).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            postData.push({...doc.data(), id: doc.id, eid: id})
+        });
+    })
+    return postData;
+   }
+    /*
+    @author Caden Deutscher
+    @return - returns obvious overtime punches for all employees
+    @params: condition - number for overtime to check for
+    */
+   async getAllOvertime(condition){
+
+   }
+
     /*
     Cadenss
     */
@@ -842,6 +866,8 @@ class Database {
     
     return matches;
     }
+
+
       
 
     /****** JOB GETTERS *******/
