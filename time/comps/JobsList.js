@@ -49,6 +49,8 @@ class JobsList extends React.Component {
             doOnce: true,
             query: '',
             refresh: false,
+            modalThree: false,
+            jobNotes: ''
             
         };
 
@@ -177,6 +179,12 @@ class JobsList extends React.Component {
     setModalTwo = (visible) => {
         this.setState({modalTwo: visible});
     }
+     /**
+     * Set job notes modal visible 
+     */
+      setModalThree = (visible) => {
+        this.setState({modalThree: visible});
+    }
 
     /**
      * Update the job address 
@@ -184,7 +192,12 @@ class JobsList extends React.Component {
     setAddress = (addy) => {
         this.setState({address: addy})
     }
-
+      /**
+     * Update the job notes 
+     */
+       setNotes= (jnote) => {
+        this.setState({jobNotes: jnote})
+    }
     /**
      * Update the job name 
      */
@@ -281,6 +294,7 @@ class JobsList extends React.Component {
                         this.setAddress(item.address);
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
+                        this.setNotes(item.notes);
                         this.setEList(item.id);
                         this.updateState();
                     }
@@ -391,6 +405,7 @@ class JobsList extends React.Component {
 
         const { isModalVisible } = this.state;
         const { modalTwo } = this.state;
+        const {modalThree} = this.state;
         return (
             
             <View>
@@ -492,7 +507,8 @@ class JobsList extends React.Component {
                                                 id='updateNotes'
                                                 style={[styles.button, styles.buttonClose]}
                                                 onPress={ () => {
-                                                    
+                                                        this.setModalVisible(!isModalVisible);
+                                                        this.setModalThree(!modalThree);
                                                     }}>
                                                     <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Notes</Text>
                                             </TouchableOpacity>
@@ -542,7 +558,7 @@ class JobsList extends React.Component {
                     transparent={true}
                     visible={modalTwo}
                     onRequestClose= { () => {
-                        this.setModalVisible(!modalTwo);
+                        this.setModalTwo(!modalTwo);
                     }}
                 >
                     <View style={styles.centeredView}>
@@ -583,6 +599,39 @@ class JobsList extends React.Component {
                     </View>
                 </Modal>
 
+                {/* Update Notes Modal */}
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={modalThree}
+                    onRequestClose= { () => {
+                        this.setModalThree(!modalThree);
+                    }}
+                >
+                    <View style={styles.centeredView}>
+                        <View  style={styles.blur}>
+                            <View style={styles.modalView}>
+                                
+                                {/* EXIT BUTTON */}
+                                <View style={styles.leftView}>
+                                    <TouchableOpacity 
+                                        id='employeeModalExit'
+                                        style={[styles.button, styles.buttonClose]} 
+                                        onPress={ () =>
+                                        {
+                                            this.setModalThree(!modalThree);
+                                            this.setModalVisible(!isModalVisible);
+                                        }
+                                    }>
+                                        <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Update Notes</Text>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     }
