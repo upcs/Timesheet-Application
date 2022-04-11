@@ -30,12 +30,10 @@
          
      }
  
-     currValue(text) {
-         
-         //val = evt.target.value;
-         //console.log(text);
-         this.setState({value: text})
-         this.props.currValue(text);
+    async currValue(text) {
+
+        this.setState({value: text})
+        await this.props.currValue(text);
      }
  
      render() {

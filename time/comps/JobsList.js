@@ -34,6 +34,7 @@ class JobsList extends React.Component {
 
 
         this.currValueMod = this.currValueMod.bind(this);
+        this.currValueMod2 = this.currValueMod2.bind(this);
         this.initEData = eData;
         this.state = {
             FakeData: [],
@@ -48,10 +49,11 @@ class JobsList extends React.Component {
             eList: null,
 
             eListInitital: null,
+            eDataInitital: null,
             doOnce: true,
             query: '',
+            query2: '',
             refresh: false,
-            doOnce: true,
         };
         this.data = new Database()
     }
@@ -92,12 +94,12 @@ class JobsList extends React.Component {
 
 
     static getDerivedStateFromProps(props, state) {
-        if (props.data !== state.stInitialFake) {
+        //if (props.data !== state.stInitialFake) {
           return {
             FakeData : props.data 
           };
-        }  
-        return  null;
+        //}  
+      
     }
 
     /**
@@ -116,6 +118,21 @@ class JobsList extends React.Component {
         
           
             
+            
+        }
+        
+        this.forceUpdate();
+    }
+
+    currValueMod2(newValue) {
+        this.setState({query2 : newValue});
+ 
+        //Filter Data
+        this.filteredItemsMod2 = this.getFilteredItems(this.state.query2, this.state.eDataInitital);
+       
+
+        if (this.filteredItemsMod2 != this.state.eData) {
+            this.setState({eData: this.filteredItemsMod2});
             
         }
         
@@ -192,6 +209,9 @@ class JobsList extends React.Component {
         this.data.getJobEmployeesID(id).then((res, rej) => {
             this.data.getAllAccounts().then((accResponse, accRej) => {
                 this.setState({eData:this.data.getEmployeesNotOnJob(accResponse, res)});
+
+                //Added by Harrison for Search Bar (Add employee)
+                this.setState({eDataInitital: this.data.getEmployeesNotOnJob(accResponse, res)});
             })
             this.data.getJobEmployeeData(res).then((respo, rejo) => {
                 this.setState({eList: respo});
@@ -537,7 +557,7 @@ class JobsList extends React.Component {
 
                             {/* SEARCH BAR */}
                             <View styles={styles.search}>
-                                <SearchBar></SearchBar>
+                                <SearchBar currValue = {this.currValueMod2}></SearchBar>
                             </View>
                             <FlatList 
                                 id='addEmployeeList'
