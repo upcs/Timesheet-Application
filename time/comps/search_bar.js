@@ -32,8 +32,9 @@
  
     async currValue(text) {
 
-        this.setState({value: text})
-        await this.props.currValue(text);
+        await this.setState({value: text})
+        this.props.currValue(text);
+        console.log(text);
      }
  
      render() {
