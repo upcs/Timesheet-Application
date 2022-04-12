@@ -16,7 +16,7 @@
 import React from 'react';
 import {Color} from './Palette.js';
 
-import { Picker, Modal, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
+import { Picker, Modal, Text, TextInput, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import TimeUtil from './TimeUtil.js';
 
 
@@ -62,6 +62,8 @@ var endTime = 0;
             lastName: '',
             email: '',
             password: '',
+            jobList: <Picker.Item key={"test"} value={"Hello"}/>,
+            selectedJob: 'default: '
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
@@ -197,24 +199,19 @@ var endTime = 0;
         const style = isTimerOn ? styles.stop : styles.start
         const text = isTimerOn ? "Clock-Out" : "Clock-In";
         
-        /*const d = new Date(todayTime * 1000);
-        const hours = d.getUTCHours();
-        const minutes = d.getUTCMinutes();
-        const seconds = d.getUTCSeconds();
-        const timeString = [hours, minutes, seconds].map(value =>  ("0" + value).slice(-2)).join(':');
-        */
-        const jobList = [
-            <Picker.Item label="Java" value="java" />
-        ];
+
         const timeString = TimeUtil.convertMsToReadable(todayTime * 1000);
         let currentJob = "java";
         const { isModalVisible } = this.state;
         return (
             <View style={styles.justColor}>
             <View style={styles.container}>
+
+                {/* COMPANY LOGO */}
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+
+                {/* CLOCK IN BUTTON  */}
                 <View>
-                    <Text style={styles.current_time}>{currentDuration}</Text>
                     <View style={styles.timerButtonOuter}>
                         <TouchableOpacity 
                             id='timerButton' 
@@ -224,33 +221,29 @@ var endTime = 0;
                         >
                             <Text style={styles.text}>{text}</Text>
                         </TouchableOpacity> 
-                        <View style={[styles.pickerOuter, {
-                            flexDirection: "row",
-                        }]}>
-                            <Text>
-                            Current Job:
-                            </Text>
-                            <View style={[styles.picker, {
-                                backgroundColor: "red",
-                            }]}>
-                                <Picker
-                                selectedValue={currentJob}
-                         
-                                onValueChange={
-                                    (choice, index) => this.setChosenJob(choice)
-                                }    
-                                >
-                                    {jobList}
-                                    </Picker>
-                            </View>
-                                
-                        </View>
-                        
                     </View>
                 </View >
-                 <Text>Today's Time: {timeString}</Text> 
+
+                {/* DROPDOWN LIST TO CHOOSE A JOB */}
+                <View style={styles.picker}>
+                    <Picker
+                    style={{height: 100, width: 200}}
+                    selectedValue={"TEST"}
+                    >
+                        <Picker.Item    label="test" value="test"    /> 
+                        <Picker.Item    label="test2" value="test2"    /> 
+                        <Picker.Item    label="test3" value="test3"    /> 
+                        {this.state.jobList}
+                    </Picker>
+
+
+
+                </View>
+
+
                  <View style={styles.bottomContainer}>
 
+                  {/* LOGOUT BUTTON */}
                  <View style={styles.logoutView}>
                        <TouchableOpacity 
                            style={styles.signOutButton}
@@ -272,6 +265,8 @@ var endTime = 0;
                                <Text style={styles.signOutText}>Account</Text>
                            </TouchableOpacity>
                    </View> 
+
+                   {/* EDIT ACCOUNT MODAL */}
                    <Modal
                         animationType='slide'
                         transparent={true}
@@ -408,22 +403,24 @@ var endTime = 0;
 
      //Styles for start button
      timerButtonOuter: {
-         borderRadius: 40,
-         borderColor: "#FF0000",
-         borderWidth: 5,
+         //borderRadius: 40,
+         //borderColor: "#FF0000",
+         //borderWidth: 5,
          width: 250,
         
-         height: 250,
+         //height: 250,
          overflow: 'hidden',
          backgroundColor: 'white'
      },
 
      picker: {
         flexDirection: 'row',
-        width: '100%',
-        height: '100%',
+        width: '50%',
+        height: '20%',
         borderRadius: 3,
         borderWidth: 1,
+       // backgroundColor: 'black',
+        margin: '10%'
      },
      button: {
         width: '100%',
@@ -432,6 +429,8 @@ var endTime = 0;
         height: 90,
         borderWidth: 5,
         alignItems: 'center',
+        borderRadius: 40,
+        borderColor: Color.MAROON
      },
 
      signOutButton: {
