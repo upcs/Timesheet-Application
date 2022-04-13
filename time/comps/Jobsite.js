@@ -22,22 +22,59 @@ class Jobsite extends React.Component {
     }
 
     componentDidMount = () => {
-        this.data.updateEmpJobs(this.state.id).then((res,rej) =>
-        {
-            //PRIORITY WILL COME FROM RES
-            this.setState({jList: res}, () => {
-                this.data.getSpecificJobs(res).then((fin,fail) => {
-                    this.setState({TheData: fin}, () => {
-                        this.updateState(fin);
-                    });
-                })
-            });
-        }
-        )
+        //Get all jobs the user is on
+        this.data.updateEmpJobs(this.state.id).then((res,rej) => {
 
-        //MAYBE SORT JOBS HERE AS WELL? 
-        
+            //Sort the jobs by priority
+            this.data.sortJobsByPriority(res, this.state.id).then((respo, rejo) => {
+                this.setState({jList: respo}, () => {
+
+                    //Get the information for each job
+                    this.data.getSpecificJobs(respo).then((fin,fail) => {
+
+                        //Get a final array: match priority to job info
+                        this.sortJobs(respo, fin)
+                    })
+                });
+            })
+        }) 
     }
+
+
+    /**
+     * Matches the sorted id's, and unsorted job info
+     * 
+     * Sorted: an array containing only job id's that is sorted by priority
+     * unsorted: an array containing all job specific info
+     * 
+     * 
+     * @author Jude Gabriel 
+     */
+    sortJobs = (sorted, unsorted) => {
+        var finalArr = [];
+        
+        //Match the unsorted array to the sorted array, store in final array
+        for(var i = 0; i < sorted.length; i++){
+            for(var j = 0; j < unsorted.length; j++){
+                if(sorted[i] == unsorted[j].id){
+                    finalArr.push({
+                        "address": unsorted[j].address,
+                        "id": unsorted[j].id,
+                        "name": unsorted[j].name,
+                        "notes": unsorted[j].notes,
+                        "phase": unsorted[j].phase,
+                    })
+                }
+            }
+        }
+
+        //Set the state as the final array
+        this.setState({TheData: finalArr}, () => {
+            this.updateState(finalArr);
+        });
+    }
+
+
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
     }

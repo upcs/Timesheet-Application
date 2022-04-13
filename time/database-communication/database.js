@@ -154,7 +154,6 @@ class Database {
      */
     async getUsersInfo(id){
         if(id == '' || id == null){
-            console.log("Couldn't fetch user's name");
             return;
         }
         var document = await this.db.collection("accounts").doc(id).get();
@@ -325,12 +324,6 @@ class Database {
         last.trim();
         email.trim();
         pass.trim();
-
-        //Error check for gmail account
-        if(!email.includes("@gmail.com")){
-            console.log("Invalid email");
-            return;
-        }
 
         //Error check admin privalleges
         if((admin != 0) && (admin != 1)){
@@ -889,8 +882,6 @@ class Database {
             for(let i = 0; i < emp.length; i++){
                 if( id == emp[i].accountID){
                    matches.push(jobs);
-                   //TODO: NEED TO GET THE JOBPRIORITY HERE
-                   //SHOULD JUST REQUIRE PUSHING INTO THE ARRAY
                 }
             }
     }
@@ -1068,6 +1059,73 @@ class Database {
     }
 
     /**
+     * Adds an employee to a job (now accounts for priority)
+     * 
+     * @author gabes
+     */
+    addEmployeeToJobPriority(jobId, employee){
+        var employeeId = employee.id
+        this.getAllPriority(employeeId).then((res, ref) => {
+            var priority = this.getHighestPriority(res);
+            this.addEmployeeToJob(jobId, employeeId, priority); 
+        })   
+    }
+
+
+     /**
+     * Get the priorites of an employee on a job
+     * 
+     * @author Caden
+     * @author gabes
+     */
+      async getAllPriority(id){
+        var jobids = [];
+        var matches = [];
+
+        //Get a list of all jobs
+        const querySnapshot =  await this.db.collection("jobs").get();
+        for (const documentSnapshot of querySnapshot.docs) {
+            jobids.push(documentSnapshot.id); 
+        }
+    
+        //For each job find if an employee matches the id, push the priority
+        for(const jobs of jobids){
+           const emp =  await this.getJobEmployeesID(jobs);
+                for(let i = 0; i < emp.length; i++){
+                    if( id == emp[i].accountID){
+                        matches.push(emp[i].jobPriority);
+                    }
+                }
+        }
+        return matches;
+    }
+
+
+    /**
+     * Get the highest priority
+     * 
+     * @author gabes
+     */
+     getHighestPriority(priorityList){
+        //Return 0 if employee has no priority 
+        if(priorityList == undefined){
+            return 0;
+        } 
+
+        //Find the highest priority and return one above it 
+        else{
+            var maxPriority = 0;
+            for(var i = 0; i < priorityList.length; i++){
+                if(priorityList[i] > maxPriority){
+                    maxPriority = priorityList[i];
+                }
+            }
+            return maxPriority + 1;
+        }
+    }
+
+
+    /**
      * Add employee to job
      * 
      * Status: Done
@@ -1075,17 +1133,64 @@ class Database {
      * 
      * @author Jude Gabriel
      */
-    async addEmployeeToJob(jobId, employeeToAdd){
-        //TODO:
-        //1. Find all jobs the employee is on, get their job num
-        //2. Find the highest jobPriority
-        //3. Add 1 to job num and set as jobPriority 
-
-
+    async addEmployeeToJob(jobId, employeeToAdd, priority){
         await this.db.collection("jobs").doc(jobId).collection("employees").add({
-            accountID: employeeToAdd.id
+            accountID: employeeToAdd,
+            jobPriority: priority
         });
     }
+
+    /**
+     * Sorts a list of jobs by priority
+     * 
+     * @author gabes 
+     */
+   async sortJobsByPriority(jobsList, employeeID){
+        var priorityArray = [];
+        var jobsArray = [];
+
+        //Get the priority of each job
+        for(var i = 0; i < jobsList.length; i++){
+            const data = await this.db.collection("jobs").doc(jobsList[i]).collection("employees").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    if(employeeID == doc.data().accountID){
+                        priorityArray.push({job: jobsList[i], priority: doc.data().jobPriority});
+                    }
+                })
+            })
+        }
+
+        //Sort the jobs by priority
+        priorityArray.sort(this.sortByProperty("priority"));
+
+        //Pass just the job if to jobs array
+        for(var i = 0; i < priorityArray.length; i++){
+            jobsArray.push(priorityArray[i].job);
+        }
+
+        //Return the sorted jobs array
+        return jobsArray;
+    }
+
+
+    /**
+     * Helper function to sort jobs by priority
+     * 
+     * Source: https://medium.com/@asadise/sorting-a-json-array-according-one-property-in-javascript-18b1d22cd9e9
+     * 
+     * @author gabes
+     */
+    sortByProperty(property){  
+        return function(a,b){  
+           if(a[property] > b[property])  
+              return 1;  
+           else if(a[property] < b[property])  
+              return -1;  
+       
+           return 0;  
+        }  
+     }
+
 
     /**
      * Remove employee from job
