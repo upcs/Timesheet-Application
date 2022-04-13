@@ -47,7 +47,6 @@ class JobsList extends React.Component {
             jobEdited: '',
             employeeEdited: '',
             eList: null,
-
             eListInitital: null,
             eDataInitital: null,
             doOnce: true,

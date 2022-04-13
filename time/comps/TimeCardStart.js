@@ -62,8 +62,9 @@ var endTime = 0;
             lastName: '',
             email: '',
             password: '',
-            jobList: <Picker.Item key={"test"} value={"Hello"}/>,
-            selectedJob: 'default: '
+            jobList: [],
+            selectedJobName: 'default: ',
+            selectedJobValue: ''
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
@@ -73,6 +74,54 @@ var endTime = 0;
         this.data = new Database();
 
     };
+
+
+    componentDidMount = () => {
+        //User.getID for ID
+
+        //Get all jobs the user is on
+        this.data.updateEmpJobs(User.getId()).then((res,rej) => {
+
+            //Sort the jobs by priority
+            this.data.sortJobsByPriority(res, User.getId()).then((respo, rejo) => {
+                this.setState({jList: respo}, () => {
+
+                    //Get the information for each job
+                    this.data.getSpecificJobs(respo).then((fin,fail) => {
+
+                        //Get a final array: match priority to job info
+                        this.sortJobs(respo, fin)
+                    })
+                });
+            })
+        }) 
+    }
+
+
+     /**
+     * Matches the sorted id's, and unsorted job info
+     * 
+     * Sorted: an array containing only job id's that is sorted by priority
+     * unsorted: an array containing all job specific info
+     * 
+     * 
+     * @author Jude Gabriel 
+     */
+      sortJobs = (sorted, unsorted) => {
+        var finalArr = [];
+        
+        //Match the unsorted array to the sorted array, store in final array
+        for(var i = 0; i < sorted.length; i++){
+            for(var j = 0; j < unsorted.length; j++){
+                if(sorted[i] == unsorted[j].id){
+                    finalArr.push(<Picker.Item label={unsorted[j].name} value={unsorted[j].name}/>);
+                }
+            }
+        }
+
+        //Set the state as the final array
+        this.setState({jobList: finalArr})
+    }
 
     handleClockOut= () => {
       this.props.sendData();
@@ -226,13 +275,15 @@ var endTime = 0;
 
                 {/* DROPDOWN LIST TO CHOOSE A JOB */}
                 <View style={styles.picker}>
+                    <Text>Current Job: {this.state.selectedJobName} {"\n"}  Value: {this.state.selectedJobValue}</Text>
                     <Picker
                     style={{height: 100, width: 200}}
-                    selectedValue={"TEST"}
+                    selectedValue={this.state.selectedJobName}
+                    onValueChange={(itemLabel, itemValue) => this.setState({selectedJobName: itemLabel, selectedJobValue: itemValue})}
                     >
-                        <Picker.Item    label="test" value="test"    /> 
-                        <Picker.Item    label="test2" value="test2"    /> 
-                        <Picker.Item    label="test3" value="test3"    /> 
+                        <Picker.Item    label="test" value="testttt"    /> 
+                        <Picker.Item    label="test2" value="testttt2"    /> 
+                        <Picker.Item    label="test3" value="testttt3"    /> 
                         {this.state.jobList}
                     </Picker>
 
