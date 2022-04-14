@@ -321,9 +321,6 @@ class Database {
      * @author Tony Hayden
      */
     async punchIn(id, jobName){
-        console.log(jobName);
-        console.log("HIT");
-
         // Grab all needed date for the current punch in
         let year = new Date().getFullYear();
         let month = new Date().getMonth() + 1;

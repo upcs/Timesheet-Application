@@ -459,14 +459,10 @@ var endTime = 0;
 
      //Styles for start button
      timerButtonOuter: {
-         //borderRadius: 40,
-         //borderColor: "#FF0000",
-         //borderWidth: 5,
          width: 250,
-        
-         //height: 250,
          overflow: 'hidden',
-         backgroundColor: 'white'
+         backgroundColor: 'white',
+         margin: 0,
      },
 
      picker: {
@@ -474,10 +470,8 @@ var endTime = 0;
         flex: 0,
         width: '50%',
         height: '30%',
-        //borderRadius: 3,
-        //borderWidth: 1,
-        //backgroundColor: 'black',
-        margin: '10%'
+        marginTop: '-5%',
+        marginBottom: '15%',
      },
      button: {
         width: '100%',
@@ -583,7 +577,8 @@ var endTime = 0;
     //Styles for text in the button
      text: {
          color: 'white',
-         fontSize: 30
+         fontSize: 30,
+         padding: 15
      },
  });
  
