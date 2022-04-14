@@ -47,7 +47,6 @@ class JobsList extends React.Component {
             jobEdited: '',
             employeeEdited: '',
             eList: null,
-
             eListInitital: null,
             eDataInitital: null,
             doOnce: true,
@@ -372,12 +371,6 @@ class JobsList extends React.Component {
      * Render the component
      */
     render() {
-
-
-        
-
-        
-            
         //Send data when prop "request" is true
         if (this.state.doOnce == true) {
             this.data.getAllJobs().then((res, rej) => {
@@ -666,9 +659,9 @@ const styles = StyleSheet.create({
     save:{
         marginRight: 30,
     },
-
-
-
+    contentContainer: {
+        paddingBottom: 100
+      },
 });
  
  
