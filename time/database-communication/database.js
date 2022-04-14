@@ -320,7 +320,9 @@ class Database {
      * 
      * @author Tony Hayden
      */
-    async punchIn(id){
+    async punchIn(id, jobName){
+        console.log(jobName);
+        console.log("HIT");
 
         // Grab all needed date for the current punch in
         let year = new Date().getFullYear();
@@ -346,6 +348,7 @@ class Database {
             clockOutHour: null,
             clockOutMinute: null,
             totalPunchTimeInMinutes: null,
+            jobName: jobName
 
         });
     }

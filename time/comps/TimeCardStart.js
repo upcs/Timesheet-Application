@@ -63,7 +63,7 @@ var endTime = 0;
             email: '',
             password: '',
             jobNames: [],
-            selectedJobName: 'Select a job to clock in',
+            selectedJobName: '',
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
@@ -109,18 +109,25 @@ var endTime = 0;
      */
       sortJobs = (sorted, unsorted) => {
         var jobNames = [];
+        var selectJob = [];
         
         //Match the unsorted array to the sorted array, store in final array
         for(var i = 0; i < sorted.length; i++){
             for(var j = 0; j < unsorted.length; j++){
                 if(sorted[i] == unsorted[j].id){
                     jobNames.push(<Picker.Item label={unsorted[j].name} value={unsorted[j].name}/>);
+                    selectJob.push(unsorted[i].name);
                 }
             }
         }
 
         //Set the state for job names
         this.setState({jobNames: jobNames});
+
+        //Set the first job in the list as the current job
+        if((selectJob != undefined) || (selectJob != null) || (selectJob.length != 0)){
+            this.setState({selectedJobName: selectJob[0]})
+        }
     }
 
 
@@ -200,7 +207,7 @@ var endTime = 0;
 
         });
 
-        this.data.punchIn(User.getId());
+        this.data.punchIn(User.getId(), this.state.selectedJobName);
     };
 
 
@@ -275,11 +282,11 @@ var endTime = 0;
                     </View>
                 </View >
 
+
                 {/* DROPDOWN LIST TO CHOOSE A JOB */}
                 <View style={styles.picker}>
-                    <Text>Current Job: {this.state.selectedJobName}</Text>
                     <Picker
-                    style={{height: 100, width: 200}}
+                    style={{height: 0, width: 210}}
                     selectedValue={this.state.selectedJobName}
                     onValueChange={(itemLabel, itemValue) => {
                         this.setState({selectedJobName: itemLabel});
@@ -287,9 +294,6 @@ var endTime = 0;
                     >
                         {this.state.jobNames}
                     </Picker>
-
-
-
                 </View>
 
 
@@ -467,11 +471,12 @@ var endTime = 0;
 
      picker: {
         flexDirection: 'row',
+        flex: 0,
         width: '50%',
-        height: '20%',
-        borderRadius: 3,
-        borderWidth: 1,
-       // backgroundColor: 'black',
+        height: '30%',
+        //borderRadius: 3,
+        //borderWidth: 1,
+        //backgroundColor: 'black',
         margin: '10%'
      },
      button: {
@@ -579,7 +584,7 @@ var endTime = 0;
      text: {
          color: 'white',
          fontSize: 30
-     }
+     },
  });
  
  export default TimeCardStart;
