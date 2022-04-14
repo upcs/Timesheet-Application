@@ -81,9 +81,7 @@ var endTime = 0;
      * @author gabes
      */
     getUserInfo(){
-        console.log("hit");
         this.data.getUsersInfo(User.getId()).then((res, rej) => {
-            console.log('name', res);
             this.setState({
                 firstName: res[0],
                 lastName: res[1],
