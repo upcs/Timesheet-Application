@@ -62,16 +62,18 @@ var endTime = 0;
             lastName: '',
             email: '',
             password: '',
-            jobList: [],
+            jobNames: [],
+            jobInfo: [],
             selectedJobName: 'default: ',
-            selectedJobValue: ''
+            selectedJobID: ''
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
         this.signOut = this.signOut.bind(this); 
         this.getUserInfo = this.getUserInfo.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
-        this.data = new Database();
+        this.sortJobs = this.sortJobs.bind(this);
+        this.data = new Database(); 
 
     };
 
@@ -108,20 +110,35 @@ var endTime = 0;
      * @author Jude Gabriel 
      */
       sortJobs = (sorted, unsorted) => {
-        var finalArr = [];
+        var jobNames = [];
+        var jobInfo = [];
         
         //Match the unsorted array to the sorted array, store in final array
         for(var i = 0; i < sorted.length; i++){
             for(var j = 0; j < unsorted.length; j++){
                 if(sorted[i] == unsorted[j].id){
-                    finalArr.push(<Picker.Item label={unsorted[j].name} value={unsorted[j].name}/>);
+                    jobNames.push(<Picker.Item label={unsorted[j].name} value={unsorted[j].name}/>);
+                    jobInfo.push({name: unsorted[i].name, id: unsorted[i].id})
                 }
             }
         }
 
-        //Set the state as the final array
-        this.setState({jobList: finalArr})
+        //Set the state for job names and the job info
+        this.setState({jobNames: jobNames})
+        this.setState({jobInfo: jobInfo});
     }
+
+
+
+    setJobID = (jobName) => {
+        for(var i = 0; i < this.state.jobInfo.length; i++){
+            if(jobName == this.state.jobInfo[i].name){
+                this.setState({selectedJobID: this.state.jobInfo[i].id});
+            }
+        }
+    }
+
+
 
     handleClockOut= () => {
       this.props.sendData();
@@ -275,16 +292,16 @@ var endTime = 0;
 
                 {/* DROPDOWN LIST TO CHOOSE A JOB */}
                 <View style={styles.picker}>
-                    <Text>Current Job: {this.state.selectedJobName} {"\n"}  Value: {this.state.selectedJobValue}</Text>
+                    <Text>Current Job: {this.state.selectedJobName} {"\n"}  Value: {this.state.selectedJobID}</Text>
                     <Picker
                     style={{height: 100, width: 200}}
                     selectedValue={this.state.selectedJobName}
-                    onValueChange={(itemLabel, itemValue) => this.setState({selectedJobName: itemLabel, selectedJobValue: itemValue})}
+                    onValueChange={(itemLabel, itemValue) => {
+                        this.setState({selectedJobName: itemLabel});
+                        this.setJobID(itemLabel);
+                    }}
                     >
-                        <Picker.Item    label="test" value="testttt"    /> 
-                        <Picker.Item    label="test2" value="testttt2"    /> 
-                        <Picker.Item    label="test3" value="testttt3"    /> 
-                        {this.state.jobList}
+                        {this.state.jobNames}
                     </Picker>
 
 
