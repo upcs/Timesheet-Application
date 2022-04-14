@@ -63,9 +63,7 @@ var endTime = 0;
             email: '',
             password: '',
             jobNames: [],
-            jobInfo: [],
-            selectedJobName: 'default: ',
-            selectedJobID: ''
+            selectedJobName: 'Select a job to clock in',
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
@@ -111,31 +109,18 @@ var endTime = 0;
      */
       sortJobs = (sorted, unsorted) => {
         var jobNames = [];
-        var jobInfo = [];
         
         //Match the unsorted array to the sorted array, store in final array
         for(var i = 0; i < sorted.length; i++){
             for(var j = 0; j < unsorted.length; j++){
                 if(sorted[i] == unsorted[j].id){
                     jobNames.push(<Picker.Item label={unsorted[j].name} value={unsorted[j].name}/>);
-                    jobInfo.push({name: unsorted[i].name, id: unsorted[i].id})
                 }
             }
         }
 
-        //Set the state for job names and the job info
-        this.setState({jobNames: jobNames})
-        this.setState({jobInfo: jobInfo});
-    }
-
-
-
-    setJobID = (jobName) => {
-        for(var i = 0; i < this.state.jobInfo.length; i++){
-            if(jobName == this.state.jobInfo[i].name){
-                this.setState({selectedJobID: this.state.jobInfo[i].id});
-            }
-        }
+        //Set the state for job names
+        this.setState({jobNames: jobNames});
     }
 
 
@@ -245,7 +230,7 @@ var endTime = 0;
 
     /**
      * Change modal visibility
-     * 
+     *  
      * 
      * @author gabes 
      */
@@ -292,13 +277,12 @@ var endTime = 0;
 
                 {/* DROPDOWN LIST TO CHOOSE A JOB */}
                 <View style={styles.picker}>
-                    <Text>Current Job: {this.state.selectedJobName} {"\n"}  Value: {this.state.selectedJobID}</Text>
+                    <Text>Current Job: {this.state.selectedJobName}</Text>
                     <Picker
                     style={{height: 100, width: 200}}
                     selectedValue={this.state.selectedJobName}
                     onValueChange={(itemLabel, itemValue) => {
                         this.setState({selectedJobName: itemLabel});
-                        this.setJobID(itemLabel);
                     }}
                     >
                         {this.state.jobNames}
