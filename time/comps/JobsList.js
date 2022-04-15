@@ -11,7 +11,7 @@
  
 
  import React, {useEffect, useState} from 'react';
- import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Modal, Alert} from 'react-native'
+ import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity, Modal, Alert, Pressable, TouchableWithoutFeedback, Keyboard} from 'react-native'
  import FakeData from './FakeJobsiteData';
  import {Color} from './Palette';
  import eData from './FakeEmployeeData';
@@ -593,41 +593,49 @@ class JobsList extends React.Component {
                     }}
                 >
                     <View style={styles.centeredView}>
-                        <View  style={styles.blur}>
-                            <View style={styles.modalViewNotes} >
-                                
-                                {/* EXIT BUTTON */}
-                                <View style={styles.leftView}>
-                                    <TouchableOpacity 
-                                        id='employeeModalExit'
-                                        style={[styles.button, styles.buttonClose]} 
-                                        onPress={ () =>
-                                        {
-                                            this.setModalThree(!modalThree);
-                                            this.setModalVisible(!isModalVisible);
-                                        }
-                                    }>
-                                        <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
-                                    </TouchableOpacity>
-                                </View>
-                      
-                                    <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Update Notes</Text>
-                                    <View>
-                                    <TextInput
-                                    id='nInput'
-                                    style={styles.textbox}
-                                    multiline
-                                    numberOfLines={6}
-                                    onChangeText={text => this.setNotes(text)}
-                                    value={this.state.jobNotes}
-                                    placeholder=" Notes for the jobsite"
-                                    >
-                            
-                                    </TextInput>
+                     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                            <View  style={styles.blur}>
+                                <View style={styles.modalViewNotes} >
+                                    
+                                    {/* EXIT BUTTON */}
+                                    <View style={styles.leftView}>
+                                        <TouchableOpacity 
+                                            id='notesModalExit'
+                                            style={[styles.button, styles.buttonClose]} 
+                                            onPress={ () =>
+                                            {
+                                                this.setModalThree(!modalThree);
+                                                this.setModalVisible(!isModalVisible);
+                                            }
+                                        }>
+                                            <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
+                                        </TouchableOpacity>
                                     </View>
-                               
+                        
+                                        <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Update Notes</Text>
+                                            <View>
+                                                <TextInput
+                                                id='nInput'
+                                                style={styles.textbox}
+                                                multiline
+                                                onChangeText={text => this.setNotes(text)}
+                                                value={this.state.jobNotes}
+                                                placeholder=" Notes for the jobsite"
+                                                >
+                                                </TextInput>
+                                                <Pressable
+                                                    id='submitButton'
+                                                    style={[styles.button2, styles.buttonClose]}
+                                                    onPress={() => { this.setModalThree(!modalThree)}}>
+                                                    <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
+                                                </Pressable>
+                                            </View>
+                                        
+                                    
+                                
+                                </View>
                             </View>
-                        </View>
+                        </TouchableWithoutFeedback>
                     </View>
                 </Modal>
             </View>
@@ -638,9 +646,21 @@ class JobsList extends React.Component {
  
 //Styles used for Scrollable list
 const styles = StyleSheet.create({
+    textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 20
+      },
+    button2: {
+        borderRadius: 20,
+        padding: '1%',
+        marginTop: 5,
+        elevation: 2,
+      },
     modalViewNotes: {
         width: '90%',
-        height: '80%',
+        height: '50%',
         backgroundColor: 'white',
         padding: '10%',
         shadowColor: '#000',
@@ -658,7 +678,8 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 2,
         width:'100%',
-        height: '90%'
+        minHeight:'50%',
+        maxHeight: '50%'
       },
     horizontalView:{
         flexDirection: 'row',
