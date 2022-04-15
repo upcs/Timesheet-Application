@@ -16,7 +16,7 @@
 import React from 'react';
 import {Color} from './Palette.js';
 
-import { Picker, Modal, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, DatePickerIOSBase} from 'react-native'
+import { Picker, Modal, Text, TextInput, View, StyleSheet, TouchableOpacity, Image} from 'react-native'
 import TimeUtil from './TimeUtil.js';
 
 
@@ -62,15 +62,75 @@ var endTime = 0;
             lastName: '',
             email: '',
             password: '',
+            jobNames: [],
+            selectedJobName: '',
         };
         this.timerOn = this.timerOn.bind(this);
         this.timerOff = this.timerOff.bind(this);
         this.signOut = this.signOut.bind(this); 
         this.getUserInfo = this.getUserInfo.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
-        this.data = new Database();
+        this.sortJobs = this.sortJobs.bind(this);
+        this.data = new Database(); 
 
     };
+
+
+    componentDidMount = () => {
+        //User.getID for ID
+
+        //Get all jobs the user is on
+        this.data.updateEmpJobs(User.getId()).then((res,rej) => {
+
+            //Sort the jobs by priority
+            this.data.sortJobsByPriority(res, User.getId()).then((respo, rejo) => {
+                this.setState({jList: respo}, () => {
+
+                    //Get the information for each job
+                    this.data.getSpecificJobs(respo).then((fin,fail) => {
+
+                        //Get a final array: match priority to job info
+                        this.sortJobs(respo, fin)
+                    })
+                });
+            })
+        }) 
+    }
+
+
+     /**
+     * Matches the sorted id's, and unsorted job info
+     * 
+     * Sorted: an array containing only job id's that is sorted by priority
+     * unsorted: an array containing all job specific info
+     * 
+     * 
+     * @author Jude Gabriel 
+     */
+      sortJobs = (sorted, unsorted) => {
+        var jobNames = [];
+        var selectJob = [];
+        
+        //Match the unsorted array to the sorted array, store in final array
+        for(var i = 0; i < sorted.length; i++){
+            for(var j = 0; j < unsorted.length; j++){
+                if(sorted[i] == unsorted[j].id){
+                    jobNames.push(<Picker.Item label={unsorted[j].name} value={unsorted[j].name}/>);
+                    selectJob.push(unsorted[i].name);
+                }
+            }
+        }
+
+        //Set the state for job names
+        this.setState({jobNames: jobNames});
+
+        //Set the first job in the list as the current job
+        if((selectJob != undefined) || (selectJob != null) || (selectJob.length != 0)){
+            this.setState({selectedJobName: selectJob[0]})
+        }
+    }
+
+
 
     handleClockOut= () => {
       this.props.sendData();
@@ -147,7 +207,7 @@ var endTime = 0;
 
         });
 
-        this.data.punchIn(User.getId());
+        this.data.punchIn(User.getId(), this.state.selectedJobName);
     };
 
 
@@ -177,7 +237,7 @@ var endTime = 0;
 
     /**
      * Change modal visibility
-     * 
+     *  
      * 
      * @author gabes 
      */
@@ -197,24 +257,19 @@ var endTime = 0;
         const style = isTimerOn ? styles.stop : styles.start
         const text = isTimerOn ? "Clock-Out" : "Clock-In";
         
-        /*const d = new Date(todayTime * 1000);
-        const hours = d.getUTCHours();
-        const minutes = d.getUTCMinutes();
-        const seconds = d.getUTCSeconds();
-        const timeString = [hours, minutes, seconds].map(value =>  ("0" + value).slice(-2)).join(':');
-        */
-        const jobList = [
-            <Picker.Item label="Java" value="java" />
-        ];
+
         const timeString = TimeUtil.convertMsToReadable(todayTime * 1000);
         let currentJob = "java";
         const { isModalVisible } = this.state;
         return (
             <View style={styles.justColor}>
             <View style={styles.container}>
+
+                {/* COMPANY LOGO */}
                 <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+
+                {/* CLOCK IN BUTTON  */}
                 <View>
-                    <Text style={styles.current_time}>{currentDuration}</Text>
                     <View style={styles.timerButtonOuter}>
                         <TouchableOpacity 
                             id='timerButton' 
@@ -224,33 +279,27 @@ var endTime = 0;
                         >
                             <Text style={styles.text}>{text}</Text>
                         </TouchableOpacity> 
-                        <View style={[styles.pickerOuter, {
-                            flexDirection: "row",
-                        }]}>
-                            <Text>
-                            Current Job:
-                            </Text>
-                            <View style={[styles.picker, {
-                                backgroundColor: "red",
-                            }]}>
-                                <Picker
-                                selectedValue={currentJob}
-                         
-                                onValueChange={
-                                    (choice, index) => this.setChosenJob(choice)
-                                }    
-                                >
-                                    {jobList}
-                                    </Picker>
-                            </View>
-                                
-                        </View>
-                        
                     </View>
                 </View >
-                 <Text>Today's Time: {timeString}</Text> 
+
+
+                {/* DROPDOWN LIST TO CHOOSE A JOB */}
+                <View style={styles.picker}>
+                    <Picker
+                    style={{height: 0, width: 210}}
+                    selectedValue={this.state.selectedJobName}
+                    onValueChange={(itemLabel, itemValue) => {
+                        this.setState({selectedJobName: itemLabel});
+                    }}
+                    >
+                        {this.state.jobNames}
+                    </Picker>
+                </View>
+
+
                  <View style={styles.bottomContainer}>
 
+                  {/* LOGOUT BUTTON */}
                  <View style={styles.logoutView}>
                        <TouchableOpacity 
                            style={styles.signOutButton}
@@ -272,6 +321,8 @@ var endTime = 0;
                                <Text style={styles.signOutText}>Account</Text>
                            </TouchableOpacity>
                    </View> 
+
+                   {/* EDIT ACCOUNT MODAL */}
                    <Modal
                         animationType='slide'
                         transparent={true}
@@ -408,22 +459,19 @@ var endTime = 0;
 
      //Styles for start button
      timerButtonOuter: {
-         borderRadius: 40,
-         borderColor: "#FF0000",
-         borderWidth: 5,
          width: 250,
-        
-         height: 250,
          overflow: 'hidden',
-         backgroundColor: 'white'
+         backgroundColor: 'white',
+         margin: 0,
      },
 
      picker: {
         flexDirection: 'row',
-        width: '100%',
-        height: '100%',
-        borderRadius: 3,
-        borderWidth: 1,
+        flex: 0,
+        width: '50%',
+        height: '30%',
+        marginTop: '-5%',
+        marginBottom: '15%',
      },
      button: {
         width: '100%',
@@ -432,6 +480,8 @@ var endTime = 0;
         height: 90,
         borderWidth: 5,
         alignItems: 'center',
+        borderRadius: 40,
+        borderColor: Color.MAROON
      },
 
      signOutButton: {
@@ -527,8 +577,9 @@ var endTime = 0;
     //Styles for text in the button
      text: {
          color: 'white',
-         fontSize: 30
-     }
+         fontSize: 30,
+         padding: 15
+     },
  });
  
  export default TimeCardStart;

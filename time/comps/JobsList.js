@@ -35,6 +35,7 @@ class JobsList extends React.Component {
 
 
         this.currValueMod = this.currValueMod.bind(this);
+        this.currValueMod2 = this.currValueMod2.bind(this);
         this.initEData = eData;
         this.state = {
             FakeData: [],
@@ -47,10 +48,11 @@ class JobsList extends React.Component {
             jobEdited: '',
             employeeEdited: '',
             eList: null,
-
             eListInitital: null,
+            eDataInitital: null,
             doOnce: true,
             query: '',
+            query2: '',
             refresh: false,
             modalThree: false,
             jobNotes: '',
@@ -96,12 +98,12 @@ class JobsList extends React.Component {
 
 
     static getDerivedStateFromProps(props, state) {
-        if (props.data !== state.stInitialFake) {
+        //if (props.data !== state.stInitialFake) {
           return {
             FakeData : props.data 
           };
-        }  
-        return  null;
+        //}  
+      
     }
     /*
     Add the updated note to the db and close the modal
@@ -126,6 +128,21 @@ class JobsList extends React.Component {
         
           
             
+            
+        }
+        
+        this.forceUpdate();
+    }
+
+    currValueMod2(newValue) {
+        this.setState({query2 : newValue});
+ 
+        //Filter Data
+        this.filteredItemsMod2 = this.getFilteredItems(this.state.query2, this.state.eDataInitital);
+       
+
+        if (this.filteredItemsMod2 != this.state.eData) {
+            this.setState({eData: this.filteredItemsMod2});
             
         }
         
@@ -219,6 +236,9 @@ class JobsList extends React.Component {
         this.data.getJobEmployeesID(id).then((res, rej) => {
             this.data.getAllAccounts().then((accResponse, accRej) => {
                 this.setState({eData:this.data.getEmployeesNotOnJob(accResponse, res)});
+
+                //Added by Harrison for Search Bar (Add employee)
+                this.setState({eDataInitital: this.data.getEmployeesNotOnJob(accResponse, res)});
             })
             this.data.getJobEmployeeData(res).then((respo, rejo) => {
                 this.setState({eList: respo});
@@ -381,12 +401,6 @@ class JobsList extends React.Component {
      * Render the component
      */
     render() {
-
-
-        
-
-        
-            
         //Send data when prop "request" is true
         if (this.state.doOnce == true) {
             this.data.getAllJobs().then((res, rej) => {
@@ -556,41 +570,40 @@ class JobsList extends React.Component {
                     visible={modalTwo}
                     onRequestClose= { () => {
                         this.setModalTwo(!modalTwo);
-                    }}
-                >
+                    }}>
                     <View style={styles.centeredView}>
-                        <View  style={styles.blur}>
-                            <View style={styles.modalView}>
-                                
-                                {/* EXIT BUTTON */}
-                                <View style={styles.leftView}>
-                                    <TouchableOpacity 
-                                        id='employeeModalExit'
-                                        style={[styles.button, styles.buttonClose]} 
-                                        onPress={ () =>
-                                        {
-                                            this.setModalTwo(!modalTwo);
-                                            this.setModalVisible(!isModalVisible);
-                                        }
-                                    }>
-                                        <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
-                                    </TouchableOpacity>
-                                </View>
+                            <View  style={styles.blur}>
+                                <View style={styles.modalView}>
+                                    
+                                    {/* EXIT BUTTON */}
+                                    <View style={styles.leftView}>
+                                        <TouchableOpacity 
+                                            id='employeeModalExit'
+                                            style={[styles.button, styles.buttonClose]} 
+                                            onPress={ () =>
+                                            {
+                                                this.setModalTwo(!modalTwo);
+                                                this.setModalVisible(!isModalVisible);
+                                            }
+                                        }>
+                                            <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
+                                        </TouchableOpacity>
+                                    </View>
 
-                                {/* Search Employees */}
-                                <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Add Employee</Text>
-
-                                {/* SEARCH BAR */}
-                                <View styles={styles.search}>
-                                    <SearchBar></SearchBar>
-                                </View>
-                                <FlatList 
-                                    id='addEmployeeList'
-                                    style={styles.list}
-                                    data={this.state.eData} 
-                                    keyExtractor={item => item.id.toString()}
-                                    renderItem={this.renderEmployee} 
-                                />
+                                    {/* Search Employees */}
+                                    <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Add Employee</Text>
+                                    {/* SEARCH BAR */}
+                                    <View styles={styles.search}>
+                                        <SearchBar currValue = {this.currValueMod2}></SearchBar>
+                                    </View>
+                                    <FlatList 
+                                        id='addEmployeeList'
+                                        style={styles.list}
+                                        data={this.state.eData} 
+                                        keyExtractor={item => item.id.toString()}
+                                        renderItem={this.renderEmployee} 
+                                    />
+                            
                             </View>
                         </View>
                     </View>
@@ -795,9 +808,9 @@ const styles = StyleSheet.create({
     save:{
         marginRight: 5,
     },
-
-
-
+    contentContainer: {
+        paddingBottom: 100
+      },
 });
  
  
