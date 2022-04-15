@@ -54,6 +54,7 @@ class JobsList extends React.Component {
             refresh: false,
             modalThree: false,
             jobNotes: '',
+            spareNote: '',
             doOnce: true
         };
         this.data = new Database()
@@ -102,7 +103,13 @@ class JobsList extends React.Component {
         }  
         return  null;
     }
-
+    /*
+    Add the updated note to the db and close the modal
+    */
+    handleNoteSubmit(id,mess) {
+        this.data.setJobNotes(id,mess);
+        this.setModalThree(!this.state.modalThree);
+    }
     /**
      * Updates state on SearchBar change
      * @param {*} newValue 
@@ -199,7 +206,12 @@ class JobsList extends React.Component {
         this.setState({employeeEdited: edited});
     }
 
-
+    /*
+    set the backup note that restores the other note
+    */
+   setSpareNote=(edited) => {
+       this.setState({spareNote: edited});
+   }
     /**
      * Set active and non-active employee lists 
      */
@@ -280,6 +292,7 @@ class JobsList extends React.Component {
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
                         this.setNotes(item.notes);
+                        this.setSpareNote(item.spareNote);
                         this.setEList(item.id);
                         this.updateState();
                     }
@@ -604,6 +617,7 @@ class JobsList extends React.Component {
                                             style={[styles.button, styles.buttonClose]} 
                                             onPress={ () =>
                                             {
+                                                this.setNotes(this.state.spareNote);
                                                 this.setModalThree(!modalThree);
                                                 this.setModalVisible(!isModalVisible);
                                             }
@@ -626,7 +640,7 @@ class JobsList extends React.Component {
                                                 <Pressable
                                                     id='submitButton'
                                                     style={[styles.button2, styles.buttonClose]}
-                                                    onPress={() => { this.setModalThree(!modalThree)}}>
+                                                    onPress={() => {this.handleNoteSubmit(this.state.jobEdited,this.state.jobNotes)}}>
                                                     <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                                                 </Pressable>
                                             </View>

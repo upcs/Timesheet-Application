@@ -1022,6 +1022,36 @@ class Database {
         }
     }
 
+       /**
+     * Set job notes
+     * 
+     * Status: Needs to test more edge cases
+     * Testing: Needed
+     * 
+     * @author Caden Deutscher
+     */
+        async setJobNotes(id, jobnotes){
+            if(typeof jobnotes === 'string'){
+                if(jobnotes == "" || jobnotes == " " || jobnotes == undefined){
+                    jobnotes = "No notes."
+                }
+
+                if(id != null){
+                    await this.db.collection("jobs").doc(id).update({notes: jobnotes});
+                }
+            }
+            else{
+
+                let jnote = "No notes."
+
+                if(id != null){
+                    await this.db.collection("jobs").doc(id).update({notes: jnote});
+                }
+            }
+           
+        }
+    
+
     /**
      * Set job phase
      */
