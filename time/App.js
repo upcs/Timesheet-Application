@@ -3,8 +3,6 @@ import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 
-import Icon from './comps/Icon';
-
 import Jobsite from './comps/Jobsite';
 import Login from './comps/login';
 
@@ -25,7 +23,7 @@ import SearchBar from './comps/SearchBar';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AdminEmployee from './comps/AdminEmployee';
 //added
-import { LogBox } from 'react-native';
+import { LogBox, Image} from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 import Database from './database-communication/database.js'
@@ -101,13 +99,42 @@ class App extends React.Component {
     return (
       <SafeAreaView style={safeAreaAndroid.SafeArea}>
       <NavigationContainer>
-        <Tab.Navigator>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+              if (route.name === 'TimeCardStart') {
+                iconName = require("./assets/clock.png");
+              } else if (route.name === 'Timesheet') {
+                iconName = require("./assets/jobs.png");
+              }
+              else if (route.name === 'Employees') {
+                iconName= require("./assets/emp.png")
+              }
+              else if (route.name === 'Jobsite') {
+                iconName = require("./assets/site.png")
+              }
+              else if (route.name === 'BasicJobsite') {
+                iconName = require("./assets/site.png")
+              }
+              else if (route.name === 'home') {
+                iconName = require("./assets/jobs.png")
+              }
+  
+              // You can return any component that you like here!
+              return  <Image source={iconName}      style={[{flex:1, resizeMode: 'stretch'},{ height: size, width: size}]}/>
+            },
+            tabBarActiveTintColor: Color.MAROON,
+            tabBarInactiveTintColor: 'gray',
+            tabBarShowLabel: false
+          })}
+        >
           {
           this.state.signedIn ? (
             this.state.user ? (
               // Logged in as admin
                   <>
-                  <Tab.Screen name="TimeCardStart"   children={()=><TimeCardStart initialParams={{
+                  <Tab.Screen name="TimeCardStart" id="tcs" children={()=><TimeCardStart initialParams={{
                          signOutParent: this.signOut}} sendData={addData} />}></Tab.Screen>
                   <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
                   <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
@@ -121,7 +148,7 @@ class App extends React.Component {
                   <>
                     <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart  sendData={addData} initialParams={{
                          signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
-                    <Tab.Screen name="Jobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
+                    <Tab.Screen name="BasicJobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
                     <Tab.Screen name="home"   children={()=><EmployeeHours ref={this.myref} dataParentToChild={this.state.id}/>}/>
                   </>
               
