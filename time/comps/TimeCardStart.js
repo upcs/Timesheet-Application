@@ -22,6 +22,7 @@ import TimeUtil from './TimeUtil.js';
 
 import Database from '../database-communication/database.js';
 import User from '../database-communication/user.js'
+
 /* Global Variables for time tracking */
 var isPressed;
 var sec = 0;
@@ -71,14 +72,18 @@ var endTime = 0;
         this.getUserInfo = this.getUserInfo.bind(this);
         this.updatePassword = this.updatePassword.bind(this);
         this.sortJobs = this.sortJobs.bind(this);
+        this.updateJobList = this.updateJobList.bind(this);
         this.data = new Database(); 
 
     };
 
 
     componentDidMount = () => {
-        //User.getID for ID
+        this.updateJobList();
+    }
 
+    
+    updateJobList = () => {
         //Get all jobs the user is on
         this.data.updateEmpJobs(User.getId()).then((res,rej) => {
 
@@ -94,8 +99,9 @@ var endTime = 0;
                     })
                 });
             })
-        }) 
+        })
     }
+
 
 
      /**
@@ -256,7 +262,6 @@ var endTime = 0;
         const { currentDuration, isTimerOn, todayTime } = this.state;
         const style = isTimerOn ? styles.stop : styles.start
         const text = isTimerOn ? "Clock-Out" : "Clock-In";
-        
 
         const timeString = TimeUtil.convertMsToReadable(todayTime * 1000);
         let currentJob = "java";
