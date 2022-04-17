@@ -83,6 +83,13 @@ var endTime = 0;
     }
 
     
+    /**
+     * Updates the picker list
+     * 
+     * Called when component mounts or when a user is added or removed from a job
+     * 
+     * @author gabes
+     */
     updateJobList = () => {
         //Get all jobs the user is on
         this.data.updateEmpJobs(User.getId()).then((res,rej) => {

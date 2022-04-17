@@ -280,6 +280,7 @@ class JobsList extends React.Component {
                     this.data.removeEmployeeFromJob(this.state.jobEdited, res[i].id);
                     this.setEList(this.state.jobEdited);
                     this.updateState();
+                    this.props.updateList();
                 }
             }
         });

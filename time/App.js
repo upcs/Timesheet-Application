@@ -84,8 +84,8 @@ class App extends React.Component {
       })
   }
 
+  //Updates the picker list. Called when a user is added or removed from a job
   updateList(){
-    console.log("hit app js")
     this.timeCardRef.current.updateJobList();
   }
 
