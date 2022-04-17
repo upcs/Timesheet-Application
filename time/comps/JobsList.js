@@ -317,7 +317,8 @@ class JobsList extends React.Component {
                                         'Employee Added to Jobsite',
                                         this.addUser(item),
                                         this.setModalTwo(!modalTwo),
-                                        this.setModalVisible(!isModalVisible)
+                                        this.setModalVisible(!isModalVisible),
+                                        this.props.updateList()
                                     )
                                 }, 
                             },
