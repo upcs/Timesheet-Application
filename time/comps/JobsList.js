@@ -105,6 +105,8 @@ class JobsList extends React.Component {
         //}  
       
     }
+
+
     /*
     Add the updated note to the db and close the modal
     */
@@ -112,6 +114,8 @@ class JobsList extends React.Component {
         this.data.setJobNotes(id,mess);
         this.setModalThree(!this.state.modalThree);
     }
+
+
     /**
      * Updates state on SearchBar change
      * @param {*} newValue 
@@ -125,10 +129,6 @@ class JobsList extends React.Component {
 
         if (this.filteredItemsMod != this.state.eList) {
             this.setState({eList: this.filteredItemsMod});
-        
-          
-            
-            
         }
         
         this.forceUpdate();
@@ -290,8 +290,10 @@ class JobsList extends React.Component {
      * Add user to the job 
      */
     addUser = (item) => {
-        this.data.addEmployeeToJobPriority(this.state.jobEdited, item);
-        this.setEList(this.state.jobEdited);
+        this.data.addEmployeeToJobPriority(this.state.jobEdited, item).then( () => {
+            this.setEList(this.state.jobEdited); 
+            this.props.updateList();
+        });
     }
 
  
@@ -348,7 +350,6 @@ class JobsList extends React.Component {
                                         this.addUser(item),
                                         this.setModalTwo(!modalTwo),
                                         this.setModalVisible(!isModalVisible),
-                                        this.props.updateList()
                                     )
                                 }, 
                             },
