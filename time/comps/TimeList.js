@@ -80,7 +80,7 @@ handleSubmit = (time) => {
                     this.setModalVisible(true);
                   }
                 }}>
-                    <Text >{item.date + '\n' + item.hours}</Text>
+                    <Text style={styles.punchStyle}>{item.date + '\n' + item.hours}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -148,8 +148,9 @@ handleSubmit = (time) => {
 //Styles used for Scrollable list
 const styles = StyleSheet.create({
     item: {
-        padding: 10,
-        borderTopWidth: 1,
+        padding: 20,
+        borderTopWidth: 2,
+        
     },
     blur: {
         width: '100%',
@@ -230,6 +231,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold'
       },
+      punchStyle: {
+        color: Color.MAROON,
+        fontWeight: 'bold'
+      }
 
 });
 

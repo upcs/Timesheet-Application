@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row", 
         marginBottom: 0,
-        marginTop: 20,
+        marginTop: 1,
         backgroundColor: 'white'
     },
     employees_hours: {
@@ -335,7 +335,9 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     text_employee: {
-        textDecorationLine: 'underline'
+        textDecorationLine: 'underline',
+        color: 'black',
+        fontWeight: 'bold'
     },
     search: {
         marginLeft: 10,

@@ -12,7 +12,9 @@
 
 import React, {useEffect, useState} from 'react';
 import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity} from 'react-native'
+import { Color } from './Palette';
 import Database from '../database-communication/database.js'
+import { color } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 /**
  * Creates a Scrollable List that can be selected
@@ -27,8 +29,10 @@ class TimeSheetList extends React.Component {
            data: [],
            stInitialFake: [],
            doOnce: true,
+           currentEmp: ''
         };
         this.data = new Database();
+
     }
 
     componentDidMount = () => {
@@ -48,6 +52,7 @@ class TimeSheetList extends React.Component {
 
     setEmployee = (id) => {
         this.props.onChange(id);
+        this.state.currentEmp = id;
     }
 
 
@@ -55,12 +60,17 @@ class TimeSheetList extends React.Component {
 
     //Render each item as a button
     renderItem = ({item}) => {
+        let theColor = Color.MAROON;
+        if(this.state.currentEmp == item.id){
+            theColor = 'black';
+        }
         return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity  onPress={() => {
                     this.setEmployee(item.id);
+                    
                 }}>
-                    <Text >{item.firstname + " " + item.lastname}</Text>
+                    <Text style={[{color: theColor},styles.empStyle]}>{item.firstname + " " + item.lastname}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -123,11 +133,17 @@ class TimeSheetList extends React.Component {
 const styles = StyleSheet.create({
     item: {
         padding: 20,
-        borderTopWidth: 1,
+        borderTopWidth: 2,
+        backgroundColor: 'white',
+        borderColor: 'black'
     }, 
     contentContainer: {
         paddingBottom: 100
       },
+      empStyle: {
+          fontWeight: 'bold',
+         
+      }
 });
 
 
