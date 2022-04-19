@@ -56,6 +56,7 @@ import Database from '../database-communication/database.js'
     updateState = () => {
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({FakeData: res}, () => {
+                this.componentDidMount();
             });
 
             this.setState({stInitialFake : res});

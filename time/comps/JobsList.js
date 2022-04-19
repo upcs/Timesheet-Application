@@ -45,6 +45,7 @@ class JobsList extends React.Component {
             modalTwo: false,
             address: '',
             jobName: '',
+            jobPhase: '',
             jobEdited: '',
             employeeEdited: '',
             eList: null,
@@ -57,7 +58,7 @@ class JobsList extends React.Component {
             modalThree: false,
             jobNotes: '',
             spareNote: '',
-            doOnce: true
+            doOnce: true,
         };
         this.data = new Database()
     }
@@ -84,15 +85,16 @@ class JobsList extends React.Component {
         });
     }
 
+
     /**
      * Update the list of jobs
      */
-    updateState = () => {
+   updateState = () => {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
+                this.componentDidMount();
             });
             this.setState({stInitialFake : res});
-            
         });
     }
 
@@ -190,13 +192,24 @@ class JobsList extends React.Component {
      * Update the job address 
      */
     setAddress = (addy) => {
-        this.setState({address: addy})
+        this.setState({address: addy});
     }
-      /**
-     * Update the job notes 
-     */
-       setNotes= (jnote) => {
+
+
+    /**
+    * Update the job notes 
+    */
+    setNotes = (jnote) => {
         this.setState({jobNotes: jnote})
+    }
+
+    /**
+     * Updates the job phase
+     * 
+     * @author gabes
+     */
+    setPhase = (phase) => {
+        this.setState({jobPhase: phase})
     }
 
 
@@ -263,10 +276,15 @@ class JobsList extends React.Component {
      * Save the job edits 
      */
     saveJob = (edited) => {
-        this.data.setJobName(this.state.jobEdited, this.state.jobName);
-        this.data.setJobAddress(this.state.jobEdited, this.state.address);
-        this.setEList(this.state.jobEdited);
-        this.updateState();
+        this.data.setJobName(this.state.jobEdited, this.state.jobName).then(() => {
+            this.data.setJobAddress(this.state.jobEdited, this.state.address).then(() => {
+                this.data.setJobPhase(this.state.jobEdited, this.state.jobPhase).then(() => {
+                    this.setEList(this.state.jobEdited);
+                    this.updateState();
+                });
+            });
+        });
+        
     }
 
 
@@ -310,8 +328,10 @@ class JobsList extends React.Component {
                 <TouchableOpacity 
                     id='jobListButton'
                     onPress={ () => {
+                        console.log(item.phase);
                         this.setModalVisible(!isModalVisible);
                         this.setAddress(item.address);
+                        this.setPhase(item.phase);
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
                         this.setNotes(item.notes);
@@ -426,7 +446,7 @@ class JobsList extends React.Component {
                 <FlatList 
                     id='jobsList'
                     data={this.state.FakeData} 
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={item => item.id}
                     renderItem={this.renderItem} 
                     contentContainerStyle={styles.contentContainer}
                     />
@@ -485,10 +505,23 @@ class JobsList extends React.Component {
                                         </TextInput>
                                     </View>
 
-                                    {/* SEARCH BAR */}
-                                    <View styles={styles.search}>
-                                        <SearchBar currValue = {this.currValueMod}></SearchBar>
-                                    </View>
+                                {/* CHANGE JOB PHASE */}
+                                <View style={styles.textAndTitle}>
+                                    <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Phase:</Text>
+                                    <TextInput 
+                                        id='jobPhase'
+                                        style={styles.textArea} 
+                                        defaultValue={this.state.jobPhase}
+                                        onChangeText={ (text) =>{
+                                            this.setState({jobPhase: text})
+                                        }}>
+                                    </TextInput>
+                                </View>
+
+                                {/* SEARCH BAR */}
+                                <View styles={styles.search}>
+                                    <SearchBar currValue = {this.currValueMod}></SearchBar>
+                                </View>
 
                                     <View styles={styles.listView}>
                                     {/* EMPLOYEE LIST */}
