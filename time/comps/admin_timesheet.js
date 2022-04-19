@@ -166,7 +166,12 @@ class AdminTimesheet extends React.Component {
      * @author gabes
      */
     getAllEmployeeTime = (id) => {
+        
         var somedata = [];
+        this.data.getAllPunchSummary(id,false,false,0,0,0,0,0,0).then((res, rej) => {
+            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+        });
+       
         this.data.getAllTime(id).then((res, rej) => {
             if(res == undefined){
                 return;
@@ -179,7 +184,7 @@ class AdminTimesheet extends React.Component {
                     res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
                     res[i].totalPunchTimeInMinutes});
             }
-            if(somedata.length <= 0){
+            if(somedata.length <= 1){
                 somedata.push({id: "0", date: "No time recorded for employee", hours: ""});
             }
             this.setState({time: somedata});
@@ -194,6 +199,9 @@ class AdminTimesheet extends React.Component {
      */
     getEmployeesFrom(id, day, month, year){
         var somedata = [];
+        this.data.getAllPunchSummary(id,true,false,0,0,0,day,month,year).then((res, rej) => {
+            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+        });
         this.data.getTimeFrom(id, day, month, year).then((res, rej) => {
             if(res == undefined){
                 return;
@@ -206,7 +214,7 @@ class AdminTimesheet extends React.Component {
                     res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
                     res[i].totalPunchTimeInMinutes});
             }
-            if(somedata.length <= 0){
+            if(somedata.length <= 1){
                 somedata.push({id: "0",date: "No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
@@ -220,6 +228,9 @@ class AdminTimesheet extends React.Component {
      * @author gabes
      */
      getEmployeesTo(id, day, month, year){
+        this.data.getAllPunchSummary(id,false,true,day,month,year,0,0,0).then((res, rej) => {
+            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+        });
         var somedata = [];
         this.data.getTimeTo(id, day, month, year).then((res, rej) => {
             if(res == undefined){
@@ -233,7 +244,7 @@ class AdminTimesheet extends React.Component {
                     res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
                     res[i].totalPunchTimeInMinutes});
             }
-            if(somedata.length <= 0){
+            if(somedata.length <= 1){
                 somedata.push({id: "0",date: "No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")", hours: ""});
             }
             this.setState({time: somedata});
@@ -243,6 +254,9 @@ class AdminTimesheet extends React.Component {
 
     getEmployeesFromAndTo(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear){
         var somedata = [];
+        this.data.getAllPunchSummary(id,true,true,toDay,toMonth,toYear,fromDay,fromMonth,fromYear).then((res, rej) => {
+            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+        });
         this.data.getTimeRanged(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear).then((res, rej) => {
             if(res == undefined){
                 return;
@@ -255,7 +269,7 @@ class AdminTimesheet extends React.Component {
                     res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
                     res[i].totalPunchTimeInMinutes });
             }
-            if(somedata.length <= 0){
+            if(somedata.length <= 1){
                 somedata.push({id: "0",date: "No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")", hours: ""});
             }
             
@@ -306,7 +320,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     horizontal_layout_top: {
-        flex: 0.1,
+        flex: 0.15,
         flexDirection: "row", 
         marginBottom: 0,
         marginTop: 5,
@@ -320,7 +334,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row", 
         marginBottom: 0,
-        marginTop: 20,
+        marginTop: 1,
         backgroundColor: 'white'
     },
     employees_hours: {
@@ -335,7 +349,9 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     text_employee: {
-        textDecorationLine: 'underline'
+        textDecorationLine: 'underline',
+        color: 'black',
+        fontWeight: 'bold'
     },
     search: {
         marginLeft: 10,
