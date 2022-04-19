@@ -837,7 +837,7 @@ class Database {
                     }
                     //add time only if it is in front of the from dates
                     else if(fFrom && !fTo){
-                        console.log("Month " + fMonth + " from fb " + doc.data().month);
+                
                         if(doc.data().year < fYear || (doc.data().year == fYear && doc.data().month < fMonth) || (doc.data().year == fYear && doc.data().month == fMonth && fYear && doc.data().day < fDay)){
 
                         }
@@ -872,7 +872,7 @@ class Database {
             }
          });   
     })
-    console.log(time);
+  
     return time;
     }
     /*
