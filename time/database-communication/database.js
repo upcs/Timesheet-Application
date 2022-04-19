@@ -1128,9 +1128,9 @@ class Database {
      * 
      * @author gabes
      */
-    addEmployeeToJobPriority(jobId, employee){
+    async addEmployeeToJobPriority(jobId, employee){
         var employeeId = employee.id
-        this.getAllPriority(employeeId).then((res, ref) => {
+        await this.getAllPriority(employeeId).then((res, ref) => {
             var priority = this.getHighestPriority(res);
             this.addEmployeeToJob(jobId, employeeId, priority); 
         })   
