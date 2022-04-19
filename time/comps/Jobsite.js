@@ -234,7 +234,8 @@ const styles = StyleSheet.create({
     switchJob: {
         backgroundColor: 'rgba(0,0,0,0.1)', 
         borderRadius: 30,
-        width: 200, 
+        width: '70%', 
+        maxHeight: '40%',
         alignItems: 'center'   
     },
     notesHeaderContainer: {
@@ -269,9 +270,10 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     headerText: {
-        color: 'black',
+        color: 'white',
         fontWeight: 'bold',
-        fontSize: 30,
+        fontSize: 40,
+        padding: 5,
         textAlign: 'center'
     },
     notesText: {

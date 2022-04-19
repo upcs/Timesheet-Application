@@ -810,7 +810,71 @@ class Database {
             return postData;
         }
     }
+    /*
+    This method returns the total time that an employee worked
+    @param 
+    id - Employee id,
+    fFrom - filtered From? (true or false)
+    fTo - filtered To? (true or false)
+    tDay - to filtered day
+    tMonth - to filted month
+    tYear - to filtered year
+    fDay - from filtered day
+    fMonth - from filtered Month
+    fYear - from filteredYear
+    @ return Total Time employee worked over time period
+    */
+    async getAllPunchSummary(id, fFrom, fTo, tDay, tMonth, tYear, fDay, fMonth, fYear){
+        fMonth = this.getMonth(fMonth);
+        tMonth = this.getMonth(tMonth);
+        var time = 0;
+        const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+         querySnapshot.forEach((doc) => {
+             if(!isNaN(doc.data().totalPunchTimeInMinutes)){
+                 //Add all time
+                    if(!fFrom && !fTo){
+                    time += parseInt(doc.data().totalPunchTimeInMinutes);
+                    }
+                    //add time only if it is in front of the from dates
+                    else if(fFrom && !fTo){
+                
+                        if(doc.data().year < fYear || (doc.data().year == fYear && doc.data().month < fMonth) || (doc.data().year == fYear && doc.data().month == fMonth && fYear && doc.data().day < fDay)){
 
+                        }
+                        else{
+                            time += parseInt(doc.data().totalPunchTimeInMinutes);
+                        }
+                    
+
+                    }
+                    //Add time only if it is before the to dates
+                    else if(!fFrom && fTo){
+                        if(doc.data().year > tYear || (doc.data().year == tYear && doc.data().month > tMonth) || (doc.data().year == tYear && doc.data().month == tMonth && tYear && doc.data().day > tDay)){
+
+                        }
+                        else{
+                            time += parseInt(doc.data().totalPunchTimeInMinutes);
+                        }
+
+                    }
+                    //Add time only if it is between the from and to dates
+                    else if(fFrom && fTo){
+                        if(doc.data().year > tYear || (doc.data().year == tYear && doc.data().month > tMonth) || (doc.data().year == tYear && doc.data().month == tMonth && tYear && doc.data().day > tDay)){
+
+                        }
+                        else if(doc.data().year < fYear || (doc.data().year == fYear && doc.data().month < fMonth) || (doc.data().year == fYear && doc.data().month == fMonth && fYear && doc.data().day < fDay)){
+
+                        }
+                        else{
+                            time += parseInt(doc.data().totalPunchTimeInMinutes);
+                        }
+                    }
+            }
+         });   
+    })
+  
+    return time;
+    }
     /*
     @author Caden Deutscher
     @return - returns obvious overtime punches for a single employee
