@@ -344,63 +344,66 @@ var endTime = 0;
                         }}
                     >
                         <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                
-                                    {/* THE EXIT BUTTON */}
-                                    <View style={styles.leftView}>
-                                        <TouchableOpacity 
-                                        id='exitButton' 
-                                        style={[styles.mbutton, styles.buttonClose]} 
-                                        onPress={ () =>
-                                        {
-                                            this.setModalVisible(!isModalVisible);
-                                        }}>
-                                            <Text style={styles.textStyle}>X</Text>
+
+                            <View  style={styles.blur}>
+                                <View style={styles.modalView}>
+                                    
+                                        {/* THE EXIT BUTTON */}
+                                        <View style={styles.leftView}>
+                                            <TouchableOpacity 
+                                            id='exitButton' 
+                                            style={[styles.mbutton, styles.buttonClose]} 
+                                            onPress={ () =>
+                                            {
+                                                this.setModalVisible(!isModalVisible);
+                                            }}>
+                                                <Text style={styles.textStyle}>X</Text>
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        {/* USER'S NAME */}
+                                        <Text style={styles.modalText}> 
+                                            {this.state.firstName + " " + this.state.lastName}
+                                        </Text>
+
+                                        {/* CHANGE EMAIL */}
+                                        <View style={styles.textAndTitle}>
+                                            <Text style={styles.titles}>Email:</Text>
+                                            <TextInput 
+                                                id='email'
+                                                style={styles.textArea} 
+                                                defaultValue={this.state.email}
+                                                onChangeText={ (text) =>{
+                                                    this.setState({userLast: text})
+                                                }}>
+                                            </TextInput>
+                                        </View>
+
+                                        {/* CHANGE PASSWORD */}
+                                        <View style={styles.textAndTitle}>
+                                            <Text style={styles.titles}>New Password:</Text>
+                                            <TextInput 
+                                                id='password'
+                                                style={styles.textArea} 
+                                                defaultValue={''}
+                                                secureTextEntry={true}
+                                                onChangeText={ (text) =>{
+                                                    this.setState({password: text})
+                                                }}>
+                                            </TextInput>
+                                        </View>
+
+                                        {/* SAVE CHANGES */}
+                                        <TouchableOpacity
+                                            id='saveChanges'
+                                            style={[styles.mbutton, styles.buttonClose]}
+                                            onPress={ () => {
+                                                    this.setModalVisible(!isModalVisible);
+                                                    this.updatePassword()
+                                                }}>
+                                                <Text style={styles.textStyle}>Save Changes</Text>
                                         </TouchableOpacity>
                                     </View>
-
-                                     {/* USER'S NAME */}
-                                    <Text style={styles.modalText}> 
-                                        {this.state.firstName + " " + this.state.lastName}
-                                    </Text>
-
-                                    {/* CHANGE EMAIL */}
-                                    <View style={styles.textAndTitle}>
-                                        <Text style={styles.titles}>Email:</Text>
-                                        <TextInput 
-                                            id='email'
-                                            style={styles.textArea} 
-                                            defaultValue={this.state.email}
-                                            onChangeText={ (text) =>{
-                                                this.setState({userLast: text})
-                                            }}>
-                                        </TextInput>
-                                    </View>
-
-                                    {/* CHANGE PASSWORD */}
-                                    <View style={styles.textAndTitle}>
-                                        <Text style={styles.titles}>New Password:</Text>
-                                        <TextInput 
-                                            id='password'
-                                            style={styles.textArea} 
-                                            defaultValue={''}
-                                            secureTextEntry={true}
-                                            onChangeText={ (text) =>{
-                                                this.setState({password: text})
-                                            }}>
-                                        </TextInput>
-                                    </View>
-
-                                    {/* SAVE CHANGES */}
-                                    <TouchableOpacity
-                                        id='saveChanges'
-                                        style={[styles.mbutton, styles.buttonClose]}
-                                        onPress={ () => {
-                                                this.setModalVisible(!isModalVisible);
-                                                this.updatePassword()
-                                            }}>
-                                            <Text style={styles.textStyle}>Save Changes</Text>
-                                    </TouchableOpacity>
                                 </View>
                             </View>
                    </Modal>
@@ -585,7 +588,13 @@ var endTime = 0;
         buttonOpen: {
         backgroundColor: Color.MAROON,
     },
-
+    blur: {
+        width: '100%',
+        height: '100%',
+        backgroundColor : 'rgba(52, 52, 52, 0.8)',
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
     //Styles for text in the button
      text: {
          color: 'white',
