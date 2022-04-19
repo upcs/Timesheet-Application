@@ -317,7 +317,7 @@ class JobsList extends React.Component {
                         this.updateState();
                     }
                 }>
-                    <Text adjustsFontSizeToFit={true}  >{item.name}</Text>
+                    <Text style={styles.jStyle} adjustsFontSizeToFit={true}  >{item.name}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -811,6 +811,10 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingBottom: 100
       },
+      jStyle: {
+        fontWeight: 'bold',
+        color: Color.MAROON
+    },
 });
  
  

@@ -141,7 +141,7 @@ import Database from '../database-communication/database.js'
                     this.setUserType(item.admin);
                     this.setUserEdited(item.id);
                  }}>
-                     <Text>{item.firstname + " "  + item.lastname}</Text>
+                     <Text style={styles.empStyle}>{item.firstname + " "  + item.lastname}</Text>
                  </TouchableOpacity> 
              </View>
          );
@@ -373,6 +373,10 @@ import Database from '../database-communication/database.js'
     },
     contentContainer: {
         paddingBottom: 100
+      },
+      empStyle: {
+          fontWeight: 'bold',
+          color: Color.MAROON
       },
  });
  
