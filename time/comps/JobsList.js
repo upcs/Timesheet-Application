@@ -45,6 +45,7 @@ class JobsList extends React.Component {
             modalTwo: false,
             address: '',
             jobName: '',
+            jobPhase: '',
             jobEdited: '',
             employeeEdited: '',
             eList: null,
@@ -191,12 +192,24 @@ class JobsList extends React.Component {
      */
     setAddress = (addy) => {
         this.setState({address: addy})
+        console.log("add", this.state.address);
     }
-      /**
-     * Update the job notes 
-     */
-       setNotes= (jnote) => {
+
+
+    /**
+    * Update the job notes 
+    */
+    setNotes = (jnote) => {
         this.setState({jobNotes: jnote})
+    }
+
+    /**
+     * Updates the job phase
+     * 
+     * @author gabes
+     */
+    setPhase = (phase) => {
+        this.setState({jobPhase: phase})
     }
 
 
@@ -265,6 +278,7 @@ class JobsList extends React.Component {
     saveJob = (edited) => {
         this.data.setJobName(this.state.jobEdited, this.state.jobName);
         this.data.setJobAddress(this.state.jobEdited, this.state.address);
+        this.data.setJobPhase(this.state.jobEdited, this.state.jobPhase);
         this.setEList(this.state.jobEdited);
         this.updateState();
     }
@@ -310,8 +324,10 @@ class JobsList extends React.Component {
                 <TouchableOpacity 
                     id='jobListButton'
                     onPress={ () => {
+                        console.log(item.phase);
                         this.setModalVisible(!isModalVisible);
                         this.setAddress(item.address);
+                        this.setPhase(item.phase);
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
                         this.setNotes(item.notes);
@@ -480,6 +496,19 @@ class JobsList extends React.Component {
                                         defaultValue={this.state.address}
                                         onChangeText={ (text) =>{
                                             this.setState({address: text})
+                                        }}>
+                                    </TextInput>
+                                </View>
+
+                                {/* CHANGE JOB PHASE */}
+                                <View style={styles.textAndTitle}>
+                                    <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Phase:</Text>
+                                    <TextInput 
+                                        id='jobPhase'
+                                        style={styles.textArea} 
+                                        defaultValue={this.state.jobPhase}
+                                        onChangeText={ (text) =>{
+                                            this.setState({jobPhase: text})
                                         }}>
                                     </TextInput>
                                 </View>

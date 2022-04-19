@@ -1118,9 +1118,13 @@ class Database {
 
     /**
      * Set job phase
+     * 
+     * @author gabes
      */
-    setJobPhase(){
-
+    async setJobPhase(id, phase){
+        if(id != null){
+            await this.db.collection("jobs").doc(id).update({phase: phase});
+        }
     }
 
     /**
