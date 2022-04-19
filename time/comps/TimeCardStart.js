@@ -330,7 +330,7 @@ var endTime = 0;
                                this.getUserInfo();
                            }}
                        >
-                               <Text style={styles.signOutText}>Account</Text>
+                               <Text  style={styles.signOutText} adjustsFontSizeToFit={true}>Account</Text>
                            </TouchableOpacity>
                    </View> 
 
@@ -459,8 +459,10 @@ var endTime = 0;
         borderRadius: 20,
         padding: 15,
         elevation: 2,
-        marginTop: 25
+        marginTop: 25,
+        justifyContent: 'center',
         },
+
         buttonOpen: {
         backgroundColor: Color.MAROON,
     },
@@ -506,7 +508,8 @@ var endTime = 0;
         height: 70,
         borderWidth: 5,
         alignItems: 'center',
-        backgroundColor: 'black'
+        backgroundColor: 'black',
+        justifyContent: 'center'
      },
 
      signOutText: {
@@ -514,17 +517,20 @@ var endTime = 0;
         fontSize: 20,
         color: 'white',
         padding: 10,
+        fontWeight: 'bold'
      },
 
      start: {
        borderColor: '#138564',
        backgroundColor: 'green',
+       justifyContent: 'center'
      },
 
      //Styles for stop button
      stop: {
         borderColor: '#882244',
         backgroundColor: Color.MAROON, 
+        justifyContent: 'center'
     },
 
     textStyle: {
@@ -599,7 +605,10 @@ var endTime = 0;
      text: {
          color: 'white',
          fontSize: 30,
-         padding: 15
+         fontWeight: 'bold'
+        
+         
+
      },
  });
  
