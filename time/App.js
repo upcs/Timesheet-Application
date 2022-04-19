@@ -58,6 +58,8 @@ class App extends React.Component {
     this.start = new Date().getTime();
     this.myref = React.createRef();
     this.signOut = this.signOut.bind(this);
+    this.updateList = this.updateList.bind(this);
+    this.timeCardRef = React.createRef();
 
   }
   
@@ -74,11 +76,17 @@ class App extends React.Component {
     }) 
   }
 
+
   loginAdmin() {
       this.setState({
         signedIn: 1,
         user: User.ADMIN,
       })
+  }
+
+  //Updates the picker list. Called when a user is added or removed from a job
+  updateList(){
+    this.timeCardRef.current.updateJobList();
   }
 
   signOut(){
@@ -134,11 +142,11 @@ class App extends React.Component {
             this.state.user ? (
               // Logged in as admin
                   <>
-                  <Tab.Screen name="TimeCardStart" id="tcs" children={()=><TimeCardStart initialParams={{
-                         signOutParent: this.signOut}} sendData={addData} />}></Tab.Screen>
+                  <Tab.Screen name="TimeCardStart" id="tcs" children={()=><TimeCardStart  ref={this.timeCardRef} initialParams={{
+                        signOutParent: this.signOut}} sendData={addData} />}></Tab.Screen>
                   <Tab.Screen name="Timesheet" component={AdminTimesheet}></Tab.Screen>
                   <Tab.Screen name="Employees" component={AdminEmployee}></Tab.Screen>
-                  <Tab.Screen name="Jobsite" component={AdminJobsite }></Tab.Screen>
+                  <Tab.Screen name="Jobsite" children={() => <AdminJobsite initialParams={{updateList: this.updateList}}/>}></Tab.Screen>
       
                 </>
                      
@@ -146,7 +154,7 @@ class App extends React.Component {
             ) : (
               // Logged in as default user
                   <>
-                    <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart  sendData={addData} initialParams={{
+                    <Tab.Screen name="TimeCardStart" children={()=><TimeCardStart  ref={this.timeCardRef} sendData={addData} initialParams={{
                          signOutParent: this.signOut}} dataParentToChild={this.state.id}/>}/>
                     <Tab.Screen name="BasicJobsite"children={()=><Jobsite dataParentToChild={this.state.id}/>}/>
                     <Tab.Screen name="home"   children={()=><EmployeeHours ref={this.myref} dataParentToChild={this.state.id}/>}/>

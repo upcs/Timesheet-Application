@@ -63,6 +63,10 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
       }
 
+      updateList = () => {
+        this.props.initialParams.updateList();
+      }
+
       //Added
       //Callback Function from JobsList
       callbackFunction(childData) {
@@ -130,7 +134,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
                  
                  <SafeAreaView style={styles.container}>
                     {/* <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList> */}
-                    <JobsList ref={this.myref} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></JobsList> 
+                    <JobsList ref={this.myref} query={this.state.query} updateList={this.updateList} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></JobsList> 
                      {/* <JobsList ref={this.myref}></JobsList> */}
                  </SafeAreaView>
          
