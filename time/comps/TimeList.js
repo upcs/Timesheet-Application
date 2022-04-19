@@ -71,16 +71,21 @@ handleSubmit = (time) => {
 }
     //Render each item as a button
     renderItem = ({item}) => {
+      let fw = 'normal';
+      let c = 'black';
+      let pressable = false;
+      if(item.id == 0 || item.id == 1){
+        fw = 'bold';
+        pressable = true;
+      }
         return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={() => {
-                  this.setCurrentTime(item.hours);
-                  this.setCurrentDocID(item.id);
-                  if(item.id != 0){
-                    this.setModalVisible(true);
-                  }
+                <TouchableOpacity disabled = {pressable} onPress={() => {
+                    this.setCurrentTime(item.hours);
+                    this.setCurrentDocID(item.id);
+                      this.setModalVisible(true);
                 }}>
-                    <Text style={styles.punchStyle}>{item.date + '\n' + item.hours}</Text>
+                    <Text style={[{color: c, fontWeight: fw }]}>{item.date + '\n' + item.hours}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -150,7 +155,7 @@ const styles = StyleSheet.create({
     item: {
         padding: 20,
         borderTopWidth: 2,
-        
+
     },
     blur: {
         width: '100%',
@@ -229,10 +234,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'white',
         fontSize: 20,
-        fontWeight: 'bold'
-      },
-      punchStyle: {
-        color: Color.MAROON,
         fontWeight: 'bold'
       }
 
