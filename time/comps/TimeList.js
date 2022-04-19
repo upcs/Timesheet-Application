@@ -78,14 +78,19 @@ handleSubmit = (time) => {
         fw = 'bold';
         pressable = true;
       }
+
+      const minutesRaw = +(item.minutes);
+      const minutes = minutesRaw % 60;
+      const hours = Math.floor(minutesRaw / 60);
         return (
             <View style={styles.item}>
                 <TouchableOpacity disabled = {pressable} onPress={() => {
-                    this.setCurrentTime(item.hours);
+                    this.setCurrentTime(item.minutes);
                     this.setCurrentDocID(item.id);
+
                       this.setModalVisible(true);
                 }}>
-                    <Text style={[{color: c, fontWeight: fw }]}>{item.date + '\n' + item.hours}</Text>
+                    <Text style={[{color: c, fontWeight: fw }]}>{item.date + '\n' + ((hours > 0) ? (hours + ' hours, ') : '') + (+minutes).toFixed(0) + ' min'}</Text>
                 </TouchableOpacity>
             </View>
         );
