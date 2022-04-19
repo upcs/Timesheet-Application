@@ -64,42 +64,42 @@ class Login extends React.Component {
         return (
             <View style={styles.topView}>
                  <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                 <KeyboardAvoidingView keyboardVerticalOffset={60} style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"} > 
-                   
-                        <Image style={styles.logo} source={require('../assets/logo.jpg')} />
-
-                        <TextInput 
-                            id='email'
-                            style={styles.textArea} 
-                        // defaultValue='joey@gmail.com'
-                            placeholder='Email'
-                            keyboardType='email-address'
-                            secureTextEntry={false}
-                            onChangeText={(text) => {
-                                this.setState({email: text.toLowerCase()})
-                                }
-                            }
-                        >
-                        </TextInput> 
-                        <TextInput
-                            id='password'
-                            style={styles.textArea}  
-                        // defaultValue='test'
-                            placeholder='Password'
-                            secureTextEntry={true}
-                            onChangeText={(text) => {
-                                this.setState({password: text})
-                                }
-                            }
-                        >
-                        </TextInput>
-                        <TouchableOpacity id='signin' style={styles.login} onPress={() => this.loginUser()}>
-                            <Text style={styles.text}>Sign-in</Text>
-                        </TouchableOpacity>  
-                        <Text style={styles.errorText}>{this.state.error}</Text>
-
+                    <KeyboardAvoidingView keyboardVerticalOffset={60} style={styles.container} behavior={Platform.OS === "ios" ? "padding" : "height"} > 
                     
-                    </KeyboardAvoidingView>
+                            <Image style={styles.logo} source={require('../assets/logo.jpg')} />
+
+                            <TextInput 
+                                id='email'
+                                style={styles.textArea} 
+                            // defaultValue='joey@gmail.com'
+                                placeholder='Email'
+                                keyboardType='email-address'
+                                secureTextEntry={false}
+                                onChangeText={(text) => {
+                                    this.setState({email: text.toLowerCase()})
+                                    }
+                                }
+                            >
+                            </TextInput> 
+                            <TextInput
+                                id='password'
+                                style={styles.textArea}  
+                            // defaultValue='test'
+                                placeholder='Password'
+                                secureTextEntry={true}
+                                onChangeText={(text) => {
+                                    this.setState({password: text})
+                                    }
+                                }
+                            >
+                            </TextInput>
+                            <TouchableOpacity id='signin' style={styles.login} onPress={() => this.loginUser()}>
+                                <Text style={styles.text}>Sign-in</Text>
+                            </TouchableOpacity>  
+                            <Text style={styles.errorText}>{this.state.error}</Text>
+
+                        
+                        </KeyboardAvoidingView>
                 </TouchableWithoutFeedback>
             </View>
         ) 
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: 'white',
+        fontWeight: 'bold',
         fontSize: 20
     },
     textArea: {

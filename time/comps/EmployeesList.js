@@ -191,102 +191,104 @@ import Database from '../database-communication/database.js'
                     }}
                 >
                     <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            
-                            {/* THE EXIT BUTTON */}
-                            <View style={styles.leftView}>
-                                <TouchableOpacity 
-                                id='exitButton' 
-                                style={[styles.button, styles.buttonClose]} 
-                                onPress={ () =>
-                                {
-                                    this.setModalVisible(!isModalVisible);
-                                }}>
-                                    <Text style={styles.textStyle}>X</Text>
+                     <View  style={styles.blur}>
+                            <View style={styles.modalView}>
+                                
+                                {/* THE EXIT BUTTON */}
+                                <View style={styles.leftView}>
+                                    <TouchableOpacity 
+                                    id='exitButton' 
+                                    style={[styles.button, styles.buttonClose]} 
+                                    onPress={ () =>
+                                    {
+                                        this.setModalVisible(!isModalVisible);
+                                    }}>
+                                        <Text style={styles.textStyle}>X</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                                {/* USER'S NAME */}
+                                <Text style={styles.modalText}> 
+                                    {this.state.userFirst + " " + this.state.userLast}
+                                </Text>
+
+                                {/* CHANGE FIRST NAME */}
+                                <View style={styles.textAndTitle}>
+                                    <Text style={styles.titles}>First Name:</Text>
+                                    <TextInput 
+                                        id='firstName'
+                                        style={styles.textArea} 
+                                        defaultValue={this.state.userFirst}
+                                        onChangeText={ (text) =>{
+                                            this.setState({userFirst: text});
+
+                                        }}>
+                                    </TextInput>
+                                </View>
+
+                                {/* CHANGE LAST NAME */}
+                                <View style={styles.textAndTitle}>
+                                    <Text style={styles.titles}>Last Name:</Text>
+                                    <TextInput 
+                                        id='lastName'
+                                        style={styles.textArea} 
+                                        defaultValue={this.state.userLast}
+                                        onChangeText={ (text) =>{
+                                            this.setState({userLast: text})
+                                        }}>
+                                    </TextInput>
+                                </View>
+
+                                {/* SWITCH FOR CHANGING USER TYPE */}
+                                <View style={styles.textAndTitle}>
+                                    <Text style={styles.titles}>Basic</Text>
+                                    <Switch
+                                        id='adminSwitch'
+                                        style={styles.switch}
+                                        trackColor={{false: 'black', true: Color.MAROON}}
+                                        thumbColor={isAdmin ? "white" : "black"}
+                                        onValueChange={ () => {
+                                            this.setAdmin(!isAdmin);
+                                        }}
+                                        value={isAdmin}
+                                    >
+                                    </Switch>
+                                    <Text style={styles.titles}>Admin</Text>
+                                </View>
+                                
+                                {/* SAVE CHANGES */}
+                                <TouchableOpacity
+                                    id='saveChanges'
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={ () => {
+                                            this.setModalVisible(!isModalVisible);
+                                            this.updateEmployee(this.state.userEdited);
+                                        }}>
+                                        <Text style={styles.textStyle}>Save Changes</Text>
+                                </TouchableOpacity>
+                                
+                                {/* REMOVE USER */}
+                                <TouchableOpacity
+                                    id='removeUser'
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={ () => {
+                                            Alert.alert(
+                                                'Delete user',
+                                                'Would you like to delete this user?',
+                                                [
+                                                    {text: 'Yes', onPress: () =>{
+                                                            this.deleteUser();
+                                                            this.setModalVisible(!isModalVisible);
+                                                        }, 
+                                                    },
+                                                    {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
+                                                ],
+                                                {cancelable: false}
+                                            )
+                                        }}>
+                                        <Text style={styles.textStyle}>DELETE</Text>
                                 </TouchableOpacity>
                             </View>
-
-                            {/* USER'S NAME */}
-                            <Text style={styles.modalText}> 
-                                {this.state.userFirst + " " + this.state.userLast}
-                            </Text>
-
-                            {/* CHANGE FIRST NAME */}
-                            <View style={styles.textAndTitle}>
-                                <Text style={styles.titles}>First Name:</Text>
-                                <TextInput 
-                                    id='firstName'
-                                    style={styles.textArea} 
-                                    defaultValue={this.state.userFirst}
-                                    onChangeText={ (text) =>{
-                                        this.setState({userFirst: text});
-
-                                    }}>
-                                </TextInput>
-                            </View>
-
-                            {/* CHANGE LAST NAME */}
-                            <View style={styles.textAndTitle}>
-                                <Text style={styles.titles}>Last Name:</Text>
-                                <TextInput 
-                                    id='lastName'
-                                    style={styles.textArea} 
-                                    defaultValue={this.state.userLast}
-                                    onChangeText={ (text) =>{
-                                        this.setState({userLast: text})
-                                    }}>
-                                </TextInput>
-                            </View>
-
-                            {/* SWITCH FOR CHANGING USER TYPE */}
-                            <View style={styles.textAndTitle}>
-                                <Text style={styles.titles}>Basic</Text>
-                                <Switch
-                                    id='adminSwitch'
-                                    style={styles.switch}
-                                    trackColor={{false: 'black', true: Color.MAROON}}
-                                    thumbColor={isAdmin ? "white" : "black"}
-                                    onValueChange={ () => {
-                                        this.setAdmin(!isAdmin);
-                                    }}
-                                    value={isAdmin}
-                                >
-                                </Switch>
-                                <Text style={styles.titles}>Admin</Text>
-                            </View>
-                            
-                            {/* SAVE CHANGES */}
-                            <TouchableOpacity
-                                id='saveChanges'
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={ () => {
-                                        this.setModalVisible(!isModalVisible);
-                                        this.updateEmployee(this.state.userEdited);
-                                    }}>
-                                    <Text style={styles.textStyle}>Save Changes</Text>
-                            </TouchableOpacity>
-                            
-                            {/* REMOVE USER */}
-                            <TouchableOpacity
-                                id='removeUser'
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={ () => {
-                                        Alert.alert(
-                                            'Delete user',
-                                            'Would you like to delete this user?',
-                                            [
-                                                {text: 'Yes', onPress: () =>{
-                                                        this.deleteUser();
-                                                        this.setModalVisible(!isModalVisible);
-                                                    }, 
-                                                },
-                                                {text: 'No', onPress: () => console.log("Cancel"), style: 'cancel'}
-                                            ],
-                                            {cancelable: false}
-                                        )
-                                    }}>
-                                    <Text style={styles.textStyle}>DELETE</Text>
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -377,6 +379,13 @@ import Database from '../database-communication/database.js'
       empStyle: {
           fontWeight: 'bold',
           color: Color.MAROON
+      },
+      blur: {
+        width: '100%',
+        height: '100%',
+        backgroundColor : 'rgba(52, 52, 52, 0.8)',
+        alignItems: 'center',
+        justifyContent: 'center'
       },
  });
  
