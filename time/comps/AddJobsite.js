@@ -119,9 +119,8 @@ export default function AddEmployee(props) {
                 
                 <TextInput
                 id='nInput'
-                style={styles.textbox}
+                style={[{maxHeight: 100, minHeight: 100},styles.textbox]}
                 multiline
-                numberOfLines={6}
                 onChangeText={text => {setNotes(text),setDataOut({jName: jobN, jAd: jobA, note: text})}}
                 value={notes}
                 placeholder=" Notes for the jobsite"
