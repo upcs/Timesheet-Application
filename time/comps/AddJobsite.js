@@ -5,9 +5,10 @@
  ******************************************************************/
  import React, {useState} from 'react';
  import {Color, style} from './Palette.js';
- import {View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
+ import {TouchableWithoutFeedback,Keyboard, View, Modal, Text, Pressable, StyleSheet, Dimensions, TextInput, ScrollView, TouchableOpacity, Alert, Switch} from 'react-native'
  import Employees from "./EmployeeInfo";
  import Database from '../database-communication/database.js'
+
 
 
 /**
@@ -55,90 +56,92 @@ export default function AddEmployee(props) {
           }}>
           
           <View style={styles.centeredView}>
-            {/*this View adds the blurred background behind the modal*/}
-            <View style={styles.blur}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+              {/*this View adds the blurred background behind the modal*/}
+              <View style={styles.blur}>
 
-              <View style={styles.modalView} id='modalView'>
-                <TouchableOpacity 
-                id='closeButton'
-                style={styles.exit}
-                //Make sure user wants to exit when 'x' is pressed
-                onPress={ () => {
-                  Alert.alert(
-                      'Exit Addition',
-                      'Are you sure you want to cancel?',
-                      [
-                        //On "Yes" exit the modal and set all the data to null
-                          {text: 'Yes', id:'yesAlert', onPress: () => {setJobN(null), setJobA(null), setNotes(null), setModalVisible(!modalVisible)}, style: 'cancel'
-                            
-                          },
-                          //On "No" do nothing
-                          {text: 'No', id:'noAlert', onPress: () => console.log("Cancel"), style: 'cancel'}
-                      ],
-                      {cancelable: false}
-                  )
-              }}
-                >
-                  <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
-                </TouchableOpacity>
-                {/*Contain everything within a scroll view so it reacts well to the key board*/}
-                <ScrollView style={style.container}>
+                <View style={styles.modalView} id='modalView'>
+                  <TouchableOpacity 
+                  id='closeButton'
+                  style={styles.exit}
+                  //Make sure user wants to exit when 'x' is pressed
+                  onPress={ () => {
+                    Alert.alert(
+                        'Exit Addition',
+                        'Are you sure you want to cancel?',
+                        [
+                          //On "Yes" exit the modal and set all the data to null
+                            {text: 'Yes', id:'yesAlert', onPress: () => {setJobN(null), setJobA(null), setNotes(null), setModalVisible(!modalVisible)}, style: 'cancel'
+                              
+                            },
+                            //On "No" do nothing
+                            {text: 'No', id:'noAlert', onPress: () => console.log("Cancel"), style: 'cancel'}
+                        ],
+                        {cancelable: false}
+                    )
+                }}
+                  >
+                    <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
+                  </TouchableOpacity>
+                  {/*Contain everything within a scroll view so it reacts well to the key board*/}
+                  <ScrollView style={style.container}>
 
-                {/*First text input*/}
-                <View style = {styles.textView}>
-                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Job Name</Text>
-                </View>
-
-                <TextInput
-                  id='jnInput'
-                  style={styles.textbox}
-                  onChangeText={text => {setJobN(text), setDataOut({jName: text, jAd: jobA,  note: notes})}}
-                  value={jobN}
-                  placeholder=" Jobsite Name"
-                ></TextInput>
-
-                 {/*Second text input*/}
-                <View style = {styles.textView}>
-                  <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Address</Text>
-                </View>
-
-                <TextInput
-                   id='aInput'
-                   multiline
-                   numberOfLines={2}
-                   style={styles.textbox}
-                   onChangeText={text => {setJobA(text),setDataOut({jName: jobN, jAd: text, note: notes})}}
-                   value={jobA}
-                   placeholder=" Jobsite Address"
-                ></TextInput>
-
-                  {/*Third text input*/}
+                  {/*First text input*/}
                   <View style = {styles.textView}>
-                      <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Notes</Text>
+                    <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Job Name</Text>
                   </View>
-                
-                <TextInput
-                id='nInput'
-                style={[{maxHeight: 100, minHeight: 100},styles.textbox]}
-                multiline
-                onChangeText={text => {setNotes(text),setDataOut({jName: jobN, jAd: jobA, note: text})}}
-                value={notes}
-                placeholder=" Notes for the jobsite"
-                >
-                </TextInput>
-                
-    
 
-                <Pressable
-                  id='submitButton'
-                  style={[styles.button2, styles.buttonClose]}
-                  onPress={() => { handleSubmit(),setModalVisible(!modalVisible)}}>
-                  <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
-                </Pressable>
+                  <TextInput
+                    id='jnInput'
+                    style={styles.textbox}
+                    onChangeText={text => {setJobN(text), setDataOut({jName: text, jAd: jobA,  note: notes})}}
+                    value={jobN}
+                    placeholder=" Jobsite Name"
+                  ></TextInput>
 
-                </ScrollView>
+                  {/*Second text input*/}
+                  <View style = {styles.textView}>
+                    <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Address</Text>
+                  </View>
+
+                  <TextInput
+                    id='aInput'
+                    multiline
+                    numberOfLines={2}
+                    style={styles.textbox}
+                    onChangeText={text => {setJobA(text),setDataOut({jName: jobN, jAd: text, note: notes})}}
+                    value={jobA}
+                    placeholder=" Jobsite Address"
+                  ></TextInput>
+
+                    {/*Third text input*/}
+                    <View style = {styles.textView}>
+                        <Text adjustsFontSizeToFit={true} style = {styles.modalText}>Notes</Text>
+                    </View>
+                  
+                  <TextInput
+                  id='nInput'
+                  style={[{maxHeight: 100, minHeight: 100},styles.textbox]}
+                  multiline
+                  onChangeText={text => {setNotes(text),setDataOut({jName: jobN, jAd: jobA, note: text})}}
+                  value={notes}
+                  placeholder=" Notes for the jobsite"
+                  >
+                  </TextInput>
+                  
+      
+
+                  <Pressable
+                    id='submitButton'
+                    style={[styles.button2, styles.buttonClose]}
+                    onPress={() => { handleSubmit(),setModalVisible(!modalVisible)}}>
+                    <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
+                  </Pressable>
+
+                  </ScrollView>
+                </View>
               </View>
-            </View>
+          </TouchableWithoutFeedback>
           </View>
         </Modal>
         <Pressable id='addButton' style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
