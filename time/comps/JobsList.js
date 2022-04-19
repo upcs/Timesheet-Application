@@ -58,7 +58,7 @@ class JobsList extends React.Component {
             modalThree: false,
             jobNotes: '',
             spareNote: '',
-            doOnce: true
+            doOnce: true,
         };
         this.data = new Database()
     }
@@ -85,15 +85,16 @@ class JobsList extends React.Component {
         });
     }
 
+
     /**
      * Update the list of jobs
      */
-    updateState = () => {
+   updateState = () => {
         this.data.getAllJobs().then((res, rej) => {
             this.setState({FakeData: res}, () => {
+                this.componentDidMount();
             });
             this.setState({stInitialFake : res});
-            
         });
     }
 
@@ -191,8 +192,7 @@ class JobsList extends React.Component {
      * Update the job address 
      */
     setAddress = (addy) => {
-        this.setState({address: addy})
-        console.log("add", this.state.address);
+        this.setState({address: addy});
     }
 
 
@@ -276,11 +276,15 @@ class JobsList extends React.Component {
      * Save the job edits 
      */
     saveJob = (edited) => {
-        this.data.setJobName(this.state.jobEdited, this.state.jobName);
-        this.data.setJobAddress(this.state.jobEdited, this.state.address);
-        this.data.setJobPhase(this.state.jobEdited, this.state.jobPhase);
-        this.setEList(this.state.jobEdited);
-        this.updateState();
+        this.data.setJobName(this.state.jobEdited, this.state.jobName).then(() => {
+            this.data.setJobAddress(this.state.jobEdited, this.state.address).then(() => {
+                this.data.setJobPhase(this.state.jobEdited, this.state.jobPhase).then(() => {
+                    this.setEList(this.state.jobEdited);
+                    this.updateState();
+                });
+            });
+        });
+        
     }
 
 
@@ -442,7 +446,7 @@ class JobsList extends React.Component {
                 <FlatList 
                     id='jobsList'
                     data={this.state.FakeData} 
-                    keyExtractor={item => item.id.toString()}
+                    keyExtractor={item => item.id}
                     renderItem={this.renderItem} 
                     contentContainerStyle={styles.contentContainer}
                     />
