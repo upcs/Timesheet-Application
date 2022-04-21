@@ -169,7 +169,7 @@ class AdminTimesheet extends React.Component {
         
         var somedata = [];
         this.data.getAllPunchSummary(id,false,false,0,0,0,0,0,0).then((res, rej) => {
-            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+            somedata.push({id: "1", date: "Total Time Summary", minutes: res});
         });
        
         this.data.getAllTime(id).then((res, rej) => {
@@ -181,13 +181,15 @@ class AdminTimesheet extends React.Component {
                     continue;
                 }
                 somedata.push({id: res[i].id, date:
-                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
-                    res[i].totalPunchTimeInMinutes});
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, minutes:
+                    res[i].totalPunchTimeInMinutes,
+                    timeIn: res[i].timeIn,
+                });
             }
             if(somedata.length <= 1){
-                somedata.push({id: "0", date: "No time recorded for employee", hours: ""});
+                somedata.push({id: "0", date: "No time recorded for employee", minutes: ""});
             }
-            this.setState({time: somedata});
+            this.setTimes(somedata)
             this.myref.current.dataChange();
         });
     }
@@ -200,7 +202,7 @@ class AdminTimesheet extends React.Component {
     getEmployeesFrom(id, day, month, year){
         var somedata = [];
         this.data.getAllPunchSummary(id,true,false,0,0,0,day,month,year).then((res, rej) => {
-            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+            somedata.push({id: "1", date: "Total Time Summary", minutes: res});
         });
         this.data.getTimeFrom(id, day, month, year).then((res, rej) => {
             if(res == undefined){
@@ -211,17 +213,22 @@ class AdminTimesheet extends React.Component {
                     continue;
                 }
                 somedata.push({id: res[i].id, date:
-                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
-                    res[i].totalPunchTimeInMinutes});
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, minutes:
+                    res[i].totalPunchTimeInMinutes,
+                    timeIn: res[i].timeIn});
             }
             if(somedata.length <= 1){
-                somedata.push({id: "0",date: "No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")", hours: ""});
+                somedata.push({id: "0",date: "No time recorded for employee for specified (From date: " + day + " " + month + ", " + year + ")", minutes: ""});
             }
-            this.setState({time: somedata});
+            this.setTimes(somedata)
             this.myref.current.dataChange();
         });
     }
-
+    setTimes(data){
+        data.forEach(entry => console.log("timrIn", entry, entry.timeIn));
+        data.sort((a, b) => b.timeIn - a.timeIn);
+        this.setState({time: data});
+    }
     /**
      * Get an employees time from the specified date 
      *
@@ -229,7 +236,7 @@ class AdminTimesheet extends React.Component {
      */
      getEmployeesTo(id, day, month, year){
         this.data.getAllPunchSummary(id,false,true,day,month,year,0,0,0).then((res, rej) => {
-            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+            somedata.push({id: "1", date: "Total Time Summary", minutes: res});
         });
         var somedata = [];
         this.data.getTimeTo(id, day, month, year).then((res, rej) => {
@@ -241,13 +248,13 @@ class AdminTimesheet extends React.Component {
                     continue;
                 }
                 somedata.push({id: res[i].id, date:
-                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, minutes:
                     res[i].totalPunchTimeInMinutes});
             }
             if(somedata.length <= 1){
-                somedata.push({id: "0",date: "No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")", hours: ""});
+                somedata.push({id: "0",date: "No time recorded for employee for specified (TO date: " + day + " " + month + ", " + year + ")", minutes: ""});
             }
-            this.setState({time: somedata});
+            this.setTimes(somedata)
             this.myref.current.dataChange();
         });
     }
@@ -255,7 +262,7 @@ class AdminTimesheet extends React.Component {
     getEmployeesFromAndTo(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear){
         var somedata = [];
         this.data.getAllPunchSummary(id,true,true,toDay,toMonth,toYear,fromDay,fromMonth,fromYear).then((res, rej) => {
-            somedata.push({id: "1", date: "Total Time Summary", hours: res});
+            somedata.push({id: "1", date: "Total Time Summary", minutes: res});
         });
         this.data.getTimeRanged(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear).then((res, rej) => {
             if(res == undefined){
@@ -266,14 +273,14 @@ class AdminTimesheet extends React.Component {
                     continue;
                 }
                 somedata.push({id: res[i].id, date:
-                    res[i].month + "/" + res[i].day + "/" + res[i].year, hours:
+                    res[i].month + "/" + res[i].day + "/" + res[i].year, minutes:
                     res[i].totalPunchTimeInMinutes });
             }
             if(somedata.length <= 1){
-                somedata.push({id: "0",date: "No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")", hours: ""});
+                somedata.push({id: "0",date: "No time recorded for employee for specified dates (From date: " + fromDay + " " + fromMonth + ", " + fromYear + ") and " + "(To date: " + toDay + " " + toMonth + ", " + toYear + ")", minutes: ""});
             }
             
-            this.setState({time: somedata});
+            this.setTimes(somedata)
             this.myref.current.dataChange();
         });
     }
@@ -302,7 +309,7 @@ class AdminTimesheet extends React.Component {
                         <TimeSheetList onChange={this.onListPress} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems} style={styles.employees}> </TimeSheetList>
                     </View>
                     <View style={[styles.vertical_layout, styles.employees_hours]}>
-                        <Text style={[styles.employees_hours, styles.text_employee]}>Punchs:
+                        <Text style={[styles.employees_hours, styles.text_employee]}>Punches:
                         </Text>
                         
                         <TimeList ref={this.myref} theEmp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
