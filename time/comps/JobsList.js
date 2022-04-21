@@ -113,8 +113,9 @@ class JobsList extends React.Component {
     Add the updated note to the db and close the modal
     */
     handleNoteSubmit(id,mess) {
-        this.data.setJobNotes(id,mess);
         this.setModalThree(!this.state.modalThree);
+        this.data.setJobNotes(id,mess);
+        this.updateState();
     }
 
 
@@ -335,7 +336,7 @@ class JobsList extends React.Component {
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
                         this.setNotes(item.notes);
-                        this.setSpareNote(item.spareNote);
+                        this.setSpareNote(item.notes);
                         this.setEList(item.id);
                         this.updateState();
                     }
@@ -692,7 +693,7 @@ class JobsList extends React.Component {
                                                 <Pressable
                                                     id='submitButton'
                                                     style={[styles.button2, styles.buttonClose]}
-                                                    onPress={() => {this.handleNoteSubmit(this.state.jobEdited,this.state.jobNotes)}}>
+                                                    onPress={() => {[this.handleNoteSubmit(this.state.jobEdited,this.state.jobNotes)]}}>
                                                     <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                                                 </Pressable>
                                             </View>
