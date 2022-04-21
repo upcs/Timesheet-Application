@@ -113,8 +113,9 @@ class JobsList extends React.Component {
     Add the updated note to the db and close the modal
     */
     handleNoteSubmit(id,mess) {
-        this.data.setJobNotes(id,mess);
         this.setModalThree(!this.state.modalThree);
+        this.data.setJobNotes(id,mess);
+        this.updateState();
     }
 
 
@@ -335,7 +336,7 @@ class JobsList extends React.Component {
                         this.setJobName(item.name);
                         this.setJobEdited(item.id); 
                         this.setNotes(item.notes);
-                        this.setSpareNote(item.spareNote);
+                        this.setSpareNote(item.notes);
                         this.setEList(item.id);
                         this.updateState();
                     }
@@ -459,50 +460,51 @@ class JobsList extends React.Component {
                     }}
                 >
                     <View style={styles.centeredView}>
-                        <View  style={styles.blur}>
-                            <View style={styles.modalView}>
-                                
-                                {/* EXIT BUTTON */}
-                                <View style={styles.leftView}>
-                                    <TouchableOpacity id='jobModalExit' 
-                                    style={[styles.button, styles.buttonClose]} 
-                                    onPress={ () =>
-                                    {
-                                        this.setModalVisible(!isModalVisible);
-                                    }}>
-                                        <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>X</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                
-                                {/* JOB NAME AND ADDRESS*/}
-                                <Text adjustsFontSizeToFit={true}  style={styles.modalText}>{this.state.jobName}</Text>
-                                <Text  adjustsFontSizeToFit={true} style={styles.modalText}>{this.state.address}</Text>
-
-                                {/* CHANGE JOB NAME */}
-                                <View style={styles.textAndTitle}>
-                                    <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Name:</Text>
-                                    <TextInput 
-                                        id='jobName'
-                                        style={styles.textArea} 
-                                        defaultValue={this.state.jobName}
-                                        onChangeText={ (text) =>{
-                                            this.setState({jobName: text})
+                        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                            <View  style={styles.blur}>
+                                <View style={styles.modalView}>
+                                    
+                                    {/* EXIT BUTTON */}
+                                    <View style={styles.leftView}>
+                                        <TouchableOpacity id='jobModalExit' 
+                                        style={[styles.button, styles.buttonClose]} 
+                                        onPress={ () =>
+                                        {
+                                            this.setModalVisible(!isModalVisible);
                                         }}>
-                                    </TextInput>
-                                </View>
+                                            <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>X</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    
+                                    {/* JOB NAME AND ADDRESS*/}
+                                    <Text adjustsFontSizeToFit={true}  style={styles.modalText}>{this.state.jobName}</Text>
+                                    <Text  adjustsFontSizeToFit={true} style={styles.modalText}>{this.state.address}</Text>
 
-                                {/* CHANGE ADDRESS */}
-                                <View style={styles.textAndTitle}>
-                                    <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Address:</Text>
-                                    <TextInput 
-                                        id='jobAddress'
-                                        style={styles.textArea} 
-                                        defaultValue={this.state.address}
-                                        onChangeText={ (text) =>{
-                                            this.setState({address: text})
-                                        }}>
-                                    </TextInput>
-                                </View>
+                                    {/* CHANGE JOB NAME */}
+                                    <View style={styles.textAndTitle}>
+                                        <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Name:</Text>
+                                        <TextInput 
+                                            id='jobName'
+                                            style={styles.textArea} 
+                                            defaultValue={this.state.jobName}
+                                            onChangeText={ (text) =>{
+                                                this.setState({jobName: text})
+                                            }}>
+                                        </TextInput>
+                                    </View>
+
+                                    {/* CHANGE ADDRESS */}
+                                    <View style={styles.textAndTitle}>
+                                        <Text adjustsFontSizeToFit={true}  style={styles.titles}>Job Address:</Text>
+                                        <TextInput 
+                                            id='jobAddress'
+                                            style={styles.textArea} 
+                                            defaultValue={this.state.address}
+                                            onChangeText={ (text) =>{
+                                                this.setState({address: text})
+                                            }}>
+                                        </TextInput>
+                                    </View>
 
                                 {/* CHANGE JOB PHASE */}
                                 <View style={styles.textAndTitle}>
@@ -522,80 +524,81 @@ class JobsList extends React.Component {
                                     <SearchBar currValue = {this.currValueMod}></SearchBar>
                                 </View>
 
-                                <View styles={styles.listView}>
-                                {/* EMPLOYEE LIST */}
-                                    <FlatList 
-                                        extraData={this.state}
-                                        id='employeeJobList'
-                                        style={styles.list}
-                                        data={this.state.eList}  
-                                        keyExtractor={item => item.id.toString()}
-                                        renderItem={this.renderList} 
-                                    />
-                                </View>
+                                    <View styles={styles.listView}>
+                                    {/* EMPLOYEE LIST */}
+                                        <FlatList 
+                                            extraData={this.state}
+                                            id='employeeJobList'
+                                            style={styles.list}
+                                            data={this.state.eList}  
+                                            keyExtractor={item => item.id.toString()}
+                                            renderItem={this.renderList} 
+                                        />
+                                    </View>
 
-                                <View style={styles.saveadd}>
-                                    <View style={styles.horizontalView}>
-                                    {/* SAVE CHANGES */}
-                                        <View style={styles.save}>
+                                    <View style={styles.saveadd}>
+                                        <View style={styles.horizontalView}>
+                                        {/* SAVE CHANGES */}
+                                            <View style={styles.save}>
+                                                <TouchableOpacity
+                                                    id='saveJobChanges'
+                                                    style={[styles.button, styles.buttonClose]}
+                                                    onPress={ () => {
+                                                            this.setModalVisible(!isModalVisible);
+                                                            this.saveJob(this.state.jobEdited);
+                                                        }}>
+                                                        <Text  adjustsFontSizeToFit={true}  style={styles.textStyle}>Save</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            {/* ADD EMPLOYEE */}
+                                            <View style={styles.save}>
+                                                <TouchableOpacity
+                                                    id='updateNotes'
+                                                    style={[styles.button, styles.buttonClose]}
+                                                    onPress={ () => {
+                                                            this.setModalVisible(!isModalVisible);
+                                                            this.setModalThree(!modalThree);
+                                                        }}>
+                                                        <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Notes</Text>
+                                                </TouchableOpacity>
+                                        </View>
+                                            {/* ADD EMPLOYEE */}
                                             <TouchableOpacity
-                                                id='saveJobChanges'
+                                                id='addEmployeeButton'
                                                 style={[styles.button, styles.buttonClose]}
                                                 onPress={ () => {
                                                         this.setModalVisible(!isModalVisible);
-                                                        this.saveJob(this.state.jobEdited);
+                                                        this.setModalTwo(!modalTwo);
                                                     }}>
-                                                    <Text  adjustsFontSizeToFit={true}  style={styles.textStyle}>Save</Text>
+                                                    <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Add Emp</Text>
                                             </TouchableOpacity>
                                         </View>
-                                        {/* ADD EMPLOYEE */}
-                                        <View style={styles.save}>
-                                            <TouchableOpacity
-                                                id='updateNotes'
-                                                style={[styles.button, styles.buttonClose]}
-                                                onPress={ () => {
-                                                        this.setModalVisible(!isModalVisible);
-                                                        this.setModalThree(!modalThree);
-                                                    }}>
-                                                    <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Notes</Text>
-                                            </TouchableOpacity>
                                     </View>
-                                        {/* ADD EMPLOYEE */}
-                                        <TouchableOpacity
-                                            id='addEmployeeButton'
-                                            style={[styles.button, styles.buttonClose]}
-                                            onPress={ () => {
-                                                    this.setModalVisible(!isModalVisible);
-                                                    this.setModalTwo(!modalTwo);
-                                                }}>
-                                                <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>Add Emp</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
 
-                                {/* REMOVE JOB */}
-                                <TouchableOpacity
-                                    id='removeJobButton'
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={ () => {
-                                            Alert.alert(
-                                                'Delete Job',
-                                                'Would you like to delete this job?',
-                                                [
-                                                    {text: 'Yes', onPress: () =>{
-                                                            this.deleteJob();
-                                                            this.setModalVisible(!isModalVisible);
-                                                        }, 
-                                                    },
-                                                    {text: 'No', style: 'cancel'}
-                                                ],
-                                                {cancelable: false}
-                                            )
-                                        }}>
-                                        <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>DELETE</Text>
-                                </TouchableOpacity>
+                                    {/* REMOVE JOB */}
+                                    <TouchableOpacity
+                                        id='removeJobButton'
+                                        style={[styles.button, styles.buttonClose]}
+                                        onPress={ () => {
+                                                Alert.alert(
+                                                    'Delete Job',
+                                                    'Would you like to delete this job?',
+                                                    [
+                                                        {text: 'Yes', onPress: () =>{
+                                                                this.deleteJob();
+                                                                this.setModalVisible(!isModalVisible);
+                                                            }, 
+                                                        },
+                                                        {text: 'No', style: 'cancel'}
+                                                    ],
+                                                    {cancelable: false}
+                                                )
+                                            }}>
+                                            <Text adjustsFontSizeToFit={true}  style={styles.textStyle}>DELETE</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </View>
+                       </TouchableWithoutFeedback>
                     </View>
                 </Modal>
 
@@ -608,40 +611,41 @@ class JobsList extends React.Component {
                         this.setModalTwo(!modalTwo);
                     }}>
                     <View style={styles.centeredView}>
-                            <View  style={styles.blur}>
-                                <View style={styles.modalView}>
-                                    
-                                    {/* EXIT BUTTON */}
-                                    <View style={styles.leftView}>
-                                        <TouchableOpacity 
-                                            id='employeeModalExit'
-                                            style={[styles.button, styles.buttonClose]} 
-                                            onPress={ () =>
-                                            {
-                                                this.setModalTwo(!modalTwo);
-                                                this.setModalVisible(!isModalVisible);
-                                            }
-                                        }>
-                                            <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
-                                        </TouchableOpacity>
-                                    </View>
+                        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+                                <View  style={styles.blur}>
+                                    <View style={styles.modalView}>
+                                        
+                                        {/* EXIT BUTTON */}
+                                        <View style={styles.leftView}>
+                                            <TouchableOpacity 
+                                                id='employeeModalExit'
+                                                style={[styles.button, styles.buttonClose]} 
+                                                onPress={ () =>
+                                                {
+                                                    this.setModalTwo(!modalTwo);
+                                                    this.setModalVisible(!isModalVisible);
+                                                }
+                                            }>
+                                                <Text adjustsFontSizeToFit={true} style={styles.textStyle}>X</Text>
+                                            </TouchableOpacity>
+                                        </View>
 
-                                    {/* Search Employees */}
-                                    <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Add Employee</Text>
-                                    {/* SEARCH BAR */}
-                                    <View styles={styles.search}>
-                                        <SearchBar currValue = {this.currValueMod2}></SearchBar>
-                                    </View>
-                                    <FlatList 
-                                        id='addEmployeeList'
-                                        style={styles.list}
-                                        data={this.state.eData} 
-                                        keyExtractor={item => item.id.toString()}
-                                        renderItem={this.renderEmployee} 
-                                    />
-                            
+                                        {/* Search Employees */}
+                                        <Text adjustsFontSizeToFit={true}  style={styles.modalText}>Add Employee</Text>
+                                        {/* SEARCH BAR */}
+                                        <View styles={styles.search}>
+                                            <SearchBar currValue = {this.currValueMod2}></SearchBar>
+                                        </View>
+                                        <FlatList 
+                                            id='addEmployeeList'
+                                            style={styles.list}
+                                            data={this.state.eData} 
+                                            keyExtractor={item => item.id.toString()}
+                                            renderItem={this.renderEmployee} 
+                                        />
+                                </View>
                             </View>
-                        </View>
+                        </TouchableWithoutFeedback>
                     </View>
                 </Modal>
 
@@ -689,7 +693,7 @@ class JobsList extends React.Component {
                                                 <Pressable
                                                     id='submitButton'
                                                     style={[styles.button2, styles.buttonClose]}
-                                                    onPress={() => {this.handleNoteSubmit(this.state.jobEdited,this.state.jobNotes)}}>
+                                                    onPress={() => {[this.handleNoteSubmit(this.state.jobEdited,this.state.jobNotes)]}}>
                                                     <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                                                 </Pressable>
                                             </View>
