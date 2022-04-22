@@ -693,7 +693,11 @@ class JobsList extends React.Component {
                                                 <Pressable
                                                     id='submitButton'
                                                     style={[styles.button2, styles.buttonClose]}
-                                                    onPress={() => {[this.handleNoteSubmit(this.state.jobEdited,this.state.jobNotes)]}}>
+                                                    onPress={() => {[
+                                                        this.handleNoteSubmit(this.state.jobEdited,this.state.jobNotes),
+                                                        this.setModalVisible(!isModalVisible)
+                                                        
+                                                        ]}}>
                                                     <Text adjustsFontSizeToFit={true} style={styles.textStyle}>Submit</Text>
                                                 </Pressable>
                                             </View>
