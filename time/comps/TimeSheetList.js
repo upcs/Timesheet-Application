@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         borderColor: 'black'
     }, 
     contentContainer: {
-        paddingBottom: 100
+        paddingBottom: 0
       },
       empStyle: {
           fontWeight: 'bold',
