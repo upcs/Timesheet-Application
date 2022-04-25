@@ -312,7 +312,7 @@ class AdminTimesheet extends React.Component {
                         <Text style={[styles.employees_hours, styles.text_employee]}>Punches:
                         </Text>
                         
-                        <TimeList ref={this.myref} theEmp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
+                        <TimeList style={styles.contentContainer} ref={this.myref} theEmp={this.state.currEmployee} hoursData={this.state.time}></TimeList>
                     </View>
                 </View>
             </View>
@@ -322,9 +322,13 @@ class AdminTimesheet extends React.Component {
 
 //Styles used to create layout
 const styles = StyleSheet.create({
+    contentContainer: {
+        paddingBottom: 400 
+      },
     vertical_layout: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        paddingBottom: 20
     },
     horizontal_layout_top: {
         flex: 0.15,
@@ -346,7 +350,7 @@ const styles = StyleSheet.create({
     },
     employees_hours: {
         marginLeft: 0,
-        fontSize: 35,
+        fontSize: 30,
         marginTop: 0,
         padding: 0,
         borderLeftWidth: 1

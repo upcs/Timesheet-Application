@@ -28,6 +28,9 @@ import { LogBox, Image} from 'react-native';
 const Tab = createMaterialTopTabNavigator();
 import Database from './database-communication/database.js'
 
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notification
+
 //added
 LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
