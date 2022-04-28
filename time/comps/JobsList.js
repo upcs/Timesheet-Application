@@ -32,8 +32,6 @@ import { ScrollView } from 'react-native-web';
 class JobsList extends React.Component {
     constructor(props) {
         super(props);
-
-
         this.currValueMod = this.currValueMod.bind(this);
         this.currValueMod2 = this.currValueMod2.bind(this);
         this.initEData = eData;
@@ -72,6 +70,7 @@ class JobsList extends React.Component {
     sendData = () => {
         this.props.parentCallback(this.state.stInitialFake); 
     }
+
 
     /**
      * Check if component mounted
@@ -128,48 +127,36 @@ class JobsList extends React.Component {
  
         //Filter Data
         this.filteredItemsMod = this.getFilteredItems(this.state.query, this.state.eListInitital);
-       
-
         if (this.filteredItemsMod != this.state.eList) {
             this.setState({eList: this.filteredItemsMod});
         }
-        
         this.forceUpdate();
     }
 
     currValueMod2(newValue) {
         this.setState({query2 : newValue});
- 
+
         //Filter Data
         this.filteredItemsMod2 = this.getFilteredItems(this.state.query2, this.state.eDataInitital);
-       
-
         if (this.filteredItemsMod2 != this.state.eData) {
-            this.setState({eData: this.filteredItemsMod2});
-            
+            this.setState({eData: this.filteredItemsMod2});   
         }
-        
         this.forceUpdate();
     }
 
 
     getFilteredItems(query, items) {
-
         if (!query || query.length == 0) {
-
           return items;
         }
         this.forceUpdate();
         return items.filter((employ) =>(employ.firstname.toString().toLowerCase() + " " + employ.lastname.toString().toLowerCase()).includes(query.toString().toLowerCase()));
-
-      
     }
 
 
     /**
      * Set job modal visible
      */
-
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
     }
@@ -181,6 +168,8 @@ class JobsList extends React.Component {
     setModalTwo = (visible) => {
         this.setState({modalTwo: visible});
     }
+
+
      /**
      * Set job notes modal visible 
      */
@@ -243,6 +232,8 @@ class JobsList extends React.Component {
    setSpareNote=(edited) => {
        this.setState({spareNote: edited});
    }
+
+   
     /**
      * Set active and non-active employee lists 
      */
@@ -390,9 +381,6 @@ class JobsList extends React.Component {
     /**
      * Render list of active employees 
      */
-
-
-
     renderList = ({item}) => {
         return(
             <View 

@@ -350,6 +350,7 @@ class Database {
         });
     }
 
+
     /**
      * Clock out
      * Updates the hours tab for the employee as well as the punches
@@ -398,6 +399,8 @@ class Database {
             totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
+
+
     /*
     @author Caden Deutscher
     @date: 4/7/2022
@@ -409,6 +412,8 @@ class Database {
        console.log(EmpID + " di " + PunchID + " min " + newMin);
      await this.db.collection("accounts").doc(EmpID).collection("punch").doc(PunchID).update({totalPunchTimeInMinutes: newMin});
    }
+
+
     /*
     @author Justin
     @date 3/19/22
@@ -461,25 +466,7 @@ class Database {
      * Added modified time handling
      */
 
-    async getDailyTime(id){
-
-        
-        //get current date 
-       /*
-        let today = new Date();
-        today.getDay()
-        var hours = 0;
-        /*
-        Get the correct user using the id, and find all punches that correspond to the current day
-        */
-       /* await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", today.getDate()).where("month", "==", today.getMonth()+1)
-        .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                hours += Math.floor(doc.data().totalPunchTimeInMinutes / 60);
-            });
-          })
-         return hours; */
-        
+    async getDailyTime(id){      
         const midnight = new Date().setHours(0, 0, 0, 0);
         //console.log("MDNGHT\t", midnight); 
         let valMs;
@@ -501,6 +488,7 @@ class Database {
        
     }
 
+
     /**
      * @author Caden
      * @date 3/14/2022
@@ -514,92 +502,6 @@ class Database {
      * Adjusted time calculation to utilize the correct field names from the database
      */
     async getWeeklyTime(id){
-       /*
-        //get the day of the week through zellers rule
-        ///
-         //get current date 
-         var today = new Date();
-         var hours = 0;
-         var start = 0;
-         var end = 0;
-         var day = today.getDate();
-         //Set Month in equation March is first month
-         var month = today.getMonth()-1;
-         if(month == 0 ){
-            month =12;
-         }
-         else if(month == -1) {
-            month = 11;
-         }
-         //get first two digits of the year
-        var firstTwoYear = parseInt(today.getFullYear().toString().substring(0,2));
-        //get last two digits of the year
-        var lastTwoYear =  parseInt(today.getFullYear().toString().substring(2));
-        var F = day + ((13*month-1)/5) +lastTwoYear+ (lastTwoYear/4) +(firstTwoYear/4)-(2*firstTwoYear);
-        F = Math.floor(F)%7;
-        //
-        //Determine the start and ends of the week
-        //
-        switch(F){
-            case 0:
-                start = today.getDate() - 6;
-                end = today.getDate();
-                break;
-            case 1:
-                start = today.getDate();
-                end = start + 6;
-                break;
-            case 2:
-                start = today.getDate() - 1;
-                end = start + 6;
-                break;
-            case 3:
-                start = today.getDate() - 2;
-                end = start + 6;
-                break;
-            case 4:
-                start = today.getDate() - 3;
-                end = start + 6;
-                break;
-            case 5:
-                start = today.getDate() - 4;
-                end = start + 6;
-                break;
-            case 6: 
-                start = today.getDate() - 5;
-                end = start + 6;
-                break;
-                
-       
-       //
-       //Return the time worked through out the week
-       //
-       while (start <= end){
-        await this.db.collection("accounts").doc(id).collection("punch").where("day", "==", start).where("month", "==", today.getMonth()+1)
-        .where("year", "==", today.getFullYear()).get().then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-              if(typeof(doc.data().totalPunchTimeInMinutes) != "undefined") {
-                  hours += Math.floor(doc.data().totalPunchTimeInMinutes / 60);
-              }
-          });
-        })
-        start++;
-      }
-      */
-        
-
-       // sunday is (current day of the week) ago from today
-      /* const t = new Date();
-       
-  
-       let valMs;
-       await this.getDurationWorkedSinceTime(id, sunday).then(value => {
-           valMs = value;
-       }); 
-       console.log("VALMS", valMs);
-         //console.log("Value: ", val);
-       return valMs;// valMs//; / (1000 * 60 * 60);
-      */
        let offset = new Date().getTime() * 24 * 60 * 60 * 1000;
        const midnight = (new Date().setHours(0, 0, 0, 0)) - offset;
        
@@ -810,6 +712,8 @@ class Database {
             return postData;
         }
     }
+
+
     /*
     This method returns the total time that an employee worked
     @param 
@@ -875,6 +779,8 @@ class Database {
   
     return time;
     }
+
+
     /*
     @author Caden Deutscher
     @return - returns obvious overtime punches for a single employee
@@ -889,6 +795,8 @@ class Database {
     })
     return postData;
    }
+
+
     /*
     @author Caden Deutscher
     @return - returns obvious overtime punches for all employees
@@ -945,6 +853,7 @@ class Database {
         return postData;
     }
 
+
     /**
      * @author Caden
      * @params A list of job ids
@@ -965,6 +874,7 @@ class Database {
         return postData;
     }
 
+
     /**
      * @author Caden Deutscher
      * @params id(jobsite id)
@@ -975,6 +885,7 @@ class Database {
         var document = await this.db.collection("jobs").doc(id).get();
         return document.data().address;
     }
+
 
     /**
      * @author Caden Deutscher
@@ -987,6 +898,7 @@ class Database {
         return document.data().name;
     }
 
+
     /**
      * @author Caden Deutshcer
      * @params id(jobsite id)
@@ -998,6 +910,7 @@ class Database {
         return document.data().phase;
     }
 
+
     /**
      * @author Caden Deutscher
      * @params id(jobsite id)
@@ -1008,6 +921,8 @@ class Database {
         var document = await this.db.collection("jobs").doc(id).get();
         return document.data().notes;
     }
+
+
     /**
      * Get a list of all employees not on the job
      * 
@@ -1022,6 +937,7 @@ class Database {
         return allEmp;
         
     }
+
 
     /**
      * Get a list of ID's for employees on a current job
@@ -1072,6 +988,7 @@ class Database {
         }
     }
 
+
     /**
      * Set job name
      * 
@@ -1086,6 +1003,7 @@ class Database {
         }
     }
 
+
        /**
      * Set job notes
      * 
@@ -1094,26 +1012,26 @@ class Database {
      * 
      * @author Caden Deutscher
      */
-        async setJobNotes(id, jobnotes){
-            if(typeof jobnotes === 'string'){
-                if(jobnotes == "" || jobnotes == " " || jobnotes == undefined){
-                    jobnotes = "No notes."
-                }
-
-                if(id != null){
-                    await this.db.collection("jobs").doc(id).update({notes: jobnotes});
-                }
+    async setJobNotes(id, jobnotes){
+        if(typeof jobnotes === 'string'){
+            if(jobnotes == "" || jobnotes == " " || jobnotes == undefined){
+                jobnotes = "No notes."
             }
-            else{
 
-                let jnote = "No notes."
-
-                if(id != null){
-                    await this.db.collection("jobs").doc(id).update({notes: jnote});
-                }
+            if(id != null){
+                await this.db.collection("jobs").doc(id).update({notes: jobnotes});
             }
-           
         }
+        else{
+
+            let jnote = "No notes."
+
+            if(id != null){
+                await this.db.collection("jobs").doc(id).update({notes: jnote});
+            }
+        }
+        
+    }
     
 
     /**
@@ -1126,6 +1044,7 @@ class Database {
             await this.db.collection("jobs").doc(id).update({phase: phase});
         }
     }
+
 
     /**
      * Adds an employee to a job (now accounts for priority)
@@ -1209,6 +1128,7 @@ class Database {
         });
     }
 
+
     /**
      * Sorts a list of jobs by priority
      * 
@@ -1275,6 +1195,8 @@ class Database {
             .collection("employees").doc(empID).delete();
        }
     }
+
+
 
     /****** CREATE JOB *******/
     
@@ -1368,9 +1290,6 @@ class Database {
                 return null;
         }
     }
-
-
-
 }
 
 export default Database;

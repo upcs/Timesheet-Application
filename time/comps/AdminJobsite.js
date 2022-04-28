@@ -27,7 +27,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
  //Jobsite Selection with a search bar and "add jobsite" button
  class AdminJobsite extends React.Component {
 
-
     constructor(props) {
       super(props);
         this.currValue = this.currValue.bind(this);
@@ -43,7 +42,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
         const {jobs} = FakeJobsiteData;
 
 
-
        function Item({ title }) {
           return (
             <View style={styles.item}>
@@ -51,7 +49,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
             </View>
           );
         }
-
           this.renderItem = ({ item }) => (
             <Item title={item.jobName} />
           );
@@ -60,9 +57,16 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
       setQuery(newQuery) {
         return newQuery;
-
       }
 
+      /**
+       * Called when a jobs employees are edited.
+       * Invokes the parent method
+       * Allows for the list under the clock in button to reflect
+       * the state
+       * 
+       * @author gabes
+       */
       updateList = () => {
         this.props.initialParams.updateList();
       }
@@ -72,14 +76,11 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       callbackFunction(childData) {
         this.setState({jobsDataChild : childData});
         this.setState({requesting : false});
-
       }
       
 
       getFilteredItems(query, items) {
-
         if (!query || query.length == 0) {
-
           return items;
         }
         return items.filter((jobs) => jobs.name.toString().toLowerCase().includes(query.toString().toLowerCase()));
@@ -87,40 +88,25 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
       currValue(newValue) {
         this.setState({query : newValue});
-
-
         this.setState({requesting : true});
-        
-
         //adding from previous requestData function
        // this.child.current.sendData();
-
         this.forceUpdate();
-        
       }
 
-     
-
-
      render() {
-
       this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
-
-
 
       //Added 
       let jobData = {};
        
-    const addData = (params) => {
-        jobData = params;
-
-        //Call updateState in JobsList
-        this.myref.current.updateState();
-    }
-
+      const addData = (params) => {
+          jobData = params;
+          //Call updateState in JobsList
+          this.myref.current.updateState();
+      }
 
          return (
-       
             <View style={styles.container}>
                  <View style={styles.upperbar}>
                      <SearchBar style={styles.search} currValue = {this.currValue}></SearchBar>
@@ -128,22 +114,14 @@ import FakeJobsiteData from './FakeJobsiteData.js';
                        {/* <AddEmployee></AddEmployee> */}
                        <AddJobsite  sendData={addData}></AddJobsite>
                       </View>
-                    
-
                  </View>
                  
                  <SafeAreaView style={styles.container}>
                     {/* <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList> */}
                     <JobsList ref={this.myref} query={this.state.query} updateList={this.updateList} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></JobsList> 
                      {/* <JobsList ref={this.myref}></JobsList> */}
-                 </SafeAreaView>
-         
-
-
-                    
-                </View>
-               
-                  
+                 </SafeAreaView>     
+                </View>      
          )
          
      }
@@ -156,12 +134,9 @@ import FakeJobsiteData from './FakeJobsiteData.js';
      },
 
      upperbar: {
-        
         display: 'flex',
         flexDirection: 'row',
-        
      },
-
   
      add: {
        backgroundColor: Color.MAROON, 
