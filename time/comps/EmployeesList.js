@@ -39,7 +39,6 @@ import Database from '../database-communication/database.js'
     }
 
     sendData = () => {
-        
         this.props.parentCallback(this.state.stInitialFake); 
     }
 
@@ -68,16 +67,12 @@ import Database from '../database-communication/database.js'
 
 
     static getDerivedStateFromProps(props, state) {
-
         //if (props.data !== state.stInitialFake) {
-
           return {
             FakeData : props.data 
            
           };
         //}     
-
-        
     }
 
     
@@ -161,16 +156,10 @@ import Database from '../database-communication/database.js'
             this.setState({doOnce : false});
         }
 
-
         if (this.props.request) {                   
             this.sendData();
         }
-
         
-
-
-
-
         const { isModalVisible } = this.state;
         const {isAdmin} = this.state;
         return (

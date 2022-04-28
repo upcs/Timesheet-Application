@@ -68,7 +68,6 @@ class TimeSheetList extends React.Component {
             <View style={styles.item}>
                 <TouchableOpacity  onPress={() => {
                     this.setEmployee(item.id);
-                    
                 }}>
                     <Text style={[{color: theColor},styles.empStyle]}>{item.firstname + " " + item.lastname}</Text>
                 </TouchableOpacity>
@@ -104,16 +103,12 @@ class TimeSheetList extends React.Component {
                 this.setState({stInitialFake : res});
                 this.sendData(this.state.stInitialFake);
             });
-
             this.setState({doOnce : false});
         }
 
-
-        if (this.props.request) {
-                      
+        if (this.props.request) {    
             this.sendData();
         }
-
 
         return (
             <View>

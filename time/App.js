@@ -15,11 +15,10 @@ import { UserInterfaceIdiom } from 'expo-constants';
 import Timesheet from './comps/Timesheet';
 import EmployeeHours from './comps/EmployeeHours.js';
 import AdminTimesheet from './comps/admin_timesheet';
-import Employees from './comps/Employees';
-import Card from './comps/Card';
+
 import TimeCardStart from './comps/TimeCardStart';
 import AdminJobsite from './comps/AdminJobsite';
-import SearchBar from './comps/SearchBar';
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AdminEmployee from './comps/AdminEmployee';
 //added
@@ -66,11 +65,22 @@ class App extends React.Component {
 
   }
   
+
+  /**
+   * Sends performance testing to console
+   * 
+   * @author gabes
+   */
   componentDidMount(){
     var end = new Date().getTime() - this.start;
     console.log('Performance App', end, 'ms');
   }
 
+
+  /**
+   * Sets the state from user sign in 
+   * 
+   */
   login(signin, uid, uType) {
     this.setState({
       signedIn: signin,
@@ -80,18 +90,22 @@ class App extends React.Component {
   }
 
 
-  loginAdmin() {
-      this.setState({
-        signedIn: 1,
-        user: User.ADMIN,
-      })
-  }
-
-  //Updates the picker list. Called when a user is added or removed from a job
+  /**
+   * Updates the picker list. Called when a user is added or removed from a job
+   * 
+   * @author gabes
+   */
   updateList(){
     this.timeCardRef.current.updateJobList();
   }
 
+  /**
+   * Signs user out by setting state back to defaut
+   * 
+   * Called by sign out button in timecardstart
+   * 
+   * @author gabes
+   */
   signOut(){
     this.setState({
       signedIn: 0,
@@ -171,7 +185,6 @@ class App extends React.Component {
               component={Login}
               initialParams={{
                 login: this.login,
-                loginAdmin: this.loginAdmin,
               }}
               ></Tab.Screen>
           )

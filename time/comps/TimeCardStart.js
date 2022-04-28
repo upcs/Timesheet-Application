@@ -23,13 +23,6 @@ import TimeUtil from './TimeUtil.js';
 import Database from '../database-communication/database.js';
 import User from '../database-communication/user.js'
 
-/* Global Variables for time tracking */
-var isPressed;
-var sec = 0;
-var min = 0;
-var hour = 0;
-var startTime = 0;
-var endTime = 0;
 
 
 /**
@@ -40,8 +33,6 @@ var endTime = 0;
  *      -Start/Stop Button for timing shifts
  *      -Daily time text
  */
-
-
  class TimeCardStart extends React.Component {
 
     /**
@@ -74,10 +65,14 @@ var endTime = 0;
         this.sortJobs = this.sortJobs.bind(this);
         this.updateJobList = this.updateJobList.bind(this);
         this.data = new Database(); 
-
     };
 
 
+    /**
+     * Updates the job picker list when the component mounts
+     * 
+     * @author gabes
+     */
     componentDidMount = () => {
         this.updateJobList();
     }
@@ -108,7 +103,6 @@ var endTime = 0;
             })
         })
     }
-
 
 
      /**
@@ -143,11 +137,14 @@ var endTime = 0;
         }
     }
 
-
-
+    /**
+     * Handles a user sign out
+     */
     handleClockOut= () => {
       this.props.sendData();
     }
+
+
     /**
      * Get user's first and last name
      * 
@@ -163,14 +160,16 @@ var endTime = 0;
         })
     }
 
+
     /**
-     * Get the users password
+     * Set the users password
      * 
      * @author gabes
      */
     updatePassword(){
         this.data.setPassword(this.state.password, User.getId());
     }
+
 
     /**
      * Turns the timer off
@@ -196,6 +195,7 @@ var endTime = 0;
        await this.data.punchOut(User.getId());
        this.handleClockOut();
     }   
+
 
     /**
      * Starts the timer 
@@ -248,6 +248,7 @@ var endTime = 0;
         this.props.initialParams.signOutParent();
     }
 
+
     /**
      * Change modal visibility
      *  
@@ -269,10 +270,8 @@ var endTime = 0;
         const { currentDuration, isTimerOn, todayTime } = this.state;
         const style = isTimerOn ? styles.stop : styles.start
         const text = isTimerOn ? "Clock-Out" : "Clock-In";
-
-        const timeString = TimeUtil.convertMsToReadable(todayTime * 1000);
-        let currentJob = "java";
         const { isModalVisible } = this.state;
+        
         return (
             <View style={styles.justColor}>
             <View style={styles.container}>

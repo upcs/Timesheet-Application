@@ -42,34 +42,25 @@ import AddEmployee from './AddEmployee.js';
     //Added
     //Callback Function from JobsList
     callbackFunction(childData) {
-
-
       this.setState({jobsDataChild : childData});
       this.setState({requesting : false});
-
     }
     
 
     getFilteredItems(query, items) {
-
       if (!query || query.length == 0) {
         return items;
       }
-
       return items.filter((accounts) => (accounts.firstname.toString().toLowerCase() + " " + accounts.lastname.toString().toLowerCase() ).includes(query.toString().toLowerCase()));
     }
 
     currValue(newValue) {
       this.setState({query : newValue});
-
       this.setState({requesting : true});
       this.forceUpdate(); 
-
     }
      
      render() {
-
-
       this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
       
        //This function is called whenever the add employee modal is submitted
