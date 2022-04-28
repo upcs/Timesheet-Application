@@ -166,7 +166,6 @@ class AdminTimesheet extends React.Component {
      * @author gabes
      */
     getAllEmployeeTime = (id) => {
-        
         var somedata = [];
         this.data.getAllPunchSummary(id,false,false,0,0,0,0,0,0).then((res, rej) => {
             somedata.push({id: "1", date: "Total Time Summary", minutes: res});
@@ -193,6 +192,7 @@ class AdminTimesheet extends React.Component {
             this.myref.current.dataChange();
         });
     }
+
 
     /**
      * Get an employees time from the specified date 
@@ -224,11 +224,15 @@ class AdminTimesheet extends React.Component {
             this.myref.current.dataChange();
         });
     }
+
+
     setTimes(data){
         data.forEach(entry => console.log("timrIn", entry, entry.timeIn));
         data.sort((a, b) => b.timeIn - a.timeIn);
         this.setState({time: data});
     }
+
+
     /**
      * Get an employees time from the specified date 
      *
@@ -259,6 +263,12 @@ class AdminTimesheet extends React.Component {
         });
     }
 
+    
+    /**
+     * Gets an employees time between two dates
+     * 
+     * @author gabes
+     */
     getEmployeesFromAndTo(id, fromDay, fromMonth, fromYear, toDay, toMonth, toYear){
         var somedata = [];
         this.data.getAllPunchSummary(id,true,true,toDay,toMonth,toYear,fromDay,fromMonth,fromYear).then((res, rej) => {
@@ -288,9 +298,7 @@ class AdminTimesheet extends React.Component {
 
 
     render() {
-        
         this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
-
         return (
             // Vertical  layout 
             <View style={styles.vertical_layout}>
