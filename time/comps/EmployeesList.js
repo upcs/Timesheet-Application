@@ -39,10 +39,14 @@ import Database from '../database-communication/database.js'
     }
 
     sendData = () => {
-        
         this.props.parentCallback(this.state.stInitialFake); 
     }
 
+    /**
+     * Populates the list with data on load
+     * 
+     * @author gabes, Harrison
+     */
     componentDidMount = () => {
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({FakeData: res}, () => {
@@ -53,6 +57,11 @@ import Database from '../database-communication/database.js'
         });
     }
 
+    /**
+     * Updates the flat list of employees
+     * 
+     * @author gabes, Harrison
+     */
     updateState = () => {
         this.data.getAllAccounts().then((res, rej) => {
             this.setState({FakeData: res}, () => {
@@ -68,36 +77,65 @@ import Database from '../database-communication/database.js'
 
 
     static getDerivedStateFromProps(props, state) {
-
-        //if (props.data !== state.stInitialFake) {
-
           return {
             FakeData : props.data 
-           
-          };
-        //}     
-
-        
+          };   
     }
 
     
-
+    /**
+     * Changes the visisbility of the employee modal
+     * 
+     * @author gabes
+     */
     setModalVisible = (visible) => {
         this.setState({isModalVisible: visible});
     }
 
+
+    /**
+     * Changes the Admin value in the database based on the 
+     * value of the switch in the modal
+     * 
+     * 0 - not admin
+     * 1 - admin
+     * 
+     * @author gabes
+     */
     setAdmin = (admin) => {
         this.setState({isAdmin: admin})
     }
 
+
+    /**
+     * Sets the users first name. Called when changes are saved
+     * 
+     * @author gabes
+     */
     setuserFirst = (username) => {
         this.setState({userFirst: username});
     }
 
+
+    /**
+     * Sets the users last name. Called when changes are saved
+     * 
+     * @author gabes
+     */
     setuserLast = (username) => {
         this.setState({userLast: username});
     }
 
+
+    /**
+     * Changes the Admin value in the database based on the 
+     * value of the switch in the modal
+     * 
+     * 0 - not admin
+     * 1 - admin
+     * 
+     * Note: Not sure why this is needed. Duplicate function
+     */
     setUserType = (usersType) => {
         if(usersType == 1){
             this.setState({isAdmin: true});
@@ -107,17 +145,34 @@ import Database from '../database-communication/database.js'
         }
     }
 
+
+    /**
+     * Allows the state to reflect which user is being edited. 
+     * Stores the users ID from firebase
+     * 
+     * @author gabes
+     */
     setUserEdited = (edited) => {
         this.setState({userEdited: edited})
     }
 
+
+    /**
+     * Removes a user from the list and database
+     * 
+     * @author gabes
+     */
     deleteUser = () => {
         this.data.deleteUserAccount(this.state.userEdited);
         this.updateState();
     }
 
 
-
+    /**
+     * Updates a users information in the list and database
+     * 
+     * @author gabes
+     */
     updateEmployee = (edited) => {
         this.data.setUserFirst(this.state.userEdited, this.state.userFirst);
         this.data.setuserLast(this.state.userEdited, this.state.userLast);
@@ -161,15 +216,9 @@ import Database from '../database-communication/database.js'
             this.setState({doOnce : false});
         }
 
-
         if (this.props.request) {                   
             this.sendData();
         }
-
-        
-
-
-
 
         const { isModalVisible } = this.state;
         const {isAdmin} = this.state;

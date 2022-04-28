@@ -45,20 +45,29 @@ class TimeSheetList extends React.Component {
         });
     }
 
+
     sendData = () => {
-        
         this.props.parentCallback(this.state.stInitialFake); 
     }
 
+    /**
+     * Notifies the parent a new employee was pressed
+     * 
+     * Sets the employee as the active employee
+     * 
+     * @author gabes
+     */
     setEmployee = (id) => {
         this.props.onChange(id);
         this.state.currentEmp = id;
     }
 
 
-
-
-    //Render each item as a button
+    /**
+     * Render each employee as a button
+     * 
+     * @author gabes, Caden 
+     */
     renderItem = ({item}) => {
         let theColor = Color.MAROON;
         if(this.state.currentEmp == item.id){
@@ -68,7 +77,6 @@ class TimeSheetList extends React.Component {
             <View style={styles.item}>
                 <TouchableOpacity  onPress={() => {
                     this.setEmployee(item.id);
-                    
                 }}>
                     <Text style={[{color: theColor},styles.empStyle]}>{item.firstname + " " + item.lastname}</Text>
                 </TouchableOpacity>
@@ -77,43 +85,39 @@ class TimeSheetList extends React.Component {
     };
 
     static getDerivedStateFromProps(props, state) {
-
         if (!props.query) {
             return {
                 data : state.stInitialFake,
             };
-            
         }
 
         if (props.data !== state.stInitialFake) {
           return {
             data : props.data 
-           
           };
         }     
         return  null;
-        
     }
 
-    //Create the flatlist
-    render() {
 
+    /**
+     * Render the flatlist 
+     * 
+     * @author gabes, Harrison
+     */
+    render() {
         //Send data when prop "request" is true
         if (this.state.doOnce == true) {
             this.data.getAllAccounts().then((res, rej) => {
                 this.setState({stInitialFake : res});
                 this.sendData(this.state.stInitialFake);
             });
-
             this.setState({doOnce : false});
         }
 
-
-        if (this.props.request) {
-                      
+        if (this.props.request) {    
             this.sendData();
         }
-
 
         return (
             <View>
