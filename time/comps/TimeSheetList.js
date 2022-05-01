@@ -12,7 +12,9 @@
 
 import React, {useEffect, useState} from 'react';
 import { Text, View, StyleSheet, ScrollView, FlatList, TouchableOpacity} from 'react-native'
+import { Color } from './Palette';
 import Database from '../database-communication/database.js'
+import { color } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
 /**
  * Creates a Scrollable List that can be selected
@@ -27,8 +29,10 @@ class TimeSheetList extends React.Component {
            data: [],
            stInitialFake: [],
            doOnce: true,
+           currentEmp: ''
         };
         this.data = new Database();
+
     }
 
     componentDidMount = () => {
@@ -48,6 +52,7 @@ class TimeSheetList extends React.Component {
 
     setEmployee = (id) => {
         this.props.onChange(id);
+        this.state.currentEmp = id;
     }
 
 
@@ -55,12 +60,17 @@ class TimeSheetList extends React.Component {
 
     //Render each item as a button
     renderItem = ({item}) => {
+        let theColor = Color.MAROON;
+        if(this.state.currentEmp == item.id){
+            theColor = 'black';
+        }
         return (
             <View style={styles.item}>
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity  onPress={() => {
                     this.setEmployee(item.id);
+                    
                 }}>
-                    <Text >{item.firstname + " " + item.lastname}</Text>
+                    <Text style={[{color: theColor},styles.empStyle]}>{item.firstname + " " + item.lastname}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -69,8 +79,6 @@ class TimeSheetList extends React.Component {
     static getDerivedStateFromProps(props, state) {
 
         if (!props.query) {
-            console.log('no query');
-            console.log(state.stInitialFake)
             return {
                 data : state.stInitialFake,
             };
@@ -78,7 +86,6 @@ class TimeSheetList extends React.Component {
         }
 
         if (props.data !== state.stInitialFake) {
-          console.log("changed");
           return {
             data : props.data 
            
@@ -105,7 +112,6 @@ class TimeSheetList extends React.Component {
         if (this.props.request) {
                       
             this.sendData();
-            console.log('request recieved')
         }
 
 
@@ -114,7 +120,9 @@ class TimeSheetList extends React.Component {
                 <FlatList 
                     data={this.state.data} 
                     renderItem={this.renderItem} 
-                    keyExtractor={item => item.name}/>
+                    keyExtractor={item => item.name}
+                    contentContainerStyle={styles.contentContainer}
+                />
             </View>
         );
     }
@@ -125,8 +133,17 @@ class TimeSheetList extends React.Component {
 const styles = StyleSheet.create({
     item: {
         padding: 20,
-        borderTopWidth: 1,
-    }
+        borderTopWidth: 2,
+        backgroundColor: 'white',
+        borderColor: 'black'
+    }, 
+    contentContainer: {
+        paddingBottom: 0
+      },
+      empStyle: {
+          fontWeight: 'bold',
+         
+      }
 });
 
 

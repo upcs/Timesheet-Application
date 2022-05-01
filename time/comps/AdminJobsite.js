@@ -63,6 +63,10 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
       }
 
+      updateList = () => {
+        this.props.initialParams.updateList();
+      }
+
       //Added
       //Callback Function from JobsList
       callbackFunction(childData) {
@@ -82,7 +86,6 @@ import FakeJobsiteData from './FakeJobsiteData.js';
       }
 
       currValue(newValue) {
-        //console.log(newValue);
         this.setState({query : newValue});
 
 
@@ -101,9 +104,8 @@ import FakeJobsiteData from './FakeJobsiteData.js';
 
      render() {
 
-      //this.filteredItems = this.getFilteredItems(this.state.query, FakeJobsiteData);
       this.filteredItems = this.getFilteredItems(this.state.query, this.state.jobsDataChild);
-      //this.callbackFunction = this.callbackFunction();
+
 
 
       //Added 
@@ -132,7 +134,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
                  
                  <SafeAreaView style={styles.container}>
                     {/* <FlatList  style= {{backgroundColor: "white"}} renderItem={this.renderItem}  data = {this.filteredItems} ></FlatList> */}
-                    <JobsList ref={this.myref} query={this.state.query} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></JobsList> 
+                    <JobsList ref={this.myref} query={this.state.query} updateList={this.updateList} request={this.state.requesting} parentCallback={this.callbackFunction} data={this.filteredItems}></JobsList> 
                      {/* <JobsList ref={this.myref}></JobsList> */}
                  </SafeAreaView>
          
@@ -149,7 +151,9 @@ import FakeJobsiteData from './FakeJobsiteData.js';
  
  /*  Styles used for login screen */
  const styles = StyleSheet.create({
-     
+     container: {
+      backgroundColor: 'white'
+     },
 
      upperbar: {
         
@@ -183,6 +187,7 @@ import FakeJobsiteData from './FakeJobsiteData.js';
     buttonContainer: {
        justifyContent: 'center', 
        position: 'relative',
+       flex: 1
     }
  });
  

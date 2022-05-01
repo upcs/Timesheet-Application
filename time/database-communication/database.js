@@ -126,6 +126,20 @@ class Database {
     }
 
     /**
+     * 
+     * Get the users name
+     * 
+     * @author gabes 
+     */
+    async getUsersInfo(id){
+        if(id == '' || id == null){
+            return;
+        }
+        var document = await this.db.collection("accounts").doc(id).get();
+        return [document.data().firstname, document.data().lastname, document.data().email];
+    }
+
+    /**
      * Gets users admin privelleges
      */
     getUserType(){
@@ -207,6 +221,18 @@ class Database {
     }
 
 
+    /**
+     * Set a new password for the user
+     * 
+     * @author gabes
+     */
+    async setPassword(pass, id){
+        if(id != null){
+            await this.db.collection('accounts').doc(id).update({password: pass});
+        }
+    }
+
+
 
 
     /****** CREATE ACCOUNT *******/
@@ -243,12 +269,6 @@ class Database {
         last.trim();
         email.trim();
         pass.trim();
-
-        //Error check for gmail account
-        if(!email.includes("@gmail.com")){
-            console.log("Invalid email");
-            return;
-        }
 
         //Error check admin privalleges
         if((admin != 0) && (admin != 1)){
@@ -300,8 +320,7 @@ class Database {
      * 
      * @author Tony Hayden
      */
-    async punchIn(id){
-
+    async punchIn(id, jobName){
         // Grab all needed date for the current punch in
         let year = new Date().getFullYear();
         let month = new Date().getMonth() + 1;
@@ -326,6 +345,7 @@ class Database {
             clockOutHour: null,
             clockOutMinute: null,
             totalPunchTimeInMinutes: null,
+            jobName: jobName
 
         });
     }
@@ -378,7 +398,17 @@ class Database {
             totalPunchTimeInMinutes: totalTimeInMinutes //duration / (1000 * 60),            
         });   
     }
-
+    /*
+    @author Caden Deutscher
+    @date: 4/7/2022
+    @params: EmpID, PunchID, newMinutes
+    @Return: N/A
+    @Result: Updates Punch - totalTimeInMinutes
+    */
+   async setPunchMinutes(EmpID, PunchID, newMin){
+       console.log(EmpID + " di " + PunchID + " min " + newMin);
+     await this.db.collection("accounts").doc(EmpID).collection("punch").doc(PunchID).update({totalPunchTimeInMinutes: newMin});
+   }
     /*
     @author Justin
     @date 3/19/22
@@ -781,6 +811,94 @@ class Database {
         }
     }
     /*
+    This method returns the total time that an employee worked
+    @param 
+    id - Employee id,
+    fFrom - filtered From? (true or false)
+    fTo - filtered To? (true or false)
+    tDay - to filtered day
+    tMonth - to filted month
+    tYear - to filtered year
+    fDay - from filtered day
+    fMonth - from filtered Month
+    fYear - from filteredYear
+    @ return Total Time employee worked over time period
+    */
+    async getAllPunchSummary(id, fFrom, fTo, tDay, tMonth, tYear, fDay, fMonth, fYear){
+        fMonth = this.getMonth(fMonth);
+        tMonth = this.getMonth(tMonth);
+        var time = 0;
+        const data = await this.db.collection("accounts").doc(id).collection("punch").get().then((querySnapshot) => {
+         querySnapshot.forEach((doc) => {
+             if(!isNaN(doc.data().totalPunchTimeInMinutes)){
+                 //Add all time
+                    if(!fFrom && !fTo){
+                    time += parseInt(doc.data().totalPunchTimeInMinutes);
+                    }
+                    //add time only if it is in front of the from dates
+                    else if(fFrom && !fTo){
+                
+                        if(doc.data().year < fYear || (doc.data().year == fYear && doc.data().month < fMonth) || (doc.data().year == fYear && doc.data().month == fMonth && fYear && doc.data().day < fDay)){
+
+                        }
+                        else{
+                            time += parseInt(doc.data().totalPunchTimeInMinutes);
+                        }
+                    
+
+                    }
+                    //Add time only if it is before the to dates
+                    else if(!fFrom && fTo){
+                        if(doc.data().year > tYear || (doc.data().year == tYear && doc.data().month > tMonth) || (doc.data().year == tYear && doc.data().month == tMonth && tYear && doc.data().day > tDay)){
+
+                        }
+                        else{
+                            time += parseInt(doc.data().totalPunchTimeInMinutes);
+                        }
+
+                    }
+                    //Add time only if it is between the from and to dates
+                    else if(fFrom && fTo){
+                        if(doc.data().year > tYear || (doc.data().year == tYear && doc.data().month > tMonth) || (doc.data().year == tYear && doc.data().month == tMonth && tYear && doc.data().day > tDay)){
+
+                        }
+                        else if(doc.data().year < fYear || (doc.data().year == fYear && doc.data().month < fMonth) || (doc.data().year == fYear && doc.data().month == fMonth && fYear && doc.data().day < fDay)){
+
+                        }
+                        else{
+                            time += parseInt(doc.data().totalPunchTimeInMinutes);
+                        }
+                    }
+            }
+         });   
+    })
+  
+    return time;
+    }
+    /*
+    @author Caden Deutscher
+    @return - returns obvious overtime punches for a single employee
+    @params: id - employee id, condition - number for overtime to check for
+    */
+   async getOverTime(id,condition){
+       var postData = [];
+       const data = await this.db.collection("accounts").doc(id).collection("punch").where("totalPunchTimeInMinutes",">", condition).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            postData.push({...doc.data(), id: doc.id, eid: id})
+        });
+    })
+    return postData;
+   }
+    /*
+    @author Caden Deutscher
+    @return - returns obvious overtime punches for all employees
+    @params: condition - number for overtime to check for
+    */
+   async getAllOvertime(condition){
+
+   }
+
+    /*
     Cadenss
     */
     async updateEmpJobs(id){
@@ -803,6 +921,8 @@ class Database {
     
     return matches;
     }
+
+
       
 
     /****** JOB GETTERS *******/
@@ -966,12 +1086,113 @@ class Database {
         }
     }
 
+       /**
+     * Set job notes
+     * 
+     * Status: Needs to test more edge cases
+     * Testing: Needed
+     * 
+     * @author Caden Deutscher
+     */
+        async setJobNotes(id, jobnotes){
+            if(typeof jobnotes === 'string'){
+                if(jobnotes == "" || jobnotes == " " || jobnotes == undefined){
+                    jobnotes = "No notes."
+                }
+
+                if(id != null){
+                    await this.db.collection("jobs").doc(id).update({notes: jobnotes});
+                }
+            }
+            else{
+
+                let jnote = "No notes."
+
+                if(id != null){
+                    await this.db.collection("jobs").doc(id).update({notes: jnote});
+                }
+            }
+           
+        }
+    
+
     /**
      * Set job phase
+     * 
+     * @author gabes
      */
-    setJobPhase(){
-
+    async setJobPhase(id, phase){
+        if(id != null){
+            await this.db.collection("jobs").doc(id).update({phase: phase});
+        }
     }
+
+    /**
+     * Adds an employee to a job (now accounts for priority)
+     * 
+     * @author gabes
+     */
+    async addEmployeeToJobPriority(jobId, employee){
+        var employeeId = employee.id
+        await this.getAllPriority(employeeId).then((res, ref) => {
+            var priority = this.getHighestPriority(res);
+            this.addEmployeeToJob(jobId, employeeId, priority); 
+        })   
+    }
+
+
+     /**
+     * Get the priorites of an employee on a job
+     * 
+     * @author Caden
+     * @author gabes
+     */
+      async getAllPriority(id){
+        var jobids = [];
+        var matches = [];
+
+        //Get a list of all jobs
+        const querySnapshot =  await this.db.collection("jobs").get();
+        for (const documentSnapshot of querySnapshot.docs) {
+            jobids.push(documentSnapshot.id); 
+        }
+    
+        //For each job find if an employee matches the id, push the priority
+        for(const jobs of jobids){
+           const emp =  await this.getJobEmployeesID(jobs);
+                for(let i = 0; i < emp.length; i++){
+                    if( id == emp[i].accountID){
+                        matches.push(emp[i].jobPriority);
+                    }
+                }
+        }
+        return matches;
+    }
+
+
+    /**
+     * Get the highest priority
+     * 
+     * @author gabes
+     */
+     getHighestPriority(priorityList){
+        //Return 0 if employee has no priority 
+        if(priorityList == undefined){
+            return 0;
+        } 
+
+        //Find the highest priority and return one above it 
+        else{
+            var maxPriority = 0;
+            for(var i = 0; i < priorityList.length; i++){
+                if(priorityList[i] > maxPriority){
+                    maxPriority = priorityList[i];
+                }
+            }
+            return maxPriority + 1;
+        }
+    }
+
 
     /**
      * Add employee to job
@@ -981,11 +1202,64 @@ class Database {
      * 
      * @author Jude Gabriel
      */
-    async addEmployeeToJob(jobId, employeeToAdd){
+    async addEmployeeToJob(jobId, employeeToAdd, priority){
         await this.db.collection("jobs").doc(jobId).collection("employees").add({
-            accountID: employeeToAdd.id
+            accountID: employeeToAdd,
+            jobPriority: priority
         });
     }
+
+    /**
+     * Sorts a list of jobs by priority
+     * 
+     * @author gabes 
+     */
+   async sortJobsByPriority(jobsList, employeeID){
+        var priorityArray = [];
+        var jobsArray = [];
+
+        //Get the priority of each job
+        for(var i = 0; i < jobsList.length; i++){
+            const data = await this.db.collection("jobs").doc(jobsList[i]).collection("employees").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    if(employeeID == doc.data().accountID){
+                        priorityArray.push({job: jobsList[i], priority: doc.data().jobPriority});
+                    }
+                })
+            })
+        }
+
+        //Sort the jobs by priority
+        priorityArray.sort(this.sortByProperty("priority"));
+
+        //Pass just the job if to jobs array
+        for(var i = 0; i < priorityArray.length; i++){
+            jobsArray.push(priorityArray[i].job);
+        }
+
+        //Return the sorted jobs array
+        return jobsArray;
+    }
+
+
+    /**
+     * Helper function to sort jobs by priority
+     * 
+     * Source: https://medium.com/@asadise/sorting-a-json-array-according-one-property-in-javascript-18b1d22cd9e9
+     * 
+     * @author gabes
+     */
+    sortByProperty(property){  
+        return function(a,b){  
+           if(a[property] > b[property])  
+              return 1;  
+           else if(a[property] < b[property])  
+              return -1;  
+       
+           return 0;  
+        }  
+     }
+
 
     /**
      * Remove employee from job

@@ -107,7 +107,6 @@ describe('Modal 1 funcitonality', () => {
         wrapper.instance().deleteUser();
         expect(getUsrFunc).toHaveBeenCalled();
         expect(deleteUsrFunc).toHaveBeenCalled();
-        expect(upState).toHaveBeenCalled();
     })
 
     it('Allows for a job to be deleted', () => {
@@ -155,15 +154,14 @@ describe('Modal 1 funcitonality', () => {
 describe('Modal 2 functionality', () => {
     it('Allows for an employee to be added', () => {
         Alert.alert = jest.fn();
-        const addEmp = jest.spyOn(wrapper.instance().data, "addEmployeeToJob");
+        const addEmp = jest.spyOn(wrapper.instance().data, "addEmployeeToJobPriority");
         const setEl = jest.spyOn(wrapper.instance(), "setEList")
         employee = shallow(wrapper.instance().renderEmployee({item: EmployeeData2}));
         employee.find('#employeeAddView').find('#employeeToAdd').props().onPress();
         expect(Alert.alert.mock.calls.length).toBe(1);
         wrapper.setState({eList: EmployeeData});
-        wrapper.instance().addUser();
+        wrapper.instance().addUser({id: 22});
         expect(addEmp).toHaveBeenCalled();
-        expect(setEl).toHaveBeenCalled();
     })
 
     it('Re-opens the first modal when closed', () => {

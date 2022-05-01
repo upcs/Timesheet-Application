@@ -1,4 +1,39 @@
+----------------------------------------
+SPRINT 5 FEATURES (FINAL SPRINT)
+---------------------------------------
+1. Bug fix: querying timesheets now auto-updates time sheets<br>
+2. More progress on deployment. Waiting to hear back from Play Store. May need to resubmit due to location tracking <br>
+3. Bug Fix: Employees show up in employee list when added<br>
+4. Job Picker: Employees can now choose which job they charge to<br>
+5. Bug Fix: Android display matches iOS now<br>
+6. Job Priority: An admin now assigns users to jobs using priority. The first job assigned becomes highest priority. Highest priority jobs show up as the first job in the job selector when clocking in. Highest priority job shows first when selecting a job to view as basic employee <br>
+7. Keyboard: A user can now tap on the screen to exit text entries<br>
+8. Bug Fix: Flatlists no longer cut off<br>
+9. Edit profile: Any user may now change their email by selecting the Account button<br>
+10. Additional aesthetics: New background color, changes in button formats, new look to text<br>
+11. Bug Fix: When a new job or employee is created, a refresh is no longer needed for the lists to update<br>
+12. All search bars finished<br>
+13. Page Menus uses icons rather than text<br>
+14. When an admin views an employees time sheet, the selected employee text changes colors to indicate they are being viewed<br>
+15. In employee timesheet, a total time summary is displayed showing the total time for the selected period<br>
+16. An admin can now change the job phase<br>
+17. Notes can now be changed after the job is created<br>
+18. Admin jobsite no longer needs app refresh to show updates, updates shown automatically<br>
+19. Password hashing finished <br>
+20. Companion website that allows data to be exported to <br>
+
+
 -----------------------------------------
+QUALITY ATTRIBUTES
+-----------------------------------------
+1. Correctness
+2. Accessability 
+3. Manageability 
+4. Efficiency
+5. Useability
+6. Safety
+
+---------------------------------------
 SPRINT 4 FEATURES
 ----------------------------------------
 KNOWN BUGS:<br>
